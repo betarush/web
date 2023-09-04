@@ -1,24 +1,30 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 
+// pages
+import Register from './pages/register'
+import Main from './pages/main'
+import Listproduct from './pages/listproduct'
+
 function App() {
+  const [userId, setUserid] = useState('')
+
+  useEffect(() => {
+    const id = localStorage.getItem("id")
+
+    setUserid(id)
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={userId ? <Main/> : <Register/>}/>
+        <Route path="/" element={<Register/>}/>
+        <Route path="/main" element={<Main/>}/>
+        <Route path="/listproduct" element={<Listproduct/>}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
