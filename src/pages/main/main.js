@@ -1,7 +1,7 @@
 import './main.scss';
 import { useEffect, useState } from 'react';
 import { resizePhoto } from 'geottuse-tools';
-import { getUserInfo } from '../../apis/user';
+import { getUserInfo } from '../../apis/user'
 import { getUntestedProducts, getTestedProducts, getMyProducts, tryProduct } from '../../apis/product'
 import { submitFeedback } from '../../apis/producttesting'
 
@@ -13,10 +13,11 @@ const LOGO_URL = process.env.REACT_APP_LOGO_URL
 export default function Main() {
 	const [userId, setUserid] = useState('')
 
-	const [username, setUsername] = useState('')
 	const [products, setProducts] = useState([])
 	const [viewType, setViewtype] = useState('')
 	const [feedback, setFeedback] = useState({ show: false, input: '', id: null, index: -1 })
+
+	const [bankaccountDone, setBankaccountdone] = useState(false)
 
 	const getTheUserInfo = () => {
 		const id = localStorage.getItem("id")
@@ -32,8 +33,15 @@ export default function Main() {
 			})
 			.then((res) => {
 				if (res) {
-					setUsername(res.username)
+					setBankaccountdone(res.bankaccountDone)
 					setUserid(id)
+				}
+			})
+			.catch((err) => {
+				if (err.status == 400) {
+					err.json().then(() => {
+
+					})
 				}
 			})
 	}
@@ -180,7 +188,7 @@ export default function Main() {
 
 	return (
 		<div id="main">
-			<Header username={username}/>
+			<Header/>
 
 			<div id="main">
 				<div className="row">
@@ -205,7 +213,7 @@ export default function Main() {
 							{viewType == 'untested' ? 
 								<div className="column">
 									<div className="info">
-										<div className="header">3 people left can try</div>
+										<div className="header">{product.numTried} people left can try</div>
 										<div className="actions">
 											<div className={"action" + (product.trying ? "" : "-disabled")} onClick={() => {
 												if (product.trying) {
@@ -224,13 +232,18 @@ export default function Main() {
 								<div className="column">
 									{viewType == "tested" ? 
 										<div className="info">
-											<div className="header">Earned: $2.00 for trying</div>
+											<div className="header">{product.earned ? "Earned: $2.00 for trying" : "Waiting for founder to accept feedback"}</div>
 										</div>
 										:
 										<div className="info-container">
-											<div className="header">Amount spent: $20.00</div>
+											<div className="header">Amount spent: ${product.amountSpent.toFixed(2)}</div>
 											<div className="header">Created on<br/>July 14, 2023 @ 2:30 PM</div>
-											<div className="header">5 people tried it</div>
+											<div className="header">
+												{product.numTried} people<br/>tried and gave feedback
+												<br/>
+
+												{product.numTried > 0 && <div className="reward">See and Reward them</div>}
+											</div>
 										</div>
 									}
 								</div>

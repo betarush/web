@@ -1,12 +1,15 @@
 import './listproduct.scss';
 import { useEffect, useState } from 'react';
 import { getId, resizePhoto } from 'geottuse-tools';
+import { getUserInfo } from '../../apis/user';
 import { listProduct } from '../../apis/product'
 
 // components
 import Header from '../components/header'
 
 export default function Listproduct() {
+	const [userId, setUserid] = useState('')
+
 	const [name, setName] = useState('chatee')
 	const [desc, setDesc] = useState('match with friends, explore their posts and like their posts to talk with them')
 	const [link, setLink] = useState('https://www.chatee.app')
@@ -14,31 +17,64 @@ export default function Listproduct() {
 	const [file, setFile] = useState(null)
 	const [errorMsg, setErrormsg] = useState('')
 
+	const [paymentDone, setPaymentdone] = useState(false)
+
+	const getTheUserInfo = () => {
+		const id = localStorage.getItem("id")
+		const data = { userId: id }
+
+		getUserInfo(data)
+			.then((res) => {
+				if (res.status == 200) {
+					return res.json()
+				}
+
+				throw res
+			})
+			.then((res) => {
+				if (res) {
+					setPaymentdone(res.paymentDone)
+				}
+			})
+			.catch((err) => {
+				if (err.status == 400) {
+					err.json().then(() => {
+
+					})
+				}
+			})
+	}
 	const listTheProduct = () => {
 		if (name && desc && link) {
-			const id = localStorage.getItem("id")
-			const data = { userId: id, name, desc, link, image: JSON.stringify(image) }
+			if (paymentDone) {
+				const id = localStorage.getItem("id")
+				const data = { userId: id, name, desc, link, image: JSON.stringify(image) }
 
-			listProduct(data)
-				.then((res) => {
-					if (res.status == 200) {
-						return res.json()
-					}
+				listProduct(data)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						}
 
-					throw res
-				})
-				.then((res) => {
-					if (res) {
-						window.location = "/main"
-					}
-				})
-				.catch((err) => {
-					if (err.status == 400) {
-						err.json().then(() => {
-							
-						})
-					}
-				})
+						throw res
+					})
+					.then((res) => {
+						if (res) {
+							window.location = "/main"
+						}
+					})
+					.catch((err) => {
+						if (err.status == 400) {
+							err.json().then(() => {
+								
+							})
+						}
+					})
+			} else {
+				localStorage.setItem("productInfo", JSON.stringify({ name, desc, link, image }))
+
+				window.location = "/payment"
+			}
 		} else {
 			if (!name) {
 				setErrormsg("Please enter your product name")
@@ -70,6 +106,10 @@ export default function Listproduct() {
 			reader.readAsDataURL(e.target.files[0])
 		}
 	}
+
+	useEffect(() => {
+		getTheUserInfo()
+	}, [])
 
 	return (
 		<div id="listproduct">
@@ -115,7 +155,7 @@ export default function Listproduct() {
 
 				<div id="errormsg">{errorMsg}</div>
 
-				<div id="submit" onClick={() => listTheProduct()}>Register</div>
+				<div id="submit" onClick={() => listTheProduct()}>{paymentDone ? "Pay and launch" : "Enter payment"}</div>
 			</div>
 		</div>
 	)
