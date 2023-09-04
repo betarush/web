@@ -32,7 +32,7 @@ export default function Register() {
 						.catch((err) => {
 							if (err.status == 400) {
 								err.json().then(() => {
-									
+
 								})
 							}
 						})
@@ -59,6 +59,14 @@ export default function Register() {
 
 	return (
 		<div id="register">
+			<div className="row">
+				<div id="page-navs">
+					<div className="column"><div className="page-nav" onClick={() => window.location = "/login"}>Login</div></div>
+					<div className="column"><div className="page-nav">Privacy</div></div>
+					<div className="column"><div className="page-nav">Terms</div></div>
+				</div>
+			</div>
+
 			<div id="form">
 				<div id="header">Register</div>
 

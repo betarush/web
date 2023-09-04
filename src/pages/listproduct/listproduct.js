@@ -16,7 +16,8 @@ export default function Listproduct() {
 
 	const listTheProduct = () => {
 		if (name && desc && link) {
-			const data = { name, desc, link, image: JSON.stringify(image) }
+			const id = localStorage.getItem("id")
+			const data = { userId: id, name, desc, link, image: JSON.stringify(image) }
 
 			listProduct(data)
 				.then((res) => {

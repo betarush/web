@@ -4,6 +4,7 @@ import './App.css';
 
 // pages
 import Register from './pages/register'
+import Login from './pages/login'
 import Main from './pages/main'
 import Listproduct from './pages/listproduct'
 
@@ -19,8 +20,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={userId ? <Main/> : <Register/>}/>
-        <Route path="/" element={<Register/>}/>
+        <Route path="/" element={userId ? <Main/> : <Login/>}/>
+        <Route path="/register" element={<Register/>}/>
+        <Route path="/login" element={<Login/>}/>
         <Route path="/main" element={<Main/>}/>
         <Route path="/listproduct" element={<Listproduct/>}/>
       </Routes>
