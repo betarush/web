@@ -30,7 +30,11 @@ export default function Register() {
 							}
 						})
 						.catch((err) => {
-
+							if (err.status == 400) {
+								err.json().then(() => {
+									
+								})
+							}
 						})
 				} else {
 					if (password.length <= 6) {

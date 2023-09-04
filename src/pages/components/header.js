@@ -10,7 +10,7 @@ export default function Header() {
 				</div>
 				<div className="page-navs">
 					<div className="column"><div className="page-nav">You earned: $15.90</div></div>
-					<div className="column"><div className="page-nav">List your product</div></div>
+					<div className="column"><div className="page-nav" onClick={() => window.location = "/listproduct"}>List your product</div></div>
 					<div className="column"><div className="page-nav">Log-Out</div></div>
 				</div>
 			</div>
