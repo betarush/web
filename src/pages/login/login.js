@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { login } from '../../apis/user'
 
 export default function Login() {
-	const [email, setEmail] = useState('djdksf@gmail.com')
-	const [password, setPassword] = useState('asdfghj')
+	const [email, setEmail] = useState('kevin@gmail.com')
+	const [password, setPassword] = useState('qqqqqqq')
 	const [errorMsg, setErrormsg] = useState('')
 
 	const theLogin = () => {

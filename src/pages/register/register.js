@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { register } from '../../apis/user'
 
 export default function Register() {
-	const [email, setEmail] = useState('djdksf@gmail.com')
-	const [password, setPassword] = useState('asdfghj')
-	const [confirmPassword, setConfirmpassword] = useState('asdfghj')
+	const [email, setEmail] = useState('kevin@gmail.com')
+	const [password, setPassword] = useState('qqqqqqq')
+	const [confirmPassword, setConfirmpassword] = useState('qqqqqqq')
 	const [errorMsg, setErrormsg] = useState('')
 
 	const theRegister = () => {

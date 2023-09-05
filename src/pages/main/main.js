@@ -183,7 +183,10 @@ export default function Main() {
 	}, [])
 
 	useEffect(() => {
-		if (userId) getTheUntestedProducts()
+		if (userId) {
+			//getTheUntestedProducts()
+			getTheMyProducts()
+		}
 	}, [userId])
 
 	return (
@@ -237,12 +240,16 @@ export default function Main() {
 										:
 										<div className="info-container">
 											<div className="header">Amount spent: ${product.amountSpent.toFixed(2)}</div>
-											<div className="header">Created on<br/>July 14, 2023 @ 2:30 PM</div>
 											<div className="header">
-												{product.numTried} people<br/>tried and gave feedback
-												<br/>
+												{product.numTesting > 0 && (
+													<>
+														{product.numTesting} people<br/>tried and gave feedback<br/>
 
-												{product.numTried > 0 && <div className="reward">See and Reward them</div>}
+														<div className="reward" onClick={() => window.location = '/feedback/' + product.id}>See and Reward them</div>
+													</>
+												)}
+												<br/>
+												{product.numTested} people<br/>rewarded
 											</div>
 										</div>
 									}

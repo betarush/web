@@ -55,3 +55,11 @@ export const submitBankaccountInfo = data => {
 		body: JSON.stringify(data)
 	})
 }
+
+export const rewardCustomer = data => {
+	return fetch(`${routeUrl}/reward_customer`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(data)
+	})
+}

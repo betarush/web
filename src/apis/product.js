@@ -39,3 +39,11 @@ export const tryProduct = data => {
 		body: JSON.stringify(data)
 	})
 }
+
+export const getFeedbacks = data => {
+	return fetch(`${routeUrl}/get_feedbacks`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(data)
+	})
+}
