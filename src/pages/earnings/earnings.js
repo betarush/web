@@ -1,6 +1,6 @@
 import './earnings.scss';
 import { useEffect, useState } from 'react';
-import { getBankaccountInfo, submitBankaccountInfo } from '../../apis/user'
+import { getUserInfo, getBankaccountInfo, submitBankaccountInfo, getEarnings } from '../../apis/user'
 
 // components
 import Header from '../components/header'
@@ -18,8 +18,39 @@ export default function Earnings() {
 	const [routingNumber, setRoutingnumber] = useState('110000000')
 	const [accountNumber, setAccountnumber] = useState('000123456789')
 
+	const [bankaccountDone, setBankaccountdone] = useState(false)
+	const [earnings, setEarnings] = useState(0.0)
+	const [earnedBox, setEarnedbox] = useState({ show: false, earned: 0.0 })
+
 	const [errorMsg, setErrormsg] = useState('')
 
+	const getTheUserInfo = () => {
+		const id = localStorage.getItem("id")
+		const data = { userId: id }
+
+		getUserInfo(data)
+			.then((res) => {
+				if (res.status == 200) {
+					return res.json()
+				}
+
+				throw res
+			})
+			.then((res) => {
+				if (res) {
+					setBankaccountdone(res.bankaccountDone)
+					setEarnings(res.earnings)
+					setUserid(id)
+				}
+			})
+			.catch((err) => {
+				if (err.status == 400) {
+					err.json().then(() => {
+
+					})
+				}
+			})
+	}
 	const getTheBankaccountInfo = () => {
 		const id = localStorage.getItem("id")
 		const data = { userId: id }
@@ -45,7 +76,6 @@ export default function Earnings() {
 				}
 			})
 	}
-
 	const submitTheBankaccountInfo = () => {
 		if (line1 && zipcode && dob && firstName && lastName && country && currency && routingNumber && accountNumber) {
 			const data = { userId, line1, zipcode, dob, firstName, lastName, country, currency, routingNumber, accountNumber }
@@ -108,14 +138,51 @@ export default function Earnings() {
 			}
 		}
 	}
+	const getTheEarnings = () => {
+		const data = { userId }
+
+		getEarnings(data)
+			.then((res) => {
+				if (res.status == 200) {
+					return res.json()
+				}
+
+				throw res
+			})
+			.then((res) => {
+				if (res) {
+					setEarnings(0.0)
+					setEarnedbox({ show: true, earned: res.earnedAmount })
+
+					setTimeout(function () {
+						setEarnedbox({ show: false, earned: 0.0 })
+					}, 2000)
+				}
+			})
+	}
 
 	useEffect(() => {
-		getTheBankaccountInfo()
+		getTheUserInfo()
 	}, [])
+
+	useEffect(() => {
+		if (userId) getTheBankaccountInfo()
+	}, [userId])
 
 	return (
 		<div id="earnings">
 			<Header/>
+
+			{earnings > 0 && (
+				<>
+					<div id="get-earnings" onClick={() => getTheEarnings()}>Get earnings now</div>
+
+					<br/>
+					Or
+				</>
+			)}
+
+			{bankaccountDone && <div id="earnings-header">Update your bank information below</div>}
 
 			<div id="form">
 				<div id="header">Your bank account info (to get your earnings)</div>
@@ -141,7 +208,6 @@ export default function Earnings() {
 					<input class="input" placeholder="Last name" type="text" onChange={e => setLastname(e.target.value)} value={lastName}/>
 				</div>
 
-
 				<div className="form-input">
 					<div className="input-header">Enter country:</div>
 					<input class="input" placeholder="CA" type="text" onChange={e => setCountry(e.target.value)} value={country}/>
@@ -163,6 +229,18 @@ export default function Earnings() {
 
 				<div id="submit" onClick={() => submitTheBankaccountInfo()}>Get earnings</div>
 			</div>
+
+			{earnedBox.show && (
+				<div id="hidden-box">
+					<div id="earned-box">
+						<div id="earned-header">
+							Yay! Your have earned ${earnedBox.earned.toFixed(2)}
+							<br/><br/>
+							Thank you for your contribution
+						</div>
+					</div>
+				</div>
+			)}
 		</div>
 	)
 }

@@ -63,3 +63,11 @@ export const rewardCustomer = data => {
 		body: JSON.stringify(data)
 	})
 }
+
+export const getEarnings = data => {
+	return fetch(`${routeUrl}/get_earnings`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(data)
+	})
+}

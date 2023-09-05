@@ -29,10 +29,13 @@ export default function Payment() {
 			})
 			.then((res) => {
 				if (res) {
-					setName(res.name)
-					setNumber(res.number)
-					setCvc(res.cvc)
-					setExpdate(res.expdate)
+					if (res.name) {
+						setName(res.name)
+						setNumber(res.number)
+						setCvc(res.cvc)
+						setExpdate(res.expdate)
+					}
+
 					setUserid(id)
 				}
 			})

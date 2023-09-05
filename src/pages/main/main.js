@@ -184,8 +184,7 @@ export default function Main() {
 
 	useEffect(() => {
 		if (userId) {
-			//getTheUntestedProducts()
-			getTheMyProducts()
+			getTheUntestedProducts()
 		}
 	}, [userId])
 
@@ -197,7 +196,7 @@ export default function Main() {
 				<div className="row">
 					<div className="page-navs">
 						<div className="column"><div className={"page-nav" + (viewType == 'untested' ? '-focus' : '')} onClick={() => viewType != 'untested' && getTheUntestedProducts()}>Untested by you</div></div>
-						<div className="column"><div className={"page-nav" + (viewType == 'tested' ? '-focus' : '')} onClick={() => viewType != 'tested' && getTheTestedProducts()}>Testing by you</div></div>
+						<div className="column"><div className={"page-nav" + (viewType == 'tested' ? '-focus' : '')} onClick={() => viewType != 'tested' && getTheTestedProducts()}>Test by you</div></div>
 						<div className="column"><div className={"page-nav" + (viewType == 'myproducts' ? '-focus' : '')} onClick={() => viewType != 'myproducts' && getTheMyProducts()}>Your products</div></div>
 					</div>
 				</div>
@@ -269,7 +268,7 @@ export default function Main() {
 
 						<div id="actions">
 							<div className="action" onClick={() => setFeedback({ show: false, input: '' })}>Cancel</div>
-							<div className="action" onClick={() => submitTheFeedback()}>Submit and get pay $2</div>
+							<div className="action" onClick={() => submitTheFeedback()}>Submit</div>
 						</div>
 					</div>
 				</div>
