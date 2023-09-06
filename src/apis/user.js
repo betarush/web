@@ -1,4 +1,5 @@
-const routeUrl = `/flask/user`
+const url = process.env.REACT_APP_MODE == 'live' ? 'https://www.getproductfeedback.com' : ''
+const routeUrl = `${url}/flask/user`
 
 export const register = data => {
 	return fetch(`${routeUrl}/register`, {

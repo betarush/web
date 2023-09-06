@@ -1,4 +1,5 @@
-const routeUrl = '/flask/product'
+const url = process.env.REACT_APP_MODE == 'live' ? 'https://www.getproductfeedback.com' : ''
+const routeUrl = `${url}/flask/product`
 
 export const listProduct = data => {
 	return fetch(`${routeUrl}/list_product`, {
