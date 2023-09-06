@@ -1,7 +1,22 @@
-import './payment.scss';
 import { useEffect, useState } from 'react';
 import { submitPaymentInfo, getPaymentInfo } from '../../apis/user'
 import { listProduct } from '../../apis/product'
+
+// material ui components
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/joy/Card';
+import CardActions from '@mui/joy/CardActions';
+import CardContent from '@mui/joy/CardContent';
+import Divider from '@mui/joy/Divider';
+import FormControl from '@mui/joy/FormControl';
+import FormLabel from '@mui/joy/FormLabel';
+import Input from '@mui/joy/Input';
+import Box from '@mui/material/Box';
+import Typography from '@mui/joy/Typography';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Button from '@mui/joy/Button';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 
 // components
 import Header from '../components/header'
@@ -56,7 +71,9 @@ export default function Payment() {
 				}
 			})
 	}
-	const submitThePaymentInfo = async() => {
+	const submitThePaymentInfo = async event => {
+		event.preventDefault()
+
 		if (name && number && cvc && expdate) {
 			// let card = await stripe.tokens.create({
 			// 	card: {
@@ -66,9 +83,11 @@ export default function Payment() {
 			//     cvc: '123'
 			// 	}
 			// })
-			const data = { userId, name, number, cvc, expdate, token: "tok_bypassPending" }
+			const data = new FormData(event.currentTarget);
+			const name = data.get('name'), number = data.get('number'), cvc = data.get('cvc'), expdate = data.get('expdate')
+			const json = { userId, name, number, cvc, expdate, token: "tok_bypassPending" }
 
-			submitPaymentInfo(data)
+			submitPaymentInfo(json)
 				.then((res) => {
 					if (res.status == 200) {
 						return res.json()
@@ -94,6 +113,8 @@ export default function Payment() {
 								})
 								.then((res) => {
 									if (res) {
+										localStorage.removeItem("productInfo")
+
 										window.location = "/main"
 									}
 								})
@@ -127,30 +148,61 @@ export default function Payment() {
 		<div id="payment">
 			<Header/>
 
-			<div id="form">
-				<div id="header">Your payment info</div>
+      <Card
+	      variant="outlined"
+	      sx={{
+	        maxHeight: 'max-content',
+	        maxWidth: 500,
+	        marginTop: 10,
+	        mx: 'auto',
+	        // to make the demo resizable
+	        overflow: 'auto'
+	      }}
+	    >
+	      <Typography level="title-lg" startDecorator={<InfoOutlined />}>
+	        Your payment info
+	      </Typography>
+	      <Divider inset="none" />
+	      <Box component="form" onSubmit={submitThePaymentInfo} noValidate sx={{ mt: 1 }}>
+		      <CardContent
+		        sx={{
+		          display: 'grid',
+		          gridTemplateColumns: 'repeat(2, minmax(80px, 1fr))',
+		          gap: 1.5,
+		        }}
+		      >
+		      	<FormControl sx={{ gridColumn: '1/-1' }}>
+		          <FormLabel>Card holder name</FormLabel>
+		          <Input placeholder="Enter cardholder's full name" name="name" defaultValue={name}/>
+		        </FormControl>
+		        <FormControl sx={{ gridColumn: '1/-1' }}>
+		          <FormLabel>Card number</FormLabel>
+		          <Input endDecorator={<CreditCardIcon />} name="number" defaultValue={number}/>
+		        </FormControl>
+		        <FormControl>
+		          <FormLabel>Expiry date</FormLabel>
+		          <Input endDecorator={<CreditCardIcon />} name="expdate" defaultValue={expdate}/>
+		        </FormControl>
+		        <FormControl>
+		          <FormLabel>CVC/CVV</FormLabel>
+		          <Input endDecorator={<InfoOutlined />} name="cvc" defaultValue={cvc}/>
+		        </FormControl>
 
-				<div className="form-input">
-					<div className="input-header">Enter the card holder name:</div>
-					<input class="input" placeholder="Card holder name" type="text" onChange={e => setName(e.target.value)} value={name}/>
-				</div>
-				<div className="form-input">
-					<div className="input-header">Enter the card number:</div>
-					<input class="input" placeholder="Card number" type="text" onChange={e => setNumber(e.target.value)} value={number}/>
-				</div>
-				<div className="form-input">
-					<div className="input-header">Enter the card security code (CVC):</div>
-					<input class="input" placeholder="Security code" type="text" onChange={e => setCvc(e.target.value)} value={cvc}/>
-				</div>
-				<div className="form-input">
-					<div className="input-header">Enter the card expiry date:</div>
-					<input class="input" placeholder="MMYYYY" type="text" onChange={e => setExpdate(e.target.value)} value={expdate}/>
-				</div>
+		        <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
-				<div id="errormsg">{errorMsg}</div>
+		        <CardActions sx={{ gridColumn: '1/-1' }}>
+		          <Button type="submit" variant="solid" color="primary">
+		            {newProduct ? "Add payment and launch" : "Save payment"}
+		            <div style={{ marginLeft: 10 }}><LockOutlinedIcon /></div>
+		          </Button>
+		        </CardActions>
+		      </CardContent>
+		    </Box>
+	    </Card>
 
-				<div id="submit" onClick={() => submitThePaymentInfo()}>{newProduct ? "Submit and launch" : "Save payment info"}</div>
-			</div>
-		</div>
+	    <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>
+	      {'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}
+	    </Typography>
+    </div>
 	)
 }

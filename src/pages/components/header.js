@@ -2,6 +2,23 @@ import './header.scss';
 import { useEffect, useState } from 'react';
 import { getUserInfo } from '../../apis/user'
 
+// material ui components
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import AdbIcon from '@mui/icons-material/Adb';
+
+const pages = ['Products', 'Rejections', 'Withdraw'];
+
 export default function Header() {
 	const [username, setUsername] = useState('')
 	const [earnings, setEarnings] = useState(0.0)
@@ -44,18 +61,29 @@ export default function Header() {
 	}, [])
 
 	return (
-		<div id="header">
-			<div id="navs">
-				<div className="page-navs">
-					<div className="column"><div id="username">Your are <strong>{username}</strong></div></div>
-					<div className="column"><div className="page-nav" onClick={() => window.location = "/main"}>Products</div></div>
-					{numRejected > 0 && <div className="column"><div className="page-nav" onClick={() => window.location = "/rejections"}>Rejections</div></div>}
-					<div className="column"><div className="page-nav" onClick={() => window.location = "/earnings"}>Withdraw: ${earnings.toFixed(2)}</div></div>
-					<div className="column"><div className="page-nav" onClick={() => window.location = "/listproduct"}>Submit your product</div></div>
-					<div className="column"><div className="page-nav" onClick={() => window.location = "/payment"}>Payment</div></div>
-					<div className="column"><div className="page-nav" onClick={() => logout()}>Log-Out</div></div>
-				</div>
-			</div>
-		</div>
+		<AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{ mr: 2, display: { xs: 'flex', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, color: 'inherit', textDecoration: 'none' }}
+          >
+            You are {username}
+          </Typography>
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
+            <Button onClick={() => window.location = "/main"} sx={{ my: 2, color: 'white', display: 'block' }}>Products</Button>
+            <Button onClick={() => window.location = "/rejections"} sx={{ my: 2, color: 'white', display: 'block' }}>Rejections</Button>
+            <Button onClick={() => window.location = "/earnings"} sx={{ my: 2, color: 'white', display: 'block' }}>Withdraw: ${earnings.toFixed(2)}</Button>
+            <Button onClick={() => window.location = "/listproduct"} sx={{ my: 2, color: 'white', display: 'block' }}>Submit your product</Button>
+            <Button onClick={() => window.location = "/payment"} sx={{ my: 2, color: 'white', display: 'block' }}>Payment</Button>
+            <Button onClick={() => logout()} sx={{ my: 2, color: 'white', display: 'block' }}>Log-Out</Button>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
 	)
 }

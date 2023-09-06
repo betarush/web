@@ -1,4 +1,3 @@
-import './register.scss';
 import { useEffect, useState } from 'react';
 import { register } from '../../apis/user'
 
@@ -7,7 +6,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
@@ -17,11 +15,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const defaultTheme = createTheme();
-
 const theme = createTheme({
 	palette: {
-		login: {
+		submit: {
 			main: 'black',
 			contrastText: 'white'
 		}
@@ -111,7 +107,7 @@ export default function Register() {
 
             <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
-            <Button type="submit" fullWidth variant="contained" color="login" sx={{ mt: 3, mb: 2 }}>REGISTER</Button>
+            <Button type="submit" fullWidth variant="contained" color="submit" sx={{ mt: 3, mb: 2 }}>REGISTER</Button>
             <Grid container>
               <Grid item>
                 <Link href="/login" variant="body2">

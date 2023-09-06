@@ -4,8 +4,40 @@ import { getId, resizePhoto } from 'geottuse-tools';
 import { getUserInfo } from '../../apis/user';
 import { listProduct } from '../../apis/product'
 
+// material ui components
+import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 // components
 import Header from '../components/header'
+
+const theme = createTheme({
+	palette: {
+		submit: {
+			main: 'black',
+			contrastText: 'white'
+		}
+	}
+})
+
+const VisuallyHiddenInput = styled('input')`
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  white-space: nowrap;
+  width: 1px;
+`;
 
 export default function Listproduct() {
 	const [userId, setUserid] = useState('')
@@ -44,13 +76,17 @@ export default function Listproduct() {
 				}
 			})
 	}
-	const listTheProduct = () => {
+	const listTheProduct = event => {
+		event.preventDefault();
+
 		if (name && desc && link) {
 			if (paymentDone) {
 				const id = localStorage.getItem("id")
-				const data = { userId: id, name, desc, link, image: JSON.stringify(image) }
+				const data = new FormData(event.currentTarget);
+				const name = data.get('name'), desc = data.get('desc'), link = data.get('link')
+				const json = { userId: id, name, desc, link, image: JSON.stringify(image) }
 
-				listProduct(data)
+				listProduct(json)
 					.then((res) => {
 						if (res.status == 200) {
 							return res.json()
@@ -112,51 +148,103 @@ export default function Listproduct() {
 	}, [])
 
 	return (
-		<div id="listproduct">
+		<ThemeProvider theme={theme}>
 			<Header/>
 
-			<div id="form">
-				<div id="header">What is your product</div>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Typography component="h1" variant="h5">What is your product</Typography>
+          <Box component="form" onSubmit={listTheProduct} noValidate sx={{ mt: 1 }}>
+          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product name:" name="name" variant="standard" defaultValue={name}/>
+          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product information:" name="desc" variant="standard" defaultValue={desc}/>
+          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product link to lead customers:" name="link" variant="standard" defaultValue={link}/>
 
-				<div className="form-input">
-					<div className="input-header">Enter product name:</div>
-					<input class="input" placeholder="What is your product name" type="text" onChange={e => setName(e.target.value)} value={name}/>
-				</div>
-				<div className="form-input">
-					<div className="input-header">Enter product information:</div>
-					<textarea 
-						class="input" 
-						placeholder="etc: what is the product about, what problem does it solve and how does it solve it" 
-						type="text" onChange={e => setDesc(e.target.value)} value={desc}
-						style={{ height: 300 }}
-					/>
-				</div>
-				<div className="form-input">
-					<div className="input-header">Enter product link to lead customers:</div>
-					<input class="input" placeholder="What is your product website" type="text" onChange={e => setLink(e.target.value)} value={link}/>
-				</div>
-				<div className="form-input">
-					<div className="input-header">Provide product logo: (Optional)</div>
+          	<Button
+						  component="label"
+						  variant="contained"
+						  startIcon={<CloudUploadIcon />}
+						  href="#file-upload"
+						>
+						  Upload a logo
+						  <VisuallyHiddenInput 
+						  	type="file"
+						  	ref={r => setFile(r)}
+						  	onChange={chooseImage} 
+						  />
+						</Button>
 
-					<div id="browse-image" onClick={() => file.click()}>Browse Logo</div>
+						{image.uri && (
+							<div style={{ margin: '0 auto', ...resizePhoto(image, 300, 300) }}>
+								<img src={image.uri} style={{ height: '100%', width: '100%' }}/>
+							</div>
+						)}
 
-					{image.uri && (
-						<div style={{ margin: '0 auto', ...resizePhoto(image, 300, 300) }}>
-							<img src={image.uri} style={{ height: '100%', width: '100%' }}/>
-						</div>
-					)}
+						<Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
-					<input 
-						type="file" ref={r => setFile(r)} 
-						onChange={chooseImage} style={{ display: 'none' }}
-						stye={{ display: 'none' }}
-					/>
-				</div>
-
-				<div id="errormsg">{errorMsg}</div>
-
-				<div id="submit" onClick={() => listTheProduct()}>{paymentDone ? "Pay and launch" : "Enter payment"}</div>
-			</div>
-		</div>
+            <Button type="submit" fullWidth variant="contained" color="submit" sx={{ mt: 3, mb: 2 }}>{paymentDone ? "PAY & LAUNCH" : "ENTER PAYMENT"}</Button>
+          </Box>
+        </Box>
+        <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>
+		      {'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}
+		    </Typography>
+      </Container>
+    </ThemeProvider>
 	)
+
+	// return (
+	// 	<div id="listproduct">
+	// 		<Header/>
+
+	// 		<div id="form">
+	// 			<div id="header">What is your product</div>
+
+	// 			<div className="form-input">
+	// 				<div className="input-header">Enter product name:</div>
+	// 				<input class="input" placeholder="What is your product name" type="text" onChange={e => setName(e.target.value)} value={name}/>
+	// 			</div>
+	// 			<div className="form-input">
+	// 				<div className="input-header">Enter product information:</div>
+	// 				<textarea 
+	// 					class="input" 
+	// 					placeholder="etc: what is the product about, what problem does it solve and how does it solve it" 
+	// 					type="text" onChange={e => setDesc(e.target.value)} value={desc}
+	// 					style={{ height: 300 }}
+	// 				/>
+	// 			</div>
+	// 			<div className="form-input">
+	// 				<div className="input-header">Enter product link to lead customers:</div>
+	// 				<input class="input" placeholder="What is your product website" type="text" onChange={e => setLink(e.target.value)} value={link}/>
+	// 			</div>
+	// 			<div className="form-input">
+	// 				<div className="input-header">Provide product logo: (Optional)</div>
+
+	// 				<div id="browse-image" onClick={() => file.click()}>Browse Logo</div>
+
+	// 				{image.uri && (
+	// 					<div style={{ margin: '0 auto', ...resizePhoto(image, 300, 300) }}>
+	// 						<img src={image.uri} style={{ height: '100%', width: '100%' }}/>
+	// 					</div>
+	// 				)}
+
+	// 				<input 
+	// 					type="file" ref={r => setFile(r)} 
+	// 					onChange={chooseImage} style={{ display: 'none' }}
+	// 					stye={{ display: 'none' }}
+	// 				/>
+	// 			</div>
+
+	// 			<div id="errormsg">{errorMsg}</div>
+
+	// 			<div id="submit" onClick={() => listTheProduct()}>{paymentDone ? "Pay and launch" : "Enter payment"}</div>
+	// 		</div>
+	// 	</div>
+	// )
 }

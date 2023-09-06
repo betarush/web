@@ -21,7 +21,7 @@ const defaultTheme = createTheme();
 
 const theme = createTheme({
 	palette: {
-		login: {
+		submit: {
 			main: 'black',
 			contrastText: 'white'
 		}
@@ -97,7 +97,7 @@ export default function Login() {
 
             <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
-            <Button type="submit" fullWidth variant="contained" color="login" sx={{ mt: 3, mb: 2 }}>LOG IN</Button>
+            <Button type="submit" fullWidth variant="contained" color="submit" sx={{ mt: 3, mb: 2 }}>LOG IN</Button>
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
