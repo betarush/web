@@ -46,8 +46,8 @@ export default function Header() {
 	return (
 		<div id="header">
 			<div id="navs">
-				<div className="column"><div id="username">Your are <strong>{username}</strong></div></div>
 				<div className="page-navs">
+					<div className="column"><div id="username">Your are <strong>{username}</strong></div></div>
 					<div className="column"><div className="page-nav" onClick={() => window.location = "/main"}>Products</div></div>
 					{numRejected > 0 && <div className="column"><div className="page-nav" onClick={() => window.location = "/rejections"}>Rejections</div></div>}
 					<div className="column"><div className="page-nav" onClick={() => window.location = "/earnings"}>Withdraw: ${earnings.toFixed(2)}</div></div>
