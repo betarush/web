@@ -7,3 +7,11 @@ export const submitFeedback = data => {
 		body: JSON.stringify(data)
 	})
 }
+
+export const getRejections = data => {
+	return fetch(`${routeUrl}/get_rejections`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(data)
+	})
+}

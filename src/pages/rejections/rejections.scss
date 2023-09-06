@@ -1,0 +1,38 @@
+#rejection {
+	background-color: #efefef;
+	height: 100vh;
+	width: 100vw;
+
+	#rejections {
+		margin: 20px 0;
+
+		.product {
+			background-color: white;
+			border-radius: 20px;
+			margin: 0 auto;
+			padding: 10px;
+			width: 600px;
+
+			.info {
+				.logo {
+					background-color: rgba(0, 0, 0, 0.2);
+					border-radius: 50px;
+					height: 100px;
+					margin: 0 auto;
+					width: 100px;
+
+					img {
+						height: 100%;
+						width: 100%;
+					}
+				}
+			}
+
+			.rejections-header {
+				font-size: 20px;
+				margin: 20px 0;
+				text-align: center;
+			}
+		}
+	}
+}

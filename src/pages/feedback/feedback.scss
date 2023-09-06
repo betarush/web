@@ -20,6 +20,11 @@
 					height: 100px;
 					margin: 0 auto;
 					width: 100px;
+
+					img {
+						height: 100%;
+						width: 100%;
+					}
 				}
 			}
 
@@ -57,6 +62,66 @@
 								cursor: pointer;
 							}
 						}
+					}
+				}
+			}
+		}
+	}
+
+	#hidden-box {
+		background-color: rgba(0, 0, 0, 0.7);
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+		justify-content: space-around;
+		position: absolute;
+		top: 0;
+		width: 100vw;
+
+		#reject-box {
+			background-color: #efefef;
+			display: flex;
+			flex-direction: column;
+			height: 500px;
+			justify-content: space-around;
+			margin: 0 auto;
+			width: 500px;
+
+			#reject-header {
+				font-size: 30px;
+				font-weight: bold;
+				text-align: center;
+			}
+
+			#reject-input {
+				border-radius: 20px;
+				font-size: 20px;
+				height: 50%;
+				margin: 0 auto;
+				padding: 10px;
+				resize: none;
+				width: 90%;
+			}
+
+			#actions {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-around;
+
+				.action {
+					background-color: black;
+					border-radius: 20px;
+					color: white;
+					font-size: 15px;
+					font-weight: bold;
+					margin: 0 auto;
+					padding: 10px;
+					text-align: center;
+					width: 200px;
+
+					&:hover {
+						cursor: pointer;
+						opacity: 0.5;
 					}
 				}
 			}
