@@ -64,6 +64,14 @@ export const rewardCustomer = data => {
 	})
 }
 
+export const rejectFeedback = data => {
+	return fetch(`${routeUrl}/reject_feedback`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(data)
+	})
+}
+
 export const getEarnings = data => {
 	return fetch(`${routeUrl}/get_earnings`, {
 		method: "POST",

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 // components
 import Header from '../components/header'
-import { rewardCustomer } from '../../apis/user'
+import { rewardCustomer, rejectFeedback } from '../../apis/user'
 import { getFeedbacks } from '../../apis/product'
 
 export default function Feedbacks(props) {
@@ -35,6 +35,30 @@ export default function Feedbacks(props) {
 					err.json().then(() => {
 
 					})
+				}
+			})
+	}
+	const rejectTheFeedback = (testerId, index) => {
+		const data = { productId: id, testerId }
+		const newFeedbacks = [...feedbacks]
+
+		rejectFeedback(data)
+			.then((res) => {
+				if (res.status == 200) {
+					return res.json()
+				}
+
+				throw res
+			})
+			.then((res) => {
+				if (res) {
+					newFeedbacks.splice(index, 1)
+
+					if (newFeedbacks.length > 0) {
+						setFeedbacks(newFeedbacks)
+					} else {
+						window.location = '/main'
+					}
 				}
 			})
 	}
@@ -92,7 +116,11 @@ export default function Feedbacks(props) {
 						{feedbacks.map((feedback, index) => (
 							<div className="feedback" key={feedback.key}>
 								<div className="feedback-header">{feedback.header}</div>
-								<div className="feedback-reward" onClick={() => rewardTheCustomer(feedback.testerId, index)}>Reward customer</div>
+
+								<div className="feedback-actions">
+									<div className="feedback-action" onClick={() => rejectTheFeedback(feedback.testerId, index)}>Reject feedback</div>
+									<div className="feedback-action" onClick={() => rewardTheCustomer(feedback.testerId, index)}>Reward customer</div>
+								</div>
 							</div>
 						))}
 					</div>

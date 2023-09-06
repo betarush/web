@@ -6,13 +6,22 @@ import { listProduct } from '../../apis/product'
 // components
 import Header from '../components/header'
 
+let stripe = require('stripe')('sk_test_51NmA1PFqjgkiO0WHxOmFjOzgwHorLyTxjyWJ926HiBK10KHnTnh7q8skEmQ5c0NpHxI3mk2fbejMASjazhPlmGkv00L98uIq8G');
+
 export default function Payment() {
 	const [userId, setUserid] = useState('')
 
 	const [name, setName] = useState('the account')
-	const [number, setNumber] = useState('4000000000000007  ')
+	const [number, setNumber] = useState('4000000000000007')
 	const [cvc, setCvc] = useState('234')
 	const [expdate, setExpdate] = useState('122024')
+
+	// real date
+	// const [name, setName] = useState('Kevin Hien Luong Mai')
+	// const [number, setNumber] = useState('4512238770577855')
+	// const [cvc, setCvc] = useState('086')
+	// const [expdate, setExpdate] = useState('1123')
+
 	const [errorMsg, setErrormsg] = useState('')
 
 	const [newProduct, setNewproduct] = useState(false)
@@ -47,9 +56,17 @@ export default function Payment() {
 				}
 			})
 	}
-	const submitThePaymentInfo = () => {
+	const submitThePaymentInfo = async() => {
 		if (name && number && cvc && expdate) {
-			const data = { userId, name, number, cvc, expdate }
+			// let card = await stripe.tokens.create({
+			// 	card: {
+			// 		number: '4000000000000007',
+			//     exp_month: '11',
+			//     exp_year: '23',
+			//     cvc: '123'
+			// 	}
+			// })
+			const data = { userId, name, number, cvc, expdate, token: "tok_bypassPending" }
 
 			submitPaymentInfo(data)
 				.then((res) => {

@@ -240,7 +240,9 @@ export default function Main() {
 										<div className="info-container">
 											<div className="header">Amount spent: ${product.amountSpent.toFixed(2)}</div>
 											<div className="header">
-												{product.numTesting > 0 && (
+												{product.numTesting > 0 && product.numTesting + " people testing"}
+												<br/>
+												{product.numFeedback > 0 && (
 													<>
 														{product.numTesting} people<br/>tried and gave feedback<br/>
 
@@ -262,7 +264,7 @@ export default function Main() {
 			{feedback.show && (
 				<div id="hidden-box">
 					<div id="feedback-box">
-						<div id="feedback-header">Your feedback</div>
+						<div id="feedback-header">Write a good feedback to earn $2</div>
 
 						<textarea id="feedback-input" maxlength="200" onChange={e => setFeedback({ ...feedback, input: e.target.value })} value={feedback.input}/>
 

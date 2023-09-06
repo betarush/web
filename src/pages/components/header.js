@@ -44,15 +44,11 @@ export default function Header() {
 	return (
 		<div id="header">
 			<div id="navs">
-				<div className="page-navs">
-					<div className="column"><div className="page-nav">Privacy</div></div>
-					<div className="column"><div className="page-nav">Terms</div></div>
-				</div>
 				<div className="column"><div id="username">Your are <strong>{username}</strong></div></div>
 				<div className="page-navs">
 					<div className="column"><div className="page-nav" onClick={() => window.location = "/main"}>Products</div></div>
-					<div className="column"><div className="page-nav" onClick={() => window.location = "/earnings"}>You earned: ${earnings.toFixed(2)}</div></div>
-					<div className="column"><div className="page-nav" onClick={() => window.location = "/listproduct"}>List your product</div></div>
+					<div className="column"><div className="page-nav" onClick={() => window.location = "/earnings"}>Withdraw: ${earnings.toFixed(2)}</div></div>
+					<div className="column"><div className="page-nav" onClick={() => window.location = "/listproduct"}>Submit your product</div></div>
 					<div className="column"><div className="page-nav" onClick={() => window.location = "/payment"}>Payment</div></div>
 					<div className="column"><div className="page-nav" onClick={() => logout()}>Log-Out</div></div>
 				</div>

@@ -1,9 +1,12 @@
 import './earnings.scss';
 import { useEffect, useState } from 'react';
+import ClipLoader from "react-spinners/ClipLoader";
 import { getUserInfo, getBankaccountInfo, submitBankaccountInfo, getEarnings } from '../../apis/user'
 
 // components
 import Header from '../components/header'
+
+let stripe = require('stripe')('sk_test_51NmA1PFqjgkiO0WHxOmFjOzgwHorLyTxjyWJ926HiBK10KHnTnh7q8skEmQ5c0NpHxI3mk2fbejMASjazhPlmGkv00L98uIq8G');
 
 export default function Earnings() {
 	const [userId, setUserid] = useState('')
@@ -18,10 +21,22 @@ export default function Earnings() {
 	const [routingNumber, setRoutingnumber] = useState('110000000')
 	const [accountNumber, setAccountnumber] = useState('000123456789')
 
+	// real data
+	// const [line1, setLine1] = useState('275 Broadview Avenue')
+	// const [zipcode, setZipcode] = useState('M4M3H5')
+	// const [dob, setDob] = useState('07301996')
+	// const [firstName, setFirstname] = useState('Kevin')
+	// const [lastName, setLastname] = useState('Mai')
+	// const [country, setCountry] = useState('CA')
+	// const [currency, setCurrency] = useState('cad')
+	// const [routingNumber, setRoutingnumber] = useState('000305842')
+	// const [accountNumber, setAccountnumber] = useState('5207790')
+
 	const [bankaccountDone, setBankaccountdone] = useState(false)
 	const [earnings, setEarnings] = useState(0.0)
 	const [earnedBox, setEarnedbox] = useState({ show: false, earned: 0.0 })
 
+	const [loaded, setLoaded] = useState(false)
 	const [errorMsg, setErrormsg] = useState('')
 
 	const getTheUserInfo = () => {
@@ -65,7 +80,7 @@ export default function Earnings() {
 			})
 			.then((res) => {
 				if (res) {
-					setUserid(id)
+					setLoaded(true)
 				}
 			})
 			.catch((err) => {
@@ -76,9 +91,19 @@ export default function Earnings() {
 				}
 			})
 	}
-	const submitTheBankaccountInfo = () => {
+	const submitTheBankaccountInfo = async() => {
 		if (line1 && zipcode && dob && firstName && lastName && country && currency && routingNumber && accountNumber) {
-			const data = { userId, line1, zipcode, dob, firstName, lastName, country, currency, routingNumber, accountNumber }
+			// let bankaccount = await stripe.tokens.create({
+			// 	bank_account: {
+			// 		country,
+			// 		currency,
+			// 		account_holder_name: firstName + " " + lastName,
+			// 		account_holder_type: "individual",
+			// 		routing_number: routingNumber,
+			// 		account_number: accountNumber
+			// 	}
+			// })
+			const data = { userId, line1, zipcode, dob, firstName, lastName, country, currency, routingNumber, accountNumber, token: "btok_us_verified" }
 
 			submitBankaccountInfo(data)
 				.then((res) => {
@@ -90,7 +115,11 @@ export default function Earnings() {
 				})
 				.then((res) => {
 					if (res) {
-						window.location = "/main"
+						if (earnings > 0) {
+							getTheEarnings()
+						} else {
+							window.location = "/main"
+						}
 					}
 				})
 				.catch((err) => {
@@ -156,7 +185,8 @@ export default function Earnings() {
 
 					setTimeout(function () {
 						setEarnedbox({ show: false, earned: 0.0 })
-					}, 2000)
+						window.location = "/main"
+					}, 4000)
 				}
 			})
 	}
@@ -173,62 +203,63 @@ export default function Earnings() {
 		<div id="earnings">
 			<Header/>
 
-			{earnings > 0 && (
+			{loaded ? 
 				<>
-					<div id="get-earnings" onClick={() => getTheEarnings()}>Get earnings now</div>
+					{(bankaccountDone && earnings > 0) && <div id="get-earnings" onClick={() => getTheEarnings()}>Get earnings now</div>}
 
-					<br/>
-					Or
+					{bankaccountDone && <div id="earnings-header">Or update your bank information below</div>}
+
+					<div id="form">
+						<div id="header">Your bank account info (to get your earnings)</div>
+
+						<div className="form-input">
+							<div className="input-header">Enter your address line 1:</div>
+							<input class="input" placeholder="Address line #1" type="text" onChange={e => setLine1(e.target.value)} value={line1}/>
+						</div>
+						<div className="form-input">
+							<div className="input-header">Enter your Zipcode:</div>
+							<input class="input" placeholder="Zipcode" type="text" onChange={e => setZipcode(e.target.value)} value={zipcode}/>
+						</div>
+						<div className="form-input">
+							<div className="input-header">Enter your Date of birth:</div>
+							<input class="input" placeholder="DDMMYYYY" type="text" onChange={e => setDob(e.target.value)} value={dob}/>
+						</div>
+						<div className="form-input">
+							<div className="input-header">Enter your first name:</div>
+							<input class="input" placeholder="First name" type="text" onChange={e => setFirstname(e.target.value)} value={firstName}/>
+						</div>
+						<div className="form-input">
+							<div className="input-header">Enter your last name:</div>
+							<input class="input" placeholder="Last name" type="text" onChange={e => setLastname(e.target.value)} value={lastName}/>
+						</div>
+
+						<div className="form-input">
+							<div className="input-header">Enter country:</div>
+							<input class="input" placeholder="CA" type="text" onChange={e => setCountry(e.target.value)} value={country}/>
+						</div>
+						<div className="form-input">
+							<div className="input-header">Enter currency:</div>
+							<input class="input" placeholder="CAD" type="text" onChange={e => setCurrency(e.target.value)} value={currency}/>
+						</div>
+						<div className="form-input">
+							<div className="input-header">Enter your routing number:</div>
+							<input class="input" placeholder="Routing number" type="text" onChange={e => setRoutingnumber(e.target.value)} value={routingNumber}/>
+						</div>
+						<div className="form-input">
+							<div className="input-header">Enter your account number:</div>
+							<input class="input" placeholder="Account number" type="text" onChange={e => setAccountnumber(e.target.value)} value={accountNumber}/>
+						</div>
+
+						<div id="errormsg">{errorMsg}</div>
+
+						<div id="submit" onClick={() => submitTheBankaccountInfo()}>{earnings > 0 ? "Get earnings" : "Submit bank information"}</div>
+					</div>
 				</>
-			)}
-
-			{bankaccountDone && <div id="earnings-header">Update your bank information below</div>}
-
-			<div id="form">
-				<div id="header">Your bank account info (to get your earnings)</div>
-
-				<div className="form-input">
-					<div className="input-header">Enter your address line 1:</div>
-					<input class="input" placeholder="Address line #1" type="text" onChange={e => setLine1(e.target.value)} value={line1}/>
+				:
+				<div style={{ height: 20, margin: '50% auto', width: 20 }}>
+					<ClipLoader color="black" size={20}/>
 				</div>
-				<div className="form-input">
-					<div className="input-header">Enter your Zipcode:</div>
-					<input class="input" placeholder="Zipcode" type="text" onChange={e => setZipcode(e.target.value)} value={zipcode}/>
-				</div>
-				<div className="form-input">
-					<div className="input-header">Enter your Date of birth:</div>
-					<input class="input" placeholder="DDMMYYYY" type="text" onChange={e => setDob(e.target.value)} value={dob}/>
-				</div>
-				<div className="form-input">
-					<div className="input-header">Enter your first name:</div>
-					<input class="input" placeholder="First name" type="text" onChange={e => setFirstname(e.target.value)} value={firstName}/>
-				</div>
-				<div className="form-input">
-					<div className="input-header">Enter your last name:</div>
-					<input class="input" placeholder="Last name" type="text" onChange={e => setLastname(e.target.value)} value={lastName}/>
-				</div>
-
-				<div className="form-input">
-					<div className="input-header">Enter country:</div>
-					<input class="input" placeholder="CA" type="text" onChange={e => setCountry(e.target.value)} value={country}/>
-				</div>
-				<div className="form-input">
-					<div className="input-header">Enter currency:</div>
-					<input class="input" placeholder="CAD" type="text" onChange={e => setCurrency(e.target.value)} value={currency}/>
-				</div>
-				<div className="form-input">
-					<div className="input-header">Enter your routing number:</div>
-					<input class="input" placeholder="Routing number" type="text" onChange={e => setRoutingnumber(e.target.value)} value={routingNumber}/>
-				</div>
-				<div className="form-input">
-					<div className="input-header">Enter your account number:</div>
-					<input class="input" placeholder="Account number" type="text" onChange={e => setAccountnumber(e.target.value)} value={accountNumber}/>
-				</div>
-
-				<div id="errormsg">{errorMsg}</div>
-
-				<div id="submit" onClick={() => submitTheBankaccountInfo()}>Get earnings</div>
-			</div>
+			}
 
 			{earnedBox.show && (
 				<div id="hidden-box">

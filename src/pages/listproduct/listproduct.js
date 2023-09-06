@@ -116,7 +116,7 @@ export default function Listproduct() {
 			<Header/>
 
 			<div id="form">
-				<div id="header">What is your startup</div>
+				<div id="header">What is your product</div>
 
 				<div className="form-input">
 					<div className="input-header">Enter product name:</div>

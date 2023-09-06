@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { login } from '../../apis/user'
 
 export default function Login() {
-	const [email, setEmail] = useState('kevin@gmail.com')
+	const [email, setEmail] = useState('creator@gmail.com')
 	const [password, setPassword] = useState('qqqqqqq')
 	const [errorMsg, setErrormsg] = useState('')
 
@@ -47,8 +47,6 @@ export default function Login() {
 			<div className="row">
 				<div id="page-navs">
 					<div className="column"><div className="page-nav" onClick={() => window.location = "/register"}>Register</div></div>
-					<div className="column"><div className="page-nav">Privacy</div></div>
-					<div className="column"><div className="page-nav">Terms</div></div>
 				</div>
 			</div>
 
