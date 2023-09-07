@@ -57,21 +57,36 @@ export default function Landing() {
 						<div className="info-header">For testers</div>
 
 						<div className="info-info">
-							A product can be tested by only a maximum of 5 users
+							<div className="header">
+								A product can be tested by only a maximum of 5 users
+							</div>
+							<div className="image" style={{ borderRadius: 75, ...resizePhoto({ width: 960, height: 540 }, 300, 300) }}>
+								<img src="/5testers.jpg"/>
+							</div>
 						</div>
 
 						<div className="info-info">
-							A tester can explore/tryout a product anyway they can and
-							write a good feedback
+							<div className="header">
+								A tester can explore/tryout a product anyway they can and
+								write a good feedback
+							</div>
+							<div className="image" style={{ borderRadius: 75, ...resizePhoto({ width: 1000, height: 563 }, 300, 300) }}>
+								<img src="/givingfeedback.jpg"/>
+							</div>
 						</div>
 
 						<div className="info-info">
-							The creator can see the feedback and reward the tester with $4
+							<div className="header">
+								The creator can see the feedback and reward the tester with $4
+							</div>
+							<div className="image" style={{ borderRadius: 75, ...resizePhoto({ width: 793, height: 496 }, 300, 300) }}>
+								<img src="/earnmoney.jpg"/>
+							</div>
 						</div>
 					</div>
 				</div>
 
-				<div id="infos-header">That's it. Simple as that</div>
+				<div id="infos-header">That's it. It's that simple</div>
 			</div>
 		</div>
 	)
