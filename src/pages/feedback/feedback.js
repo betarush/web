@@ -1,5 +1,6 @@
 import './feedback.scss';
 import { useEffect, useState } from 'react';
+import ClipLoader from "react-spinners/ClipLoader";
 import { useParams } from 'react-router-dom';
 import { resizePhoto } from 'geottuse-tools';
 
@@ -19,6 +20,7 @@ export default function Feedbacks(props) {
 	const [name, setName] = useState('')
 	const [image, setImage] = useState({ name: '', width: 0, height: 0 })
 	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {} })
+	const [loaded, setLoaded] = useState(false)
 
 	const getTheFeedbacks = () => {
 		const data = { productId: id }
@@ -36,6 +38,7 @@ export default function Feedbacks(props) {
 					setFeedbacks(res.feedbacks)
 					setName(res.name)
 					setImage(res.logo)
+					setLoaded(true)
 				}
 			})
 			.catch((err) => {
@@ -115,30 +118,36 @@ export default function Feedbacks(props) {
 		<div id="feedback">
 			<Header/>
 
-			<div id="feedbacks">
-				<div className="product">
-					<div className="info">
-						<div className="logo" style={resizePhoto(image, 100, 100)}>
-							<img src={LOGO_URL + '/' + image.name}/>
+			{loaded ? 
+				<div id="feedbacks">
+					<div className="product">
+						<div className="info">
+							<div className="logo" style={resizePhoto(image, 100, 100)}>
+								<img src={LOGO_URL + '/' + image.name}/>
+							</div>
+						</div>
+
+						<div id="feedbacks-header">Your feedbacks for <strong>{name}</strong></div>
+
+						<div id="product-feedbacks">
+							{feedbacks.map((feedback, index) => (
+								<div className="feedback" key={feedback.key}>
+									<div className="feedback-header">{feedback.header}</div>
+
+									<div className="feedback-actions">
+										<div className="feedback-action" onClick={() => rejectTheFeedback(feedback.testerId, index)}>Reject feedback</div>
+										<div className="feedback-action" onClick={() => rewardTheCustomer(feedback.testerId, index)}>Reward customer</div>
+									</div>
+								</div>
+							))}
 						</div>
 					</div>
-
-					<div id="feedbacks-header">Your feedbacks for <strong>{name}</strong></div>
-
-					<div id="product-feedbacks">
-						{feedbacks.map((feedback, index) => (
-							<div className="feedback" key={feedback.key}>
-								<div className="feedback-header">{feedback.header}</div>
-
-								<div className="feedback-actions">
-									<div className="feedback-action" onClick={() => rejectTheFeedback(feedback.testerId, index)}>Reject feedback</div>
-									<div className="feedback-action" onClick={() => rewardTheCustomer(feedback.testerId, index)}>Reward customer</div>
-								</div>
-							</div>
-						))}
-					</div>
 				</div>
-			</div>
+				:
+				<div style={{ height: 20, margin: '10% auto', width: 20 }}>
+					<ClipLoader color="black" size={20}/>
+				</div>
+			}
 
 			{rejectReasonbox.show && (
 				<div id="hidden-box">

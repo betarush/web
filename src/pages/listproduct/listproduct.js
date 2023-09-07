@@ -1,4 +1,3 @@
-import './listproduct.scss';
 import { useEffect, useState } from 'react';
 import { getId, resizePhoto } from 'geottuse-tools';
 import { getUserInfo } from '../../apis/user';
@@ -79,11 +78,12 @@ export default function Listproduct() {
 	const listTheProduct = event => {
 		event.preventDefault();
 
+		const data = new FormData(event.currentTarget);
+		const name = data.get('name'), desc = data.get('desc'), link = data.get('link')
+
 		if (name && desc && link) {
 			if (paymentDone) {
 				const id = localStorage.getItem("id")
-				const data = new FormData(event.currentTarget);
-				const name = data.get('name'), desc = data.get('desc'), link = data.get('link')
 				const json = { userId: id, name, desc, link, image: JSON.stringify(image) }
 
 				listProduct(json)
@@ -198,53 +198,4 @@ export default function Listproduct() {
       </Container>
     </ThemeProvider>
 	)
-
-	// return (
-	// 	<div id="listproduct">
-	// 		<Header/>
-
-	// 		<div id="form">
-	// 			<div id="header">What is your product</div>
-
-	// 			<div className="form-input">
-	// 				<div className="input-header">Enter product name:</div>
-	// 				<input class="input" placeholder="What is your product name" type="text" onChange={e => setName(e.target.value)} value={name}/>
-	// 			</div>
-	// 			<div className="form-input">
-	// 				<div className="input-header">Enter product information:</div>
-	// 				<textarea 
-	// 					class="input" 
-	// 					placeholder="etc: what is the product about, what problem does it solve and how does it solve it" 
-	// 					type="text" onChange={e => setDesc(e.target.value)} value={desc}
-	// 					style={{ height: 300 }}
-	// 				/>
-	// 			</div>
-	// 			<div className="form-input">
-	// 				<div className="input-header">Enter product link to lead customers:</div>
-	// 				<input class="input" placeholder="What is your product website" type="text" onChange={e => setLink(e.target.value)} value={link}/>
-	// 			</div>
-	// 			<div className="form-input">
-	// 				<div className="input-header">Provide product logo: (Optional)</div>
-
-	// 				<div id="browse-image" onClick={() => file.click()}>Browse Logo</div>
-
-	// 				{image.uri && (
-	// 					<div style={{ margin: '0 auto', ...resizePhoto(image, 300, 300) }}>
-	// 						<img src={image.uri} style={{ height: '100%', width: '100%' }}/>
-	// 					</div>
-	// 				)}
-
-	// 				<input 
-	// 					type="file" ref={r => setFile(r)} 
-	// 					onChange={chooseImage} style={{ display: 'none' }}
-	// 					stye={{ display: 'none' }}
-	// 				/>
-	// 			</div>
-
-	// 			<div id="errormsg">{errorMsg}</div>
-
-	// 			<div id="submit" onClick={() => listTheProduct()}>{paymentDone ? "Pay and launch" : "Enter payment"}</div>
-	// 		</div>
-	// 	</div>
-	// )
 }

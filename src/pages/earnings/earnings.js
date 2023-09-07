@@ -3,6 +3,21 @@ import { useEffect, useState } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
 import { getUserInfo, getBankaccountInfo, submitBankaccountInfo, getEarnings } from '../../apis/user'
 
+// material ui components
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/joy/Card';
+import CardActions from '@mui/joy/CardActions';
+import CardContent from '@mui/joy/CardContent';
+import Divider from '@mui/joy/Divider';
+import FormControl from '@mui/joy/FormControl';
+import FormLabel from '@mui/joy/FormLabel';
+import Input from '@mui/joy/Input';
+import Box from '@mui/material/Box';
+import Typography from '@mui/joy/Typography';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Button from '@mui/joy/Button';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
+
 // components
 import Header from '../components/header'
 
@@ -17,7 +32,7 @@ export default function Earnings() {
 	const [firstName, setFirstname] = useState('Kevin')
 	const [lastName, setLastname] = useState('Mai')
 	const [country, setCountry] = useState('CA')
-	const [currency, setCurrency] = useState('usd')
+	const [currency, setCurrency] = useState('cad')
 	const [routingNumber, setRoutingnumber] = useState('110000000')
 	const [accountNumber, setAccountnumber] = useState('000123456789')
 
@@ -80,6 +95,18 @@ export default function Earnings() {
 			})
 			.then((res) => {
 				if (res) {
+					if (res.line1) {
+						setLine1(res.line1)
+						setZipcode(res.zipcode)
+						setDob(res.dob)
+						setFirstname(res.firstName)
+						setLastname(res.lastName)
+						setCountry(res.country)
+						setCurrency(res.currency)
+						setRoutingnumber(res.routingNumber)
+						setAccountnumber(res.accountNumber)
+					}
+
 					setLoaded(true)
 				}
 			})
@@ -91,7 +118,14 @@ export default function Earnings() {
 				}
 			})
 	}
-	const submitTheBankaccountInfo = async() => {
+	const submitTheBankaccountInfo = async event => {
+		event.preventDefault()
+
+		const data = new FormData(event.currentTarget);
+		const line1 = data.get('line1'), zipcode = data.get('zipcode'), dob = data.get('dob')
+		const firstName = data.get('firstName'), lastName = data.get('lastName'), country = data.get('country')
+		const currency = data.get('currency'), routingNumber = data.get('routingNumber'), accountNumber = data.get('accountNumber')
+
 		if (line1 && zipcode && dob && firstName && lastName && country && currency && routingNumber && accountNumber) {
 			// let bankaccount = await stripe.tokens.create({
 			// 	bank_account: {
@@ -103,9 +137,9 @@ export default function Earnings() {
 			// 		account_number: accountNumber
 			// 	}
 			// })
-			const data = { userId, line1, zipcode, dob, firstName, lastName, country, currency, routingNumber, accountNumber, token: "btok_us_verified" }
+			const json = { userId, line1, zipcode, dob, firstName, lastName, country, currency, routingNumber, accountNumber, token: "btok_us_verified" }
 
-			submitBankaccountInfo(data)
+			submitBankaccountInfo(json)
 				.then((res) => {
 					if (res.status == 200) {
 						return res.json()
@@ -205,73 +239,95 @@ export default function Earnings() {
 
 			{loaded ? 
 				<>
-					{(bankaccountDone && earnings > 0) && <div id="get-earnings" onClick={() => getTheEarnings()}>Get earnings now</div>}
+					{(bankaccountDone && earnings > 0) && (
+						<>
+							<div id="get-earnings" onClick={() => getTheEarnings()}>Get earnings now</div>
+							<div id="earnings-header">Or update your bank information below</div>
+						</>
+					)}
 
-					{bankaccountDone && <div id="earnings-header">Or update your bank information below</div>}
+					<Card
+			      variant="outlined"
+			      sx={{
+			        maxHeight: 'max-content',
+			        maxWidth: 500,
+			        marginTop: 10,
+			        mx: 'auto',
+			        // to make the demo resizable
+			        overflow: 'auto'
+			      }}
+			    >
+			      <Typography level="title-lg" startDecorator={<InfoOutlined />}>
+			        Your bank account info
+			      </Typography>
+			      <Typography>(to get your earnings)</Typography>
+			      <Divider inset="none" />
+			      <Box component="form" onSubmit={submitTheBankaccountInfo} noValidate sx={{ mt: 1 }}>
+			      	<CardContent
+				        sx={{
+				          display: 'grid',
+				          gridTemplateColumns: 'repeat(2, minmax(80px, 1fr))',
+				          gap: 1.5,
+				        }}
+				      >
+				      	<FormControl sx={{ gridColumn: '1/-1' }}>
+				          <FormLabel>Enter your address line 1:</FormLabel>
+				          <Input placeholder="Address line #1" name="line1" defaultValue={line1}/>
+				        </FormControl>
+				        <FormControl sx={{ gridColumn: '1/-1' }}>
+				          <FormLabel>Enter your Zipcode:</FormLabel>
+				          <Input placeholder="Zipcode" name="zipcode" defaultValue={zipcode}/>
+				        </FormControl>
+				        <FormControl sx={{ gridColumn: '1/-1' }}>
+				          <FormLabel>Ener your Date of Birth:</FormLabel>
+				          <Input placeholder="DDMMYY" name="dob" defaultValue={dob}/>
+				        </FormControl>
+				        <FormControl sx={{ gridColumn: '1/-1' }}>
+				          <FormLabel>Enter your first name:</FormLabel>
+				          <Input placeholder="Enter cardholder's full name" name="firstName" defaultValue={firstName}/>
+				        </FormControl>
+				        <FormControl sx={{ gridColumn: '1/-1' }}>
+				          <FormLabel>Enter your last name:</FormLabel>
+				          <Input placeholder="Enter cardholder's last name" name="lastName" defaultValue={lastName}/>
+				        </FormControl>
+				        <FormControl sx={{ gridColumn: '1/-1' }}>
+				          <FormLabel>Enter country:</FormLabel>
+				          <Input placeholder="Enter country" name="country" defaultValue={country}/>
+				        </FormControl>
+				        <FormControl sx={{ gridColumn: '1/-1' }}>
+				          <FormLabel>Enter currency</FormLabel>
+				          <Input placeholder="Enter currency" name="currency" defaultValue={currency}/>
+				        </FormControl>
+				        <FormControl sx={{ gridColumn: '1/-1' }}>
+				          <FormLabel>Enter your routing number:</FormLabel>
+				          <Input placeholder="Routing number" name="routingNumber" defaultValue={routingNumber}/>
+				        </FormControl>
+				        <FormControl sx={{ gridColumn: '1/-1' }}>
+				          <FormLabel>Enter your account number:</FormLabel>
+				          <Input placeholder="Account number" name="accountNumber" defaultValue={accountNumber}/>
+				        </FormControl>
 
-					<div id="form">
-						<div id="header">Your bank account info (to get your earnings)</div>
+				        <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
-						<div className="form-input">
-							<div className="input-header">Enter your address line 1:</div>
-							<input class="input" placeholder="Address line #1" type="text" onChange={e => setLine1(e.target.value)} value={line1}/>
-						</div>
-						<div className="form-input">
-							<div className="input-header">Enter your Zipcode:</div>
-							<input class="input" placeholder="Zipcode" type="text" onChange={e => setZipcode(e.target.value)} value={zipcode}/>
-						</div>
-						<div className="form-input">
-							<div className="input-header">Enter your Date of birth:</div>
-							<input class="input" placeholder="DDMMYYYY" type="text" onChange={e => setDob(e.target.value)} value={dob}/>
-						</div>
-						<div className="form-input">
-							<div className="input-header">Enter your first name:</div>
-							<input class="input" placeholder="First name" type="text" onChange={e => setFirstname(e.target.value)} value={firstName}/>
-						</div>
-						<div className="form-input">
-							<div className="input-header">Enter your last name:</div>
-							<input class="input" placeholder="Last name" type="text" onChange={e => setLastname(e.target.value)} value={lastName}/>
-						</div>
-
-						<div className="form-input">
-							<div className="input-header">Enter country:</div>
-							<input class="input" placeholder="CA" type="text" onChange={e => setCountry(e.target.value)} value={country}/>
-						</div>
-						<div className="form-input">
-							<div className="input-header">Enter currency:</div>
-							<input class="input" placeholder="CAD" type="text" onChange={e => setCurrency(e.target.value)} value={currency}/>
-						</div>
-						<div className="form-input">
-							<div className="input-header">Enter your routing number:</div>
-							<input class="input" placeholder="Routing number" type="text" onChange={e => setRoutingnumber(e.target.value)} value={routingNumber}/>
-						</div>
-						<div className="form-input">
-							<div className="input-header">Enter your account number:</div>
-							<input class="input" placeholder="Account number" type="text" onChange={e => setAccountnumber(e.target.value)} value={accountNumber}/>
-						</div>
-
-						<div id="errormsg">{errorMsg}</div>
-
-						<div id="submit" onClick={() => submitTheBankaccountInfo()}>{earnings > 0 ? "Get earnings" : "Submit bank information"}</div>
-					</div>
+				        <CardActions sx={{ gridColumn: '1/-1' }}>
+				          <Button type="submit" variant="solid" color="primary">
+				            {earnings > 0 ? "Get earnings" : "Save bank information"}
+				            <div style={{ marginLeft: 10 }}><LockOutlinedIcon /></div>
+				          </Button>
+				        </CardActions>
+				      </CardContent>
+				     </Box>
+			    </Card>
 				</>
 				:
-				<div style={{ height: 20, margin: '50% auto', width: 20 }}>
+				<div style={{ height: 20, margin: '10% auto', width: 20 }}>
 					<ClipLoader color="black" size={20}/>
 				</div>
 			}
 
-			{earnedBox.show && (
-				<div id="hidden-box">
-					<div id="earned-box">
-						<div id="earned-header">
-							Yay! Your have earned ${earnedBox.earned.toFixed(2)}
-							<br/><br/>
-							Thank you for your contribution
-						</div>
-					</div>
-				</div>
-			)}
-		</div>
+	    <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>
+	      {'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}
+	    </Typography>
+    </div>
 	)
 }

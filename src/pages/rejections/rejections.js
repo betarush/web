@@ -1,5 +1,6 @@
 import './rejections.scss';
 import { useEffect, useState } from 'react';
+import ClipLoader from "react-spinners/ClipLoader";
 import { getRejections } from '../../apis/producttesting';
 import { resizePhoto } from 'geottuse-tools';
 
@@ -12,6 +13,7 @@ export default function Rejections() {
 	const [userId, setUserid] = useState(null)
 
 	const [rejections, setRejections] = useState([])
+	const [loaded, setLoaded] = useState(false)
 
 	const getTheRejections = () => {
 		const id = localStorage.getItem("id")
@@ -29,6 +31,7 @@ export default function Rejections() {
 				if (res) {
 					if (res) {
 						setRejections(res.rejections)
+						setLoaded(true)
 					}
 				}
 			})
@@ -49,19 +52,32 @@ export default function Rejections() {
 		<div id="rejection">
 			<Header/>
 
-			<div id="rejections">
-				{rejections.map((rejection, index) => (
-					<div className="product" key={rejection.key}>
-						<div className="info">
-							<div className="logo" style={resizePhoto(rejection.logo, 100, 100)}>
-								<img src={LOGO_URL + '/' + rejection.logo.name}/>
-							</div>
-						</div>
+			{loaded ? 
+				rejections.length > 0 ? 
+					<div id="rejections">
+						{rejections.map((rejection, index) => (
+							<div className="product" key={rejection.key}>
+								<div className="info">
+									<div className="logo" style={resizePhoto(rejection.logo, 100, 100)}>
+										<img src={LOGO_URL + '/' + rejection.logo.name}/>
+									</div>
+									<div className="header">{rejection.name}</div>
+								</div>
 
-						<div className="rejections-header"><strong>Your feedback for {rejection.name} was rejected:</strong> {rejection.header}</div>
+								<div className="rejections-header">
+									Your feedback: <strong>"{rejection.feedback}",</strong> was rejected 
+									{rejection.header && " for this reason: " + rejection.header}
+								</div>
+							</div>
+						))}
 					</div>
-				))}
-			</div>
+					:
+					<div id="no-result">No Results</div>
+				:
+				<div style={{ height: 20, margin: '10% auto', width: 20 }}>
+					<ClipLoader color="black" size={20}/>
+				</div>
+			}
 		</div>
 	)
 }

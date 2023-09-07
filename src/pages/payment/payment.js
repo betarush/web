@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import ClipLoader from "react-spinners/ClipLoader";
 import { submitPaymentInfo, getPaymentInfo } from '../../apis/user'
 import { listProduct } from '../../apis/product'
 
@@ -40,6 +41,7 @@ export default function Payment() {
 	const [errorMsg, setErrormsg] = useState('')
 
 	const [newProduct, setNewproduct] = useState(false)
+	const [loaded, setLoaded] = useState(false)
 
 	const getThePaymentInfo = () => {
 		const id = localStorage.getItem("id")
@@ -61,6 +63,7 @@ export default function Payment() {
 					}
 
 					setUserid(id)
+					setLoaded(true)
 				}
 			})
 			.catch((err) => {
@@ -74,6 +77,9 @@ export default function Payment() {
 	const submitThePaymentInfo = async event => {
 		event.preventDefault()
 
+		const data = new FormData(event.currentTarget);
+		const name = data.get('name'), number = data.get('number'), cvc = data.get('cvc'), expdate = data.get('expdate')
+
 		if (name && number && cvc && expdate) {
 			// let card = await stripe.tokens.create({
 			// 	card: {
@@ -83,8 +89,6 @@ export default function Payment() {
 			//     cvc: '123'
 			// 	}
 			// })
-			const data = new FormData(event.currentTarget);
-			const name = data.get('name'), number = data.get('number'), cvc = data.get('cvc'), expdate = data.get('expdate')
 			const json = { userId, name, number, cvc, expdate, token: "tok_bypassPending" }
 
 			submitPaymentInfo(json)
@@ -148,57 +152,63 @@ export default function Payment() {
 		<div id="payment">
 			<Header/>
 
-      <Card
-	      variant="outlined"
-	      sx={{
-	        maxHeight: 'max-content',
-	        maxWidth: 500,
-	        marginTop: 10,
-	        mx: 'auto',
-	        // to make the demo resizable
-	        overflow: 'auto'
-	      }}
-	    >
-	      <Typography level="title-lg" startDecorator={<InfoOutlined />}>
-	        Your payment info
-	      </Typography>
-	      <Divider inset="none" />
-	      <Box component="form" onSubmit={submitThePaymentInfo} noValidate sx={{ mt: 1 }}>
-		      <CardContent
-		        sx={{
-		          display: 'grid',
-		          gridTemplateColumns: 'repeat(2, minmax(80px, 1fr))',
-		          gap: 1.5,
-		        }}
-		      >
-		      	<FormControl sx={{ gridColumn: '1/-1' }}>
-		          <FormLabel>Card holder name</FormLabel>
-		          <Input placeholder="Enter cardholder's full name" name="name" defaultValue={name}/>
-		        </FormControl>
-		        <FormControl sx={{ gridColumn: '1/-1' }}>
-		          <FormLabel>Card number</FormLabel>
-		          <Input endDecorator={<CreditCardIcon />} name="number" defaultValue={number}/>
-		        </FormControl>
-		        <FormControl>
-		          <FormLabel>Expiry date</FormLabel>
-		          <Input endDecorator={<CreditCardIcon />} name="expdate" defaultValue={expdate}/>
-		        </FormControl>
-		        <FormControl>
-		          <FormLabel>CVC/CVV</FormLabel>
-		          <Input endDecorator={<InfoOutlined />} name="cvc" defaultValue={cvc}/>
-		        </FormControl>
+			{loaded ? 
+				<Card
+		      variant="outlined"
+		      sx={{
+		        maxHeight: 'max-content',
+		        maxWidth: 500,
+		        marginTop: 10,
+		        mx: 'auto',
+		        // to make the demo resizable
+		        overflow: 'auto'
+		      }}
+		    >
+		      <Typography level="title-lg" startDecorator={<InfoOutlined />}>
+		        Your payment info
+		      </Typography>
+		      <Divider inset="none" />
+		      <Box component="form" onSubmit={submitThePaymentInfo} noValidate sx={{ mt: 1 }}>
+			      <CardContent
+			        sx={{
+			          display: 'grid',
+			          gridTemplateColumns: 'repeat(2, minmax(80px, 1fr))',
+			          gap: 1.5,
+			        }}
+			      >
+			      	<FormControl sx={{ gridColumn: '1/-1' }}>
+			          <FormLabel>Card holder name</FormLabel>
+			          <Input placeholder="Enter cardholder's full name" name="name" defaultValue={name}/>
+			        </FormControl>
+			        <FormControl sx={{ gridColumn: '1/-1' }}>
+			          <FormLabel>Card number</FormLabel>
+			          <Input endDecorator={<CreditCardIcon />} name="number" defaultValue={number}/>
+			        </FormControl>
+			        <FormControl>
+			          <FormLabel>Expiry date</FormLabel>
+			          <Input endDecorator={<CreditCardIcon />} name="expdate" defaultValue={expdate}/>
+			        </FormControl>
+			        <FormControl>
+			          <FormLabel>CVC/CVV</FormLabel>
+			          <Input endDecorator={<InfoOutlined />} name="cvc" defaultValue={cvc}/>
+			        </FormControl>
 
-		        <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
+			        <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
-		        <CardActions sx={{ gridColumn: '1/-1' }}>
-		          <Button type="submit" variant="solid" color="primary">
-		            {newProduct ? "Add payment and launch" : "Save payment"}
-		            <div style={{ marginLeft: 10 }}><LockOutlinedIcon /></div>
-		          </Button>
-		        </CardActions>
-		      </CardContent>
-		    </Box>
-	    </Card>
+			        <CardActions sx={{ gridColumn: '1/-1' }}>
+			          <Button type="submit" variant="solid" color="primary">
+			            {newProduct ? "Add payment and launch" : "Save payment"}
+			            <div style={{ marginLeft: 10 }}><LockOutlinedIcon /></div>
+			          </Button>
+			        </CardActions>
+			      </CardContent>
+			    </Box>
+		    </Card>
+				:
+				<div style={{ height: 20, margin: '10% auto', width: 20 }}>
+					<ClipLoader color="black" size={20}/>
+				</div>
+			}
 
 	    <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>
 	      {'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}
