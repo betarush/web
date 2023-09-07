@@ -8,8 +8,8 @@ export default function Landing() {
 				<div id="title">GETPRODUCTFEEDBACK</div>
 
 				<div id="navs">
-					<div className="nav">REGISTER</div>
-					<div className="nav">LOGIN</div>
+					<div className="nav" onClick={() => window.location = '/register'}>REGISTER</div>
+					<div className="nav" onClick={() => window.location = '/login'}>LOGIN</div>
 				</div>
 			</div>
 
@@ -27,7 +27,30 @@ export default function Landing() {
 						<div className="info-header">For creators</div>
 
 						<div className="info-info">
-							Creators can launch products they built and deposit $20
+							<div className="header">
+								Creators can launch products they built and deposit $20
+							</div>
+							<div className="image" style={{ borderRadius: 75 }}>
+								<img src="/launchproduct.png"/>
+							</div>
+						</div>
+
+						<div className="info-info">
+							<div className="header">
+								Reward maximum of 5 users each $4 to explore/tryout your product and give you feedback
+							</div>
+							<div className="image">
+								<img src="/reward.png"/>
+							</div>
+						</div>
+
+						<div className="info-info">
+							<div className="header">
+								The most accurate way to hit product/market fit
+							</div>
+							<div className="image" style={{ borderRadius: 75 }}>
+								<img src="/accuracy.png"/>
+							</div>
 						</div>
 					</div>
 					<div className="info">

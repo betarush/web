@@ -77,9 +77,28 @@
 				}
 
 				.info-info {
-					font-size: 20px;
-					padding: 5%;
-					text-align: center;
+					display: flex;
+					flex-direction: row;
+					justify-content: space-around;
+					margin: 10%;
+
+					.header {
+						font-size: 20px;
+						padding: 5%;
+						text-align: center;
+						width: 50%;
+					}
+
+					.image {
+						height: 150px;
+						overflow: hidden;
+						width: 150px;
+
+						img {
+							height: 100%;
+							width: 100%;
+						}
+					}
 				}
 			}
 		}
