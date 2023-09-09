@@ -4,8 +4,12 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { useParams } from 'react-router-dom';
 import { resizePhoto } from 'geottuse-tools';
 
+// material ui components
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+
 // components
-import Header from '../components/header'
+import Header from '../../components/header'
 import { rewardCustomer, rejectFeedback } from '../../apis/user'
 import { getFeedbacks } from '../../apis/product'
 
@@ -127,17 +131,23 @@ export default function Feedbacks(props) {
 							</div>
 						</div>
 
-						<div id="feedbacks-header">Your feedbacks for <strong>{name}</strong></div>
+						<div id="feedbacks-header">
+							Your feedbacks for <strong>{name}</strong>
+							<br/>
+							<div style={{ fontSize: 20 }}>(Please save your feedback somewhere)</div>
+						</div>
 
 						<div id="product-feedbacks">
 							{feedbacks.map((feedback, index) => (
 								<div className="feedback" key={feedback.key}>
 									<div className="feedback-header">{feedback.header}</div>
 
-									<div className="feedback-actions">
-										<div className="feedback-action" onClick={() => rejectTheFeedback(feedback.testerId, index)}>Reject feedback</div>
-										<div className="feedback-action" onClick={() => rewardTheCustomer(feedback.testerId, index)}>Reward customer</div>
-									</div>
+									<Stack>
+										<div className="feedback-actions">
+											<Button style={{ margin: '0 5px' }} variant="contained" onClick={() => rejectTheFeedback(feedback.testerId, index)}>Reject feedback</Button>
+											<Button style={{ margin: '0 5px' }} variant="contained" onClick={() => rewardTheCustomer(feedback.testerId, index)}>Reward customer</Button>
+										</div>
+									</Stack>
 								</div>
 							))}
 						</div>

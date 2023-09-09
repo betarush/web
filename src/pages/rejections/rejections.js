@@ -5,7 +5,7 @@ import { getRejections } from '../../apis/producttesting';
 import { resizePhoto } from 'geottuse-tools';
 
 // components
-import Header from '../components/header'
+import Header from '../../components/header'
 
 const LOGO_URL = process.env.REACT_APP_LOGO_URL
 

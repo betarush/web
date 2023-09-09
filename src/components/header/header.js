@@ -61,29 +61,35 @@ export default function Header() {
 	}, [])
 
 	return (
-		<AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{ mr: 2, display: { xs: 'flex', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, color: 'inherit', textDecoration: 'none' }}
-          >
-            You are {username}
-          </Typography>
+		<div id="header">
+			<AppBar position="static">
+	      <Container>
+	        <Toolbar>
+	        	<div id="logo">
+	        		<img src="/logo.png"/>
+	        	</div>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
-            <Button onClick={() => window.location = "/main"} sx={{ my: 2, color: 'white', display: 'block' }}>Products</Button>
-            <Button onClick={() => window.location = "/rejections"} sx={{ my: 2, color: 'white', display: 'block' }}>Rejections</Button>
-            <Button onClick={() => window.location = "/earnings"} sx={{ my: 2, color: 'white', display: 'block' }}>Withdraw reward: ${earnings.toFixed(2)}</Button>
-            <Button onClick={() => window.location = "/listproduct"} sx={{ my: 2, color: 'white', display: 'block' }}>Submit your product</Button>
-            <Button onClick={() => window.location = "/payment"} sx={{ my: 2, color: 'white', display: 'block' }}>Payment</Button>
-            <Button onClick={() => logout()} sx={{ my: 2, color: 'white', display: 'block' }}>Log-Out</Button>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+	          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
+	            <Button onClick={() => window.location = "/main"} sx={{ my: 2, color: 'white', display: 'block' }}>Products</Button>
+	            <Button onClick={() => window.location = "/rejections"} sx={{ my: 2, color: 'white', display: 'block' }}>Rejections</Button>
+	            <Button onClick={() => window.location = "/earnings"} sx={{ my: 2, color: 'white', display: 'block' }}>Withdraw reward: ${earnings.toFixed(2)}</Button>
+	            <Button onClick={() => window.location = "/listproduct"} sx={{ my: 2, color: 'white', display: 'block' }}>Submit your product</Button>
+	            <Button onClick={() => window.location = "/payment"} sx={{ my: 2, color: 'white', display: 'block' }}>Payment</Button>
+	            <Button onClick={() => logout()} sx={{ my: 2, color: 'white', display: 'block' }}>Log-Out</Button>
+	          </Box>
+
+	          <Typography
+	            variant="h6"
+	            noWrap
+	            component="a"
+	            href="/"
+	            sx={{ mr: 2, display: { xs: 'flex', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, color: 'inherit', textDecoration: 'none' }}
+	          >
+	            You are {username}
+	          </Typography>
+	        </Toolbar>
+	      </Container>
+	    </AppBar>
+	  </div>
 	)
 }

@@ -7,6 +7,7 @@ import { getUntestedProducts, getTestedProducts, getMyProducts, tryProduct } fro
 import { submitFeedback } from '../../apis/producttesting'
 
 // material ui components
+import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
@@ -14,11 +15,12 @@ import ListItemContent from '@mui/joy/ListItemContent';
 import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import BuildIcon from '@mui/icons-material/Build';
+import Button from '@mui/material/Button';
 import SpeedRoundedIcon from '@mui/icons-material/SpeedRounded';
 import PersonIcon from '@mui/icons-material/Person';
 
 // components
-import Header from '../components/header'
+import Header from '../../components/header'
 
 const LOGO_URL = process.env.REACT_APP_LOGO_URL
 
@@ -255,57 +257,65 @@ export default function Main() {
 						<div id="products">
 							{products.map((product, index) => (
 								<div className="product" key={product.key}>
-									<div className="image" style={resizePhoto(product.logo, 100, 100)}>
-										<img src={LOGO_URL + '/' + product.logo.name}/>
-									</div>
-									<div className="desc">
-										<div style={{ fontWeight: 'bold' }}>{product.name}</div><br/>
-										{product.info}
+									<div className="product-row">
+										<div className="image" style={resizePhoto(product.logo, 100, 100)}>
+											<img src={LOGO_URL + '/' + product.logo.name}/>
+										</div>
+										<div className="desc">
+											<div style={{ fontWeight: 'bold' }}>{product.name}</div><br/>
+											{product.info}
+										</div>
 									</div>
 
-									{viewType == 'untested' ? 
-										<div className="column">
-											<div className="info">
-												<div className="header">{product.numTried} people left can try</div>
-												<div className="actions">
-													<div className={"action" + (product.trying ? "" : "-disabled")} onClick={() => {
+									<Stack>
+										{viewType == 'untested' ? 
+											<div className="column">
+												<div className="info">
+													<div className="header">{product.numTried} people left can try</div>
+
+													<Button disabled={!product.trying} variant={product.trying ? "contained" : ""} onClick={() => {
 														if (product.trying) {
 															setFeedback({ show: true, input: '', id: product.id, index })
 														}
-													}}>Give feedback & Earn $2</div>
-													<div className={"action" + (!product.trying ? "" : "-disabled")} onClick={() => {
+													}}>Give feedback & Earn ${product.reward.toFixed(2)}</Button>
+													<Button disabled={product.trying} variant={!product.trying ? "contained" : ""} onClick={() => {
 														if (!product.trying) {
 															tryTheProduct(index, product.id, product.link)
 														}
-													}}>Try first</div>
+													}}>Try first</Button>
 												</div>
 											</div>
-										</div>
-										:
-										<div className="column">
-											{viewType == "tested" ? 
-												<div className="info">
-													<div className="header">{product.earned ? "Earned: $2.00 for trying" : "Waiting for founder to accept feedback"}</div>
-												</div>
-												:
-												<div className="info-container">
-													<div className="header">Amount spent: ${product.amountSpent.toFixed(2)}</div>
-													<div className="header">
-														{product.numTesting > 0 && product.numTesting + " people testing"}
-														{product.numFeedback > 0 && (
-															<>
-																<br/><br/>
-																{product.numTesting} people<br/>gave feedback<br/>
-																<div className="reward" onClick={() => window.location = '/feedback/' + product.id}>See and Reward them</div>
-															</>
-														)}
-														<br/>
-														{product.numTested} people<br/>rewarded
+											:
+											<div className="column">
+												{viewType == "tested" ? 
+													<div className="info">
+														<div className="header">{product.earned ? "Earned: $" + product.reward.toFixed(2) + " for trying" : "Waiting for creator to reward you"}</div>
 													</div>
-												</div>
-											}
-										</div>
-									}
+													:
+													<div className="info-container">
+														<div className="header">Amount spent: ${product.amountSpent.toFixed(2)}</div>
+
+														{product.numTesting > 0 && (
+															<div className="header">
+																{product.numTesting + " people testing"}
+															</div>
+														)}
+
+														{product.numFeedback > 0 && (
+															<div className="header">
+																{product.numTesting} people gave feedback<br/>
+																<div className="reward" onClick={() => window.location = '/feedback/' + product.id}>Reward them</div>
+															</div>
+														)}															
+															
+														<div className="header">
+															{product.numTested} people rewarded
+														</div>
+													</div>
+												}
+											</div>
+										}
+									</Stack>
 								</div>
 							))}
 						</div>
@@ -321,7 +331,7 @@ export default function Main() {
 			{feedback.show && (
 				<div id="hidden-box">
 					<div id="feedback-box">
-						<div id="feedback-header">Write a good feedback to earn $2</div>
+						<div id="feedback-header">Write a good feedback to earn $4.00</div>
 
 						<textarea id="feedback-input" maxlength="200" onChange={e => setFeedback({ ...feedback, input: e.target.value })} value={feedback.input}/>
 

@@ -15,7 +15,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // components
-import Header from '../components/header'
+import Header from '../../components/header'
 
 const theme = createTheme({
 	palette: {

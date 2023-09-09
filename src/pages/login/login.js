@@ -1,3 +1,4 @@
+import './login.scss';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 import { login } from '../../apis/user'
@@ -76,46 +77,51 @@ export default function Login() {
 	}
 
 	return (
-		<ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'black' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">Log in</Typography>
-          <Box component="form" onSubmit={theLogin} noValidate sx={{ mt: 1 }}>
-            <TextField margin="normal" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" autoFocus defaultValue={email}/>
-            <TextField margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" defaultValue={password}/>
+		<div id="login">
+			<ThemeProvider theme={theme}>
+				<div id="logo" onClick={() => window.location = "/"}>
+	    		<img src="/logo.png"/>
+	    	</div>
+	      <Container component="main" maxWidth="xs">
+	        <CssBaseline />
+	        <Box
+	          sx={{
+	            marginTop: 8,
+	            display: 'flex',
+	            flexDirection: 'column',
+	            alignItems: 'center',
+	          }}
+	        >
+	          <Avatar sx={{ m: 1, bgcolor: 'black' }}>
+	            <LockOutlinedIcon />
+	          </Avatar>
+	          <Typography component="h1" variant="h5">Log in</Typography>
+	          <Box component="form" onSubmit={theLogin} noValidate sx={{ mt: 1 }}>
+	            <TextField margin="normal" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" autoFocus defaultValue={email}/>
+	            <TextField margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" defaultValue={password}/>
 
-            <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
+	            <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
-            <Button type="submit" fullWidth variant="contained" color="submit" sx={{ mt: 3, mb: 2 }}>LOG IN</Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                	Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="/register" variant="body2">
-                  Don't have an account? Sign Up
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-        <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>
-		      {'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}
-		    </Typography>
-      </Container>
-    </ThemeProvider>
+	            <Button type="submit" fullWidth variant="contained" color="submit" sx={{ mt: 3, mb: 2 }}>LOG IN</Button>
+	            <Grid container>
+	              <Grid item xs>
+	                <Link href="#" variant="body2">
+	                	Forgot password?
+	                </Link>
+	              </Grid>
+	              <Grid item>
+	                <Link href="/register" variant="body2">
+	                  Don't have an account? Sign Up
+	                </Link>
+	              </Grid>
+	            </Grid>
+	          </Box>
+	        </Box>
+	        <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>
+			      {'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}
+			    </Typography>
+	      </Container>
+	    </ThemeProvider>
+	  </div>
 	)
 }

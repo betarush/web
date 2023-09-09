@@ -1,5 +1,4 @@
 #landing {
-
 	height: 100vh;
 
 	#landing-header {
@@ -8,9 +7,23 @@
 		justify-content: space-between;
 		width: 100%;
 
-		#title {
-			font-weight: bold;
-			padding: 20px 10px;
+		.row {
+			#logo {
+				height: 50px;
+				margin: 0 10px;
+				overflow: hidden;
+				width: 50px;
+
+				img {
+					height: 100%;
+					width: 100%;
+				}
+			}
+
+			#title {
+				font-weight: bold;
+				padding: 20px 10px;
+			}
 		}
 
 		#navs {
@@ -18,9 +31,10 @@
 			flex-direction: row;
 
 			.nav {
+				border-radius: 10px;
 				font-weight: 100;
-				margin: 0 10px;
-				padding: 20px 10px;
+				margin-right: 10px;
+				padding: 10px;
 				text-align: center;
 
 				&:hover {
@@ -33,15 +47,26 @@
 
 	#body {
 		#masthead {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+
 			#masthead-header {
+				color: black;
 				display: flex;
 				flex-direction: column;
 				font-size: 50px;
 				font-weight: bold;
 				justify-content: space-around;
-				padding: 0 20px;
+				margin: 0 5%;
 				position: absolute;
 				text-align: center;
+
+				div {
+					font-size: 30px;
+					font-weight: 100;
+					margin-top: 1%;
+				}
 			}
 
 			img {
@@ -67,6 +92,7 @@
 			}
 
 			.info {
+				font-weight: bold;
 				margin-top: 10px;
 				width: 50%;
 
@@ -84,7 +110,7 @@
 					margin: 10%;
 
 					.header {
-						font-size: 20px;
+						font-size: 25px;
 						padding: 5%;
 						text-align: center;
 						width: 50%;
@@ -105,7 +131,7 @@
 		}
 
 		#infos-header {
-			font-size: 25px;
+			font-size: 50px;
 			font-weight: bold;
 			padding: 20px 0;
 			text-align: center;

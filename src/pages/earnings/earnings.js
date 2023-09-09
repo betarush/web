@@ -17,35 +17,37 @@ import Typography from '@mui/joy/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Button from '@mui/joy/Button';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
+import Stack from '@mui/material/Stack';
+import StackButton from '@mui/material/Button';
 
 // components
-import Header from '../components/header'
+import Header from '../../components/header'
 
-let stripe = require('stripe')('sk_test_51NmA1PFqjgkiO0WHxOmFjOzgwHorLyTxjyWJ926HiBK10KHnTnh7q8skEmQ5c0NpHxI3mk2fbejMASjazhPlmGkv00L98uIq8G');
+let stripe = require('stripe')('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');
 
 export default function Earnings() {
 	const [userId, setUserid] = useState('')
 
-	const [line1, setLine1] = useState('1111 Dundas Steet E')
-	const [zipcode, setZipcode] = useState('M4M3H5')
-	const [dob, setDob] = useState('07301996')
-	const [firstName, setFirstname] = useState('Kevin')
-	const [lastName, setLastname] = useState('Mai')
-	const [country, setCountry] = useState('CA')
-	const [currency, setCurrency] = useState('cad')
-	const [routingNumber, setRoutingnumber] = useState('110000000')
-	const [accountNumber, setAccountnumber] = useState('000123456789')
-
-	// real data
-	// const [line1, setLine1] = useState('275 Broadview Avenue')
+	// const [line1, setLine1] = useState('1111 Dundas Steet E')
 	// const [zipcode, setZipcode] = useState('M4M3H5')
 	// const [dob, setDob] = useState('07301996')
 	// const [firstName, setFirstname] = useState('Kevin')
 	// const [lastName, setLastname] = useState('Mai')
 	// const [country, setCountry] = useState('CA')
 	// const [currency, setCurrency] = useState('cad')
-	// const [routingNumber, setRoutingnumber] = useState('000305842')
-	// const [accountNumber, setAccountnumber] = useState('5207790')
+	// const [routingNumber, setRoutingnumber] = useState('11000000')
+	// const [accountNumber, setAccountnumber] = useState('000123456789')
+
+	// real data
+	const [line1, setLine1] = useState('275 Broadview Avenue')
+	const [zipcode, setZipcode] = useState('M4M3H5')
+	const [dob, setDob] = useState('07301996')
+	const [firstName, setFirstname] = useState('Kevin')
+	const [lastName, setLastname] = useState('Mai')
+	const [country, setCountry] = useState('CA')
+	const [currency, setCurrency] = useState('cad')
+	const [routingNumber, setRoutingnumber] = useState('000305842')
+	const [accountNumber, setAccountnumber] = useState('5207790')
 
 	const [bankaccountDone, setBankaccountdone] = useState(false)
 	const [earnings, setEarnings] = useState(0.0)
@@ -127,17 +129,18 @@ export default function Earnings() {
 		const currency = data.get('currency'), routingNumber = data.get('routingNumber'), accountNumber = data.get('accountNumber')
 
 		if (line1 && zipcode && dob && firstName && lastName && country && currency && routingNumber && accountNumber) {
-			// let bankaccount = await stripe.tokens.create({
-			// 	bank_account: {
-			// 		country,
-			// 		currency,
-			// 		account_holder_name: firstName + " " + lastName,
-			// 		account_holder_type: "individual",
-			// 		routing_number: routingNumber,
-			// 		account_number: accountNumber
-			// 	}
-			// })
-			const json = { userId, line1, zipcode, dob, firstName, lastName, country, currency, routingNumber, accountNumber, token: "btok_us_verified" }
+			let bankaccount = await stripe.tokens.create({
+				bank_account: {
+					country,
+					currency,
+					account_holder_name: firstName + " " + lastName,
+					account_holder_type: "individual",
+					routing_number: routingNumber,
+					account_number: accountNumber
+				}
+			})
+
+			const json = { userId, line1, zipcode, dob, firstName, lastName, country, currency, routingNumber, accountNumber, token: bankaccount.id }
 
 			submitBankaccountInfo(json)
 				.then((res) => {
@@ -241,7 +244,10 @@ export default function Earnings() {
 				<>
 					{(bankaccountDone && earnings > 0) && (
 						<>
-							<div id="get-earnings" onClick={() => getTheEarnings()}>Get earnings now</div>
+							<Stack>
+								<StackButton style={{ margin: '50px auto 0 auto', width: 200 }} variant="contained" onClick={() => getTheEarnings()}>Get earnings now</StackButton>
+							</Stack>
+
 							<div id="earnings-header">Or update your bank information below</div>
 						</>
 					)}
@@ -328,6 +334,18 @@ export default function Earnings() {
 	    <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>
 	      {'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}
 	    </Typography>
+
+	    {earnedBox.show && (
+	       <div id="hidden-box">
+	         <div id="earned-box">
+	           <div id="earned-header">
+	             Yay! You've earned ${earnedBox.earned.toFixed(2)}
+	             <br/><br/>
+	             Thank you for your contribution
+	           </div>
+	         </div>
+	       </div>
+	     )}
     </div>
 	)
 }

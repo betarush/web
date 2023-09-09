@@ -44,23 +44,29 @@
 			justify-content: space-between;
 			margin: 0 auto 10px auto;
 			padding: 10px;
-			width: 80%;
+			width: 50%;
 
-			.image {
-				background-color: rgba(0, 0, 0, 0.2);
-				border-radius: 50px;
-				height: 100px;
-				overflow: hidden;
-				width: 100px;
+			.product-row {
+				display: flex;
+				flex-direction: row;
 
-				img {
-					height: 100%;
-					width: 100%;
+				.image {
+					background-color: rgba(0, 0, 0, 0.2);
+					border-radius: 50px;
+					height: 100px;
+					overflow: hidden;
+					width: 100px;
+
+					img {
+						height: 100%;
+						width: 100%;
+					}
 				}
-			}
 
-			.desc {
-				width: 50%;
+				.desc {
+					margin-left: 20px;
+					width: 50%;
+				}
 			}
 
 			.info,
@@ -68,33 +74,26 @@
 				.header {
 					font-weight: bold;
 					margin-bottom: 20px;
+				}
+
+				.action,
+				.action-disabled {
+					background-color: black;
+					border-radius: 20px;
+					color: white;
+					font-weight: bold;
+					margin: 0 2px;
+					padding: 5px 10px;;
 					text-align: center;
 				}
 
-				.actions {
-					display: flex;
-					flex-direction: row;
-					justify-content: space-around;
+				.action-disabled {
+					opacity: 0.1;
+				}
 
-					.action,
-					.action-disabled {
-						background-color: black;
-						border-radius: 20px;
-						color: white;
-						font-weight: bold;
-						margin: 0 2px;
-						padding: 5px 10px;;
-						text-align: center;
-					}
-
-					.action-disabled {
-						opacity: 0.1;
-					}
-
-					.action:hover {
-						cursor: pointer;
-						opacity: 0.5;
-					}
+				.action:hover {
+					cursor: pointer;
+					opacity: 0.5;
 				}
 			}
 

@@ -1,3 +1,4 @@
+import './payment.scss';
 import { useEffect, useState } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
 import { submitPaymentInfo, getPaymentInfo } from '../../apis/user'
@@ -20,19 +21,20 @@ import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 
 // components
-import Header from '../components/header'
+import Header from '../../components/header'
 
 let stripe = require('stripe')('sk_test_51NmA1PFqjgkiO0WHxOmFjOzgwHorLyTxjyWJ926HiBK10KHnTnh7q8skEmQ5c0NpHxI3mk2fbejMASjazhPlmGkv00L98uIq8G');
 
 export default function Payment() {
 	const [userId, setUserid] = useState('')
 
+	// test card
 	const [name, setName] = useState('the account')
-	const [number, setNumber] = useState('4000000000000007')
+	const [number, setNumber] = useState('4000000000000077')
 	const [cvc, setCvc] = useState('234')
-	const [expdate, setExpdate] = useState('122024')
+	const [expdate, setExpdate] = useState('1224')
 
-	// real date
+	// real card
 	// const [name, setName] = useState('Kevin Hien Luong Mai')
 	// const [number, setNumber] = useState('4512238770577855')
 	// const [cvc, setCvc] = useState('086')
@@ -81,15 +83,16 @@ export default function Payment() {
 		const name = data.get('name'), number = data.get('number'), cvc = data.get('cvc'), expdate = data.get('expdate')
 
 		if (name && number && cvc && expdate) {
-			// let card = await stripe.tokens.create({
-			// 	card: {
-			// 		number: '4000000000000007',
-			//     exp_month: '11',
-			//     exp_year: '23',
-			//     cvc: '123'
-			// 	}
-			// })
-			const json = { userId, name, number, cvc, expdate, token: "tok_bypassPending" }
+			let card = await stripe.tokens.create({
+				card: {
+					number,
+			    exp_month: expdate.substr(0, 2),
+			    exp_year: expdate.substr(2),
+			    cvc
+				}
+			})
+
+			const json = { userId, name, number, cvc, expdate, token: card.id }
 
 			submitPaymentInfo(json)
 				.then((res) => {
@@ -157,7 +160,7 @@ export default function Payment() {
 		      variant="outlined"
 		      sx={{
 		        maxHeight: 'max-content',
-		        maxWidth: 500,
+		        maxWidth: 600,
 		        marginTop: 10,
 		        mx: 'auto',
 		        // to make the demo resizable
@@ -176,24 +179,58 @@ export default function Payment() {
 			          gap: 1.5,
 			        }}
 			      >
-			      	<FormControl sx={{ gridColumn: '1/-1' }}>
-			          <FormLabel>Card holder name</FormLabel>
-			          <Input placeholder="Enter cardholder's full name" name="name" defaultValue={name}/>
-			        </FormControl>
-			        <FormControl sx={{ gridColumn: '1/-1' }}>
-			          <FormLabel>Card number</FormLabel>
-			          <Input endDecorator={<CreditCardIcon />} name="number" defaultValue={number}/>
-			        </FormControl>
-			        <FormControl>
-			          <FormLabel>Expiry date</FormLabel>
-			          <Input endDecorator={<CreditCardIcon />} name="expdate" defaultValue={expdate}/>
-			        </FormControl>
-			        <FormControl>
-			          <FormLabel>CVC/CVV</FormLabel>
-			          <Input endDecorator={<InfoOutlined />} name="cvc" defaultValue={cvc}/>
-			        </FormControl>
+			      	{localStorage.getItem("productInfo") ? 
+			      		<div>
+			      			<FormControl sx={{ gridColumn: '1/-1' }}>
+					          <FormLabel>Card holder name</FormLabel>
+					          <Input placeholder="Enter cardholder's full name" name="name" defaultValue={name}/>
+					        </FormControl>
+					        <FormControl sx={{ gridColumn: '1/-1' }}>
+					          <FormLabel>Card number</FormLabel>
+					          <Input endDecorator={<CreditCardIcon />} name="number" defaultValue={number}/>
+					        </FormControl>
+					        <FormControl>
+					          <FormLabel>Expiry date</FormLabel>
+					          <Input endDecorator={<CreditCardIcon />} name="expdate" defaultValue={expdate}/>
+					        </FormControl>
+					        <FormControl>
+					          <FormLabel>CVC/CVV</FormLabel>
+					          <Input endDecorator={<InfoOutlined />} name="cvc" defaultValue={cvc}/>
+					        </FormControl>
 
-			        <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
+					        <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
+			      		</div>
+			      		:
+			      		<>
+			      			<FormControl sx={{ gridColumn: '1/-1' }}>
+					          <FormLabel>Card holder name</FormLabel>
+					          <Input placeholder="Enter cardholder's full name" name="name" defaultValue={name}/>
+					        </FormControl>
+					        <FormControl sx={{ gridColumn: '1/-1' }}>
+					          <FormLabel>Card number</FormLabel>
+					          <Input endDecorator={<CreditCardIcon />} name="number" defaultValue={number}/>
+					        </FormControl>
+					        <FormControl>
+					          <FormLabel>Expiry date</FormLabel>
+					          <Input endDecorator={<CreditCardIcon />} name="expdate" defaultValue={expdate}/>
+					        </FormControl>
+					        <FormControl>
+					          <FormLabel>CVC/CVV</FormLabel>
+					          <Input endDecorator={<InfoOutlined />} name="cvc" defaultValue={cvc}/>
+					        </FormControl>
+
+					        <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
+			      		</>
+			      	}
+					      	
+
+				      {localStorage.getItem("productInfo") && (
+				      	<div id="payment-infos">
+					      	<div className="payment-info"><strong>Subtotal:</strong> $20.00</div>
+					      	<div className="payment-info"><strong>Service fee:</strong> $5.00</div>
+					      	<div className="payment-info"><strong>Total:</strong> $25.00</div>
+					      </div>
+				      )}
 
 			        <CardActions sx={{ gridColumn: '1/-1' }}>
 			          <Button type="submit" variant="solid" color="primary">
