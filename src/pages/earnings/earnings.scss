@@ -8,6 +8,22 @@
 		text-align: center;
 	}
 
+	#bank-info {
+		margin: 0 auto;
+		width: 200px;
+
+		#type {
+			width: 100%;
+		}
+	}
+
+	#bank-info-header {
+		font-size: 20px;
+		font-weight: bold;
+		padding: 20px 0;
+		text-align: center;
+	}
+
 	#hidden-box {
 		background-color: rgba(0, 0, 0, 0.7);
 		display: flex;
@@ -17,6 +33,7 @@
 		position: absolute;
 		top: 0;
 		width: 100vw;
+		z-index: 1;
 
 		#earned-box {
 			background-color: #efefef;

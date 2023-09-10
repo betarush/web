@@ -82,6 +82,8 @@ export default function Listproduct() {
 		const name = data.get('name'), desc = data.get('desc'), link = data.get('link')
 
 		if (name && desc && link) {
+			localStorage.setItem("viewMyProducts", "true")
+
 			if (paymentDone) {
 				const id = localStorage.getItem("id")
 				const json = { userId: id, name, desc, link, image: JSON.stringify(image) }

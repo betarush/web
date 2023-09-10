@@ -2,7 +2,7 @@ import './payment.scss';
 import { useEffect, useState } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
 import { submitPaymentInfo, getPaymentInfo } from '../../apis/user'
-import { listProduct } from '../../apis/product'
+import { listProduct, relistProduct } from '../../apis/product'
 
 // material ui components
 import Avatar from '@mui/material/Avatar';
@@ -40,10 +40,11 @@ export default function Payment() {
 	// const [cvc, setCvc] = useState('086')
 	// const [expdate, setExpdate] = useState('1123')
 
-	const [errorMsg, setErrormsg] = useState('')
+	const [cardInfo, setCardinfo] = useState({ last4: '', name: '' })
 
-	const [newProduct, setNewproduct] = useState(false)
+	const [errorMsg, setErrormsg] = useState('')
 	const [loaded, setLoaded] = useState(false)
+	const [loading, setLoading] = useState(false)
 
 	const getThePaymentInfo = () => {
 		const id = localStorage.getItem("id")
@@ -57,11 +58,8 @@ export default function Payment() {
 			})
 			.then((res) => {
 				if (res) {
-					if (res.name) {
-						setName(res.name)
-						setNumber(res.number)
-						setCvc(res.cvc)
-						setExpdate(res.expdate)
+					if (res.card) {
+						setCardinfo(res.card)
 					}
 
 					setUserid(id)
@@ -92,7 +90,9 @@ export default function Payment() {
 				}
 			})
 
-			const json = { userId, name, number, cvc, expdate, token: card.id }
+			const json = { userId, token: card.id }
+
+			setLoading(true)
 
 			submitPaymentInfo(json)
 				.then((res) => {
@@ -104,7 +104,7 @@ export default function Payment() {
 				})
 				.then((res) => {
 					if (res) {
-						if (newProduct) { // new product launching
+						if (localStorage.getItem("productInfo")) { // new product launching
 							const data = JSON.parse(localStorage.getItem("productInfo"))
 
 							data["userId"] = userId
@@ -128,6 +128,25 @@ export default function Payment() {
 								.catch((err) => {
 
 								})
+						} else if (localStorage.getItem("relaunchProduct")) {
+							relistProduct({ productId: localStorage.getItem("relaunchProduct") })
+								.then((res) => {
+									if (res.status == 200) {
+										return res.json()
+									}
+
+									throw res
+								})
+								.then((res) => {
+									if (res) {
+										localStorage.removeItem("relaunchProduct")
+
+										window.location = "/main"
+									}
+								})
+								.catch((err) => {
+									
+								})
 						} else {
 							window.location = "/main"
 						}
@@ -145,10 +164,6 @@ export default function Payment() {
 
 	useEffect(() => {
 		getThePaymentInfo()
-
-		if (localStorage.getItem("productInfo")) {
-			setNewproduct(true)
-		}
 	}, [])
 
 	return (
@@ -172,6 +187,28 @@ export default function Payment() {
 		      </Typography>
 		      <Divider inset="none" />
 		      <Box component="form" onSubmit={submitThePaymentInfo} noValidate sx={{ mt: 1 }}>
+		      	{cardInfo.last4 && (
+		      		<div>
+			      		<div id="card-info">
+			      			<div id="type">
+			      				{cardInfo.name == "Visa" && <img src="/visa.png"/>}
+			      				{cardInfo.name == "MasterCard" && <img src="/mastercard.png"/>}
+			      				{cardInfo.name == "American Express" && <img src="/amex.jpg"/>}
+			      				{cardInfo.name == "Discover" && <img src="/discover.jpg"/>}
+			      				{cardInfo.name == "Diners Club" && <img src="/dinersclub.png"/>}
+			      				{cardInfo.name == "JCB" && <img src="/jcb.jpg"/>}
+			      				{cardInfo.name == "UnionPay" && <img src="/unionpay.png"/>}
+			      			</div>
+			      			<div className="info">
+			      				{cardInfo.name}
+			      				<br/>
+			      				*********{cardInfo.last4}
+			      			</div>
+			      		</div>
+			      		<div id="card-info-header">Or enter a new card below to update</div>
+			      	</div>
+		      	)}
+
 			      <CardContent
 			        sx={{
 			          display: 'grid',
@@ -183,19 +220,19 @@ export default function Payment() {
 			      		<div>
 			      			<FormControl sx={{ gridColumn: '1/-1' }}>
 					          <FormLabel>Card holder name</FormLabel>
-					          <Input placeholder="Enter cardholder's full name" name="name" defaultValue={name}/>
+					          <Input placeholder="Enter cardholder's full name" name="name" disabled={loading} defaultValue={name}/>
 					        </FormControl>
 					        <FormControl sx={{ gridColumn: '1/-1' }}>
 					          <FormLabel>Card number</FormLabel>
-					          <Input endDecorator={<CreditCardIcon />} name="number" defaultValue={number}/>
+					          <Input endDecorator={<CreditCardIcon />} name="number" disabled={loading} defaultValue={number}/>
 					        </FormControl>
 					        <FormControl>
 					          <FormLabel>Expiry date</FormLabel>
-					          <Input endDecorator={<CreditCardIcon />} name="expdate" defaultValue={expdate}/>
+					          <Input endDecorator={<CreditCardIcon />} name="expdate" disabled={loading} defaultValue={expdate}/>
 					        </FormControl>
 					        <FormControl>
 					          <FormLabel>CVC/CVV</FormLabel>
-					          <Input endDecorator={<InfoOutlined />} name="cvc" defaultValue={cvc}/>
+					          <Input endDecorator={<InfoOutlined />} name="cvc" disabled={loading} defaultValue={cvc}/>
 					        </FormControl>
 
 					        <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
@@ -204,25 +241,24 @@ export default function Payment() {
 			      		<>
 			      			<FormControl sx={{ gridColumn: '1/-1' }}>
 					          <FormLabel>Card holder name</FormLabel>
-					          <Input placeholder="Enter cardholder's full name" name="name" defaultValue={name}/>
+					          <Input placeholder="Enter cardholder's full name" name="name" disabled={loading} defaultValue={name}/>
 					        </FormControl>
 					        <FormControl sx={{ gridColumn: '1/-1' }}>
 					          <FormLabel>Card number</FormLabel>
-					          <Input endDecorator={<CreditCardIcon />} name="number" defaultValue={number}/>
+					          <Input endDecorator={<CreditCardIcon />} name="number" disabled={loading} defaultValue={number}/>
 					        </FormControl>
 					        <FormControl>
 					          <FormLabel>Expiry date</FormLabel>
-					          <Input endDecorator={<CreditCardIcon />} name="expdate" defaultValue={expdate}/>
+					          <Input endDecorator={<CreditCardIcon />} name="expdate" disabled={loading} defaultValue={expdate}/>
 					        </FormControl>
 					        <FormControl>
 					          <FormLabel>CVC/CVV</FormLabel>
-					          <Input endDecorator={<InfoOutlined />} name="cvc" defaultValue={cvc}/>
+					          <Input endDecorator={<InfoOutlined />} name="cvc" disabled={loading} defaultValue={cvc}/>
 					        </FormControl>
 
 					        <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 			      		</>
 			      	}
-					      	
 
 				      {localStorage.getItem("productInfo") && (
 				      	<div id="payment-infos">
@@ -233,8 +269,15 @@ export default function Payment() {
 				      )}
 
 			        <CardActions sx={{ gridColumn: '1/-1' }}>
-			          <Button type="submit" variant="solid" color="primary">
-			            {newProduct ? "Add payment and launch" : "Save payment"}
+			          <Button type="submit" disabled={loading} variant="solid" color="primary">
+			            {localStorage.getItem("productInfo") ? 
+			            	"Add payment and launch" 
+			            	: 
+			            	localStorage.getItem("relaunchProduct") ? 
+			            		"Update payment and launch"
+			            		:
+			            		"Save payment"
+			           	}
 			            <div style={{ marginLeft: 10 }}><LockOutlinedIcon /></div>
 			          </Button>
 			        </CardActions>

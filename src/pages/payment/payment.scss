@@ -1,4 +1,20 @@
 #payment {
+	#card-info {
+		margin: 0 auto;
+		width: 200px;
+
+		#type {
+			width: 100%;
+		}
+	}
+
+	#card-info-header {
+		font-size: 20px;
+		font-weight: bold;
+		padding: 20px 0;
+		text-align: center;
+	}
+
 	#payment-infos {
 		margin: 0 auto;
 		

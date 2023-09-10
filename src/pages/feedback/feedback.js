@@ -101,6 +101,8 @@ export default function Feedbacks(props) {
 					if (newFeedbacks.length > 0) {
 						setFeedbacks(newFeedbacks)
 					} else {
+						localStorage.setItem("viewMyProducts", "true")
+						
 						window.location = '/main'
 					}
 				}

@@ -18,6 +18,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
 const pages = ['Products', 'Rejections', 'Withdraw'];
+const fullWidth = window.innerWidth
 
 export default function Header() {
 	const [username, setUsername] = useState('')
@@ -63,9 +64,9 @@ export default function Header() {
 	return (
 		<div id="header">
 			<AppBar position="static">
-	      <Container>
-	        <Toolbar>
-	        	<div id="logo">
+	      <Container maxWidth={fullWidth}>
+	        <Toolbar >
+	        	<div id="logo" onClick={() => window.location = "/"}>
 	        		<img src="/logo.png"/>
 	        	</div>
 
@@ -82,7 +83,6 @@ export default function Header() {
 	            variant="h6"
 	            noWrap
 	            component="a"
-	            href="/"
 	            sx={{ mr: 2, display: { xs: 'flex', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, color: 'inherit', textDecoration: 'none' }}
 	          >
 	            You are {username}

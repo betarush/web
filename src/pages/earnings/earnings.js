@@ -23,37 +23,40 @@ import StackButton from '@mui/material/Button';
 // components
 import Header from '../../components/header'
 
-let stripe = require('stripe')('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');
+let stripe = require('stripe')('sk_test_51NmA1PFqjgkiO0WHxOmFjOzgwHorLyTxjyWJ926HiBK10KHnTnh7q8skEmQ5c0NpHxI3mk2fbejMASjazhPlmGkv00L98uIq8G');
 
 export default function Earnings() {
 	const [userId, setUserid] = useState('')
 
-	// const [line1, setLine1] = useState('1111 Dundas Steet E')
-	// const [zipcode, setZipcode] = useState('M4M3H5')
-	// const [dob, setDob] = useState('07301996')
-	// const [firstName, setFirstname] = useState('Kevin')
-	// const [lastName, setLastname] = useState('Mai')
-	// const [country, setCountry] = useState('CA')
-	// const [currency, setCurrency] = useState('cad')
-	// const [routingNumber, setRoutingnumber] = useState('11000000')
-	// const [accountNumber, setAccountnumber] = useState('000123456789')
-
-	// real data
-	const [line1, setLine1] = useState('275 Broadview Avenue')
+	const [line1, setLine1] = useState('1111 Dundas Steet E')
 	const [zipcode, setZipcode] = useState('M4M3H5')
 	const [dob, setDob] = useState('07301996')
 	const [firstName, setFirstname] = useState('Kevin')
 	const [lastName, setLastname] = useState('Mai')
 	const [country, setCountry] = useState('CA')
 	const [currency, setCurrency] = useState('cad')
-	const [routingNumber, setRoutingnumber] = useState('000305842')
-	const [accountNumber, setAccountnumber] = useState('5207790')
+	const [routingNumber, setRoutingnumber] = useState('11000000')
+	const [accountNumber, setAccountnumber] = useState('000123456789')
+
+	// real data
+	// const [line1, setLine1] = useState('275 Broadview Avenue')
+	// const [zipcode, setZipcode] = useState('M4M3H5')
+	// const [dob, setDob] = useState('07301996')
+	// const [firstName, setFirstname] = useState('Kevin')
+	// const [lastName, setLastname] = useState('Mai')
+	// const [country, setCountry] = useState('CA')
+	// const [currency, setCurrency] = useState('cad')
+	// const [routingNumber, setRoutingnumber] = useState('000305842')
+	// const [accountNumber, setAccountnumber] = useState('5207790')
+
+	const [bankInfo, setBankinfo] = useState('')
 
 	const [bankaccountDone, setBankaccountdone] = useState(false)
 	const [earnings, setEarnings] = useState(0.0)
 	const [earnedBox, setEarnedbox] = useState({ show: false, earned: 0.0 })
 
 	const [loaded, setLoaded] = useState(false)
+	const [loading, setLoading] = useState(false)
 	const [errorMsg, setErrormsg] = useState('')
 
 	const getTheUserInfo = () => {
@@ -97,16 +100,8 @@ export default function Earnings() {
 			})
 			.then((res) => {
 				if (res) {
-					if (res.line1) {
-						setLine1(res.line1)
-						setZipcode(res.zipcode)
-						setDob(res.dob)
-						setFirstname(res.firstName)
-						setLastname(res.lastName)
-						setCountry(res.country)
-						setCurrency(res.currency)
-						setRoutingnumber(res.routingNumber)
-						setAccountnumber(res.accountNumber)
+					if (res.bank) {
+						setBankinfo(res.bank)
 					}
 
 					setLoaded(true)
@@ -128,7 +123,7 @@ export default function Earnings() {
 		const firstName = data.get('firstName'), lastName = data.get('lastName'), country = data.get('country')
 		const currency = data.get('currency'), routingNumber = data.get('routingNumber'), accountNumber = data.get('accountNumber')
 
-		if (line1 && zipcode && dob && firstName && lastName && country && currency && routingNumber && accountNumber) {
+		if (line1 && zipcode && dob && firstName && lastName && country) {
 			let bankaccount = await stripe.tokens.create({
 				bank_account: {
 					country,
@@ -140,7 +135,9 @@ export default function Earnings() {
 				}
 			})
 
-			const json = { userId, line1, zipcode, dob, firstName, lastName, country, currency, routingNumber, accountNumber, token: bankaccount.id }
+			const json = { userId, line1, zipcode, dob, firstName, lastName, country, token: bankaccount.id }
+
+			setLoading(true)
 
 			submitBankaccountInfo(json)
 				.then((res) => {
@@ -154,6 +151,8 @@ export default function Earnings() {
 					if (res) {
 						if (earnings > 0) {
 							getTheEarnings()
+
+							setLoading(false)
 						} else {
 							window.location = "/main"
 						}
@@ -223,7 +222,7 @@ export default function Earnings() {
 					setTimeout(function () {
 						setEarnedbox({ show: false, earned: 0.0 })
 						window.location = "/main"
-					}, 4000)
+					}, 2000)
 				}
 			})
 	}
@@ -248,7 +247,18 @@ export default function Earnings() {
 								<StackButton style={{ margin: '50px auto 0 auto', width: 200 }} variant="contained" onClick={() => getTheEarnings()}>Get earnings now</StackButton>
 							</Stack>
 
-							<div id="earnings-header">Or update your bank information below</div>
+							{bankInfo.last4 && (
+			      		<div>
+				      		<div id="bank-info">
+				      			<div className="info">
+				      				{bankInfo.name}
+				      				<br/>
+				      				*********{bankInfo.last4}
+				      			</div>
+				      		</div>
+				      		<div id="bank-info-header">Or enter a new account below to update</div>
+				      	</div>
+			      	)}
 						</>
 					)}
 
@@ -257,11 +267,11 @@ export default function Earnings() {
 			      sx={{
 			        maxHeight: 'max-content',
 			        maxWidth: 500,
-			        marginTop: 10,
 			        mx: 'auto',
 			        // to make the demo resizable
 			        overflow: 'auto'
 			      }}
+			      style={{ marginTop: 10 }}
 			    >
 			      <Typography level="title-lg" startDecorator={<InfoOutlined />}>
 			        Your bank account info
@@ -278,46 +288,46 @@ export default function Earnings() {
 				      >
 				      	<FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your address line 1:</FormLabel>
-				          <Input placeholder="Address line #1" name="line1" defaultValue={line1}/>
+				          <Input placeholder="Address line #1" name="line1" disabled={loading} defaultValue={line1}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your Zipcode:</FormLabel>
-				          <Input placeholder="Zipcode" name="zipcode" defaultValue={zipcode}/>
+				          <Input placeholder="Zipcode" name="zipcode" disabled={loading} defaultValue={zipcode}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Ener your Date of Birth:</FormLabel>
-				          <Input placeholder="DDMMYY" name="dob" defaultValue={dob}/>
+				          <Input placeholder="DDMMYY" name="dob" disabled={loading} defaultValue={dob}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your first name:</FormLabel>
-				          <Input placeholder="Enter cardholder's full name" name="firstName" defaultValue={firstName}/>
+				          <Input placeholder="Enter cardholder's full name" name="firstName" disabled={loading} defaultValue={firstName}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your last name:</FormLabel>
-				          <Input placeholder="Enter cardholder's last name" name="lastName" defaultValue={lastName}/>
+				          <Input placeholder="Enter cardholder's last name" name="lastName" disabled={loading} defaultValue={lastName}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter country:</FormLabel>
-				          <Input placeholder="Enter country" name="country" defaultValue={country}/>
+				          <Input placeholder="Enter country" name="country" disabled={loading} defaultValue={country}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter currency</FormLabel>
-				          <Input placeholder="Enter currency" name="currency" defaultValue={currency}/>
+				          <Input placeholder="Enter currency" name="currency" disabled={loading} defaultValue={currency}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your routing number:</FormLabel>
-				          <Input placeholder="Routing number" name="routingNumber" defaultValue={routingNumber}/>
+				          <Input placeholder="Routing number" name="routingNumber" disabled={loading} defaultValue={routingNumber}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your account number:</FormLabel>
-				          <Input placeholder="Account number" name="accountNumber" defaultValue={accountNumber}/>
+				          <Input placeholder="Account number" name="accountNumber" disabled={loading} defaultValue={accountNumber}/>
 				        </FormControl>
 
 				        <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
 				        <CardActions sx={{ gridColumn: '1/-1' }}>
-				          <Button type="submit" variant="solid" color="primary">
-				            {earnings > 0 ? "Get earnings" : "Save bank information"}
+				          <Button type="submit" disabled={loading} variant="solid" color="primary">
+				            {earnings > 0 ? "Save and get earnings" : "Save bank information"}
 				            <div style={{ marginLeft: 10 }}><LockOutlinedIcon /></div>
 				          </Button>
 				        </CardActions>
