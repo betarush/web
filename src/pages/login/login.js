@@ -18,8 +18,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const defaultTheme = createTheme();
-
 const theme = createTheme({
 	palette: {
 		submit: {
@@ -28,11 +26,9 @@ const theme = createTheme({
 		}
 	}
 })
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function Login() {
-	const [email, setEmail] = useState('creator@gmail.com')
+	const [email, setEmail] = useState('kmrobogram@gmail.com')
 	const [password, setPassword] = useState('qqqqqqq')
 	const [errorMsg, setErrormsg] = useState('')
 

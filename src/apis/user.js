@@ -17,6 +17,14 @@ export const login = data => {
 	})
 }
 
+export const verify = data => {
+	return fetch(`${routeUrl}/verify`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(data)
+	})
+}
+
 export const getUserInfo = data => {
 	return fetch(`${routeUrl}/get_user_info`, {
 		method: "POST",

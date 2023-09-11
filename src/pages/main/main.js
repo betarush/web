@@ -164,6 +164,7 @@ export default function Main() {
 
 					setProducts(newProducts)
 
+					getTheTestedProducts()
 					window.open(link)
 				}
 			})
@@ -321,11 +322,6 @@ export default function Main() {
 												<div className="info">
 													<div className="header">{product.numTried} people left can try</div>
 
-													<Button disabled={!product.trying} variant={product.trying ? "contained" : ""} onClick={() => {
-														if (product.trying) {
-															setFeedback({ show: true, input: '', id: product.id, index })
-														}
-													}}>Give feedback & Earn ${product.reward.toFixed(2)}</Button>
 													<Button disabled={product.trying} variant={!product.trying ? "contained" : ""} onClick={() => {
 														if (!product.trying) {
 															tryTheProduct(index, product.id, product.link)
@@ -337,7 +333,11 @@ export default function Main() {
 											<div className="column">
 												{viewType == "tested" ? 
 													<div className="info">
-														<div className="header">{product.earned ? "Earned: $" + product.reward.toFixed(2) + " for trying" : "Waiting for creator to reward you"}</div>
+														<div className="header">{product.earned ? "Earned $4.00 for trying" : product.gave_feedback && "Waiting for creator to reward you"}</div>
+
+														{!product.gave_feedback && (
+															<Button variant="contained" onClick={() => setFeedback({ show: true, input: '', id: product.id, index })}>Give feedback & Earn ${product.reward.toFixed(2)}</Button>
+														)}
 													</div>
 													:
 													<div className="info-container">
