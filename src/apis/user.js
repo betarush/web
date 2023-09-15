@@ -88,3 +88,19 @@ export const getEarnings = data => {
 		body: JSON.stringify(data)
 	})
 }
+
+export const createCheckout = data => {
+	return fetch(`${routeUrl}/create_checkout`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(data)
+	})
+}
+
+export const createCustomerPayment = data => {
+	return fetch(`${routeUrl}/create_customer_payment`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(data)
+	})
+}

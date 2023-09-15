@@ -55,7 +55,7 @@ export default function Earnings() {
 	const [earnings, setEarnings] = useState(0.0)
 	const [earnedBox, setEarnedbox] = useState({ show: false, earned: 0.0 })
 
-	const [loaded, setLoaded] = useState(false)
+	const [loaded, setLoaded] = useState(true)
 	const [loading, setLoading] = useState(false)
 	const [errorMsg, setErrormsg] = useState('')
 

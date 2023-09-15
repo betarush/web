@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getId, resizePhoto } from 'geottuse-tools';
-import { getUserInfo } from '../../apis/user';
+import { getUserInfo, createCheckout, createCustomerPayment } from '../../apis/user';
 import { listProduct } from '../../apis/product'
 
 // material ui components
@@ -65,6 +65,7 @@ export default function Listproduct() {
 			.then((res) => {
 				if (res) {
 					setPaymentdone(res.paymentDone)
+					setUserid(id)
 				}
 			})
 			.catch((err) => {
@@ -111,7 +112,28 @@ export default function Listproduct() {
 			} else {
 				localStorage.setItem("productInfo", JSON.stringify({ name, desc, link, image }))
 
-				window.location = "/payment"
+				const data = { userId }
+
+				createCheckout(data)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						}
+
+						throw res
+					})
+					.then((res) => {
+						if (res) {
+							window.location = res.url
+						}
+					})
+					.catch((err) => {
+						if (err.status == 400) {
+							err.json().then(() => {
+
+							})
+						}
+					})
 			}
 		} else {
 			if (!name) {
@@ -147,6 +169,54 @@ export default function Listproduct() {
 
 	useEffect(() => {
 		getTheUserInfo()
+
+		if (window.location.search.includes("session_id")) {
+			const urlParams = new URLSearchParams(window.location.search)
+			const sessionId = urlParams.get('session_id')
+			const id = localStorage.getItem("id")
+
+			const data = { userId: id, sessionId }
+
+			createCustomerPayment(data)
+				.then((res) => {
+					if (res.status == 200) {
+						return res.json()
+					}
+
+					throw res
+				})
+				.then((res) => {
+					if (res) {
+						localStorage.setItem("viewMyProducts", "true")
+
+						const { name, desc, link, image } = JSON.parse(localStorage.getItem("productInfo"))
+						const json = { userId: id, name, desc, link, image: JSON.stringify(image) }
+
+						listProduct(json)
+							.then((res) => {
+								if (res.status == 200) {
+									return res.json()
+								}
+
+								throw res
+							})
+							.then((res) => {
+								if (res) {
+									localStorage.removeItem("productInfo")
+
+									window.location = "/main"
+								}
+							})
+							.catch((err) => {
+								if (err.status == 400) {
+									err.json().then(() => {
+										
+									})
+								}
+							})
+					}
+				})
+		}
 	}, [])
 
 	return (
@@ -191,7 +261,7 @@ export default function Listproduct() {
 
 						<Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
-            <Button type="submit" fullWidth variant="contained" color="submit" sx={{ mt: 3, mb: 2 }}>{paymentDone ? "PAY & LAUNCH" : "ENTER PAYMENT"}</Button>
+            <Button type="submit" fullWidth variant="contained" color="submit" sx={{ mt: 3, mb: 2 }}>{paymentDone ? "PAY & LAUNCH" : "ENTER PAYMENT & LAUNCH"}</Button>
           </Box>
         </Box>
         <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>
