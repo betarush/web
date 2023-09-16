@@ -53,9 +53,9 @@ export default function Earnings() {
 
 	const [bankaccountDone, setBankaccountdone] = useState(false)
 	const [earnings, setEarnings] = useState(0.0)
-	const [earnedBox, setEarnedbox] = useState({ show: false, earned: 0.0 })
+	const [earnedBox, setEarnedbox] = useState({ show: false, earned: 0, pending: 0 })
 
-	const [loaded, setLoaded] = useState(true)
+	const [loaded, setLoaded] = useState(false)
 	const [loading, setLoading] = useState(false)
 	const [errorMsg, setErrormsg] = useState('')
 
@@ -217,10 +217,10 @@ export default function Earnings() {
 			.then((res) => {
 				if (res) {
 					setEarnings(0.0)
-					setEarnedbox({ show: true, earned: res.earnedAmount })
+					setEarnedbox({ show: true, earned: res.earnedAmount, pending: res.pendingEarned })
 
 					setTimeout(function () {
-						setEarnedbox({ show: false, earned: 0.0 })
+						setEarnedbox({ show: false, earned: 0.0, pending: false })
 						window.location = "/main"
 					}, 2000)
 				}
@@ -346,16 +346,24 @@ export default function Earnings() {
 	    </Typography>
 
 	    {earnedBox.show && (
-	       <div id="hidden-box">
-	         <div id="earned-box">
-	           <div id="earned-header">
-	             Yay! You've earned ${earnedBox.earned.toFixed(2)}
-	             <br/><br/>
-	             Thank you for your contribution
-	           </div>
-	         </div>
-	       </div>
-	     )}
+	      <div id="hidden-box">
+         	<div id="earned-box">
+           	<div id="earned-header">
+           		{earnedBox.earned > 0 && "Yay! You've earned $" + earnedBox.earned.toFixed(2)}
+           		{earnedBox.pending && (
+           			<div style={{ fontSize: 20, padding: '0 5%' }}>
+           				<br/><br/>
+           				We are processing your withdrawal. You will get an e-mail to withdraw your money soon.
+           			</div>
+           		)}
+
+            	<br/><br/>
+
+            	Thank you for your contribution
+           	</div>
+         	</div>
+	     	</div>
+	    )}
     </div>
 	)
 }

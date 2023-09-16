@@ -30,6 +30,7 @@ export default function Main() {
 
 	const [products, setProducts] = useState([])
 	const [viewType, setViewtype] = useState('')
+	const [rewardAmount, setRewardamount] = useState(0)
 	const [feedback, setFeedback] = useState({ show: false, input: '', id: null, index: -1 })
 	const [relaunch, setRelaunch] = useState({ show: false, cardInfo: {}, productId: null })
 
@@ -52,6 +53,7 @@ export default function Main() {
 				if (res) {
 					setBankaccountdone(res.bankaccountDone)
 					setUserid(id)
+					setRewardamount(res.rewardAmount)
 				}
 			})
 			.catch((err) => {
@@ -333,7 +335,7 @@ export default function Main() {
 											<div className="column">
 												{viewType == "tested" ? 
 													<div className="info">
-														<div className="header">{product.earned ? "Earned $4.00 for trying" : product.gave_feedback && "Waiting for creator to reward you"}</div>
+														<div className="header">{product.earned ? "Earned $" + rewardAmount + " for trying" : product.gave_feedback && "Waiting for creator to reward you"}</div>
 
 														{!product.gave_feedback && (
 															<Button variant="contained" onClick={() => setFeedback({ show: true, input: '', id: product.id, index })}>Give feedback & Earn ${product.reward.toFixed(2)}</Button>
@@ -389,7 +391,7 @@ export default function Main() {
 				<div id="hidden-box">
 					{feedback.show && (
 						<div id="feedback-box">
-							<div id="feedback-header">Write a good feedback to earn $4.00</div>
+							<div id="feedback-header">Write a good feedback to earn ${rewardAmount.toFixed(2)}</div>
 
 							<textarea id="feedback-input" maxlength="200" onChange={e => setFeedback({ ...feedback, input: e.target.value })} value={feedback.input}/>
 

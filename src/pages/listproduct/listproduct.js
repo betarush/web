@@ -37,6 +37,13 @@ const VisuallyHiddenInput = styled('input')`
   white-space: nowrap;
   width: 1px;
 `;
+let sessionId = ""
+
+if (window.location.search.includes("session_id")) {
+	const urlParams = new URLSearchParams(window.location.search)
+	
+	sessionId = urlParams.get('session_id')
+}
 
 export default function Listproduct() {
 	const [userId, setUserid] = useState('')
@@ -49,6 +56,7 @@ export default function Listproduct() {
 	const [errorMsg, setErrormsg] = useState('')
 
 	const [paymentDone, setPaymentdone] = useState(false)
+	const [loading, setLoading] = useState(false)
 
 	const getTheUserInfo = () => {
 		const id = localStorage.getItem("id")
@@ -77,17 +85,19 @@ export default function Listproduct() {
 			})
 	}
 	const listTheProduct = event => {
+		setLoading(true)
+
 		event.preventDefault();
 
 		const data = new FormData(event.currentTarget);
 		const name = data.get('name'), desc = data.get('desc'), link = data.get('link')
 
 		if (name && desc && link) {
-			localStorage.setItem("viewMyProducts", "true")
-
 			if (paymentDone) {
 				const id = localStorage.getItem("id")
 				const json = { userId: id, name, desc, link, image: JSON.stringify(image) }
+
+				localStorage.setItem("viewMyProducts", "true")
 
 				listProduct(json)
 					.then((res) => {
@@ -110,7 +120,7 @@ export default function Listproduct() {
 						}
 					})
 			} else {
-				localStorage.setItem("productInfo", JSON.stringify({ name, desc, link, image }))
+				localStorage.setItem("productInfo", JSON.stringify({ userId, name, desc, link, image }))
 
 				const data = { userId }
 
@@ -168,14 +178,14 @@ export default function Listproduct() {
 	}
 
 	useEffect(() => {
-		getTheUserInfo()
+		if (sessionId) {
+			setLoading(true)
 
-		if (window.location.search.includes("session_id")) {
-			const urlParams = new URLSearchParams(window.location.search)
-			const sessionId = urlParams.get('session_id')
 			const id = localStorage.getItem("id")
 
 			const data = { userId: id, sessionId }
+
+			sessionId = ""
 
 			createCustomerPayment(data)
 				.then((res) => {
@@ -187,10 +197,10 @@ export default function Listproduct() {
 				})
 				.then((res) => {
 					if (res) {
-						localStorage.setItem("viewMyProducts", "true")
+						const { userId, name, desc, link, image } = JSON.parse(localStorage.getItem("productInfo"))
+						const json = { userId, name, desc, link, image: JSON.stringify(image) }
 
-						const { name, desc, link, image } = JSON.parse(localStorage.getItem("productInfo"))
-						const json = { userId: id, name, desc, link, image: JSON.stringify(image) }
+						localStorage.setItem("viewMyProducts", "true")
 
 						listProduct(json)
 							.then((res) => {
@@ -215,7 +225,9 @@ export default function Listproduct() {
 								}
 							})
 					}
-				})
+			})
+		} else {
+			getTheUserInfo()
 		}
 	}, [])
 
@@ -235,9 +247,9 @@ export default function Listproduct() {
         >
           <Typography component="h1" variant="h5">What is your product</Typography>
           <Box component="form" onSubmit={listTheProduct} noValidate sx={{ mt: 1 }}>
-          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product name:" name="name" variant="standard" defaultValue={name}/>
-          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product information:" name="desc" variant="standard" defaultValue={desc}/>
-          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product link to lead customers:" name="link" variant="standard" defaultValue={link}/>
+          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product name:" name="name" variant="standard" disabled={loading} defaultValue={name}/>
+          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product information:" name="desc" variant="standard" disabled={loading} defaultValue={desc}/>
+          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product link to lead customers:" name="link" variant="standard" disabled={loading} defaultValue={link}/>
 
           	<Button
 						  component="label"
@@ -261,7 +273,7 @@ export default function Listproduct() {
 
 						<Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
-            <Button type="submit" fullWidth variant="contained" color="submit" sx={{ mt: 3, mb: 2 }}>{paymentDone ? "PAY & LAUNCH" : "ENTER PAYMENT & LAUNCH"}</Button>
+            <Button type="submit" fullWidth variant="contained" color="submit" disabled={loading} sx={{ mt: 3, mb: 2 }}>{paymentDone ? "PAY & LAUNCH" : "ENTER PAYMENT & LAUNCH"}</Button>
           </Box>
         </Box>
         <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>

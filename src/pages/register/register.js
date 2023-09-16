@@ -27,7 +27,7 @@ const theme = createTheme({
 })
 
 export default function Register() {
-	const [email, setEmail] = useState('kmrobogram@gmail.com')
+	const [email, setEmail] = useState('creator@gmail.com')
 	const [password, setPassword] = useState('qqqqqqq')
 	const [confirmPassword, setConfirmpassword] = useState('qqqqqqq')
 	const [verified, setVerified] = useState(false)
@@ -115,10 +115,6 @@ export default function Register() {
 				setErrormsg("Your verification code is wrong")
 			}
 		}
-
-
-
-			
 	}
 
 	return (
@@ -161,7 +157,7 @@ export default function Register() {
 		          	</>
 	          		:
 	          		<>
-		          		<TextField margin="normal" required fullWidth id="usercode" label="Enter verification code" name="usercode" autoFocus defaultValue={userCode}/>
+		          		<TextField margin="normal" required fullWidth id="usercode" label="Enter verification code" name="usercode" autoFocus defaultValue=""/>
 
 			            <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 

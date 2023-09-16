@@ -33,7 +33,7 @@
 			.nav {
 				border-radius: 10px;
 				font-weight: 100;
-				margin-right: 10px;
+				margin-right: 50px;
 				padding: 10px;
 				text-align: center;
 
@@ -52,20 +52,46 @@
 			justify-content: space-around;
 
 			#masthead-header {
+				background-color: rgba(255, 255, 255, 0.8);
+				border-radius: 5px;
 				color: black;
 				display: flex;
 				flex-direction: column;
-				font-size: 50px;
-				font-weight: bold;
 				justify-content: space-around;
 				margin: 0 5%;
 				position: absolute;
-				text-align: center;
+				padding: 5px;
+				width: 40%;
+
+				.header {
+					margin: 5% 0;
+				}
 
 				div {
+					margin: 2% 0;
+				}
+
+				#top-header {
+					font-size: 40px;
+				}
+
+				#info-header {
 					font-size: 30px;
-					font-weight: 100;
-					margin-top: 1%;
+				}
+
+				#learnmore {
+					background-color: black;
+					border-radius: 10px;
+					color: white;
+					font-weight: bold;
+					padding: 10px;
+					text-align: center;
+					width: 150px;
+
+					&:hover {
+						cursor: pointer;
+						opacity: 0.5;
+					}
 				}
 			}
 
@@ -76,9 +102,6 @@
 		}
 
 		#infos {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-around;
 			width: 100%;
 
 			.info:first-child {
@@ -93,8 +116,8 @@
 
 			.info {
 				font-weight: bold;
-				margin-top: 10px;
-				width: 50%;
+				margin-bottom: 10%;
+				width: 100%;
 
 				.info-header {
 					font-size: 40px;
@@ -103,27 +126,46 @@
 					text-align: center;
 				}
 
-				.info-info {
+				.info-row {
 					display: flex;
 					flex-direction: row;
 					justify-content: space-around;
-					margin: 10%;
 
-					.header {
-						font-size: 25px;
-						padding: 5%;
-						text-align: center;
-						width: 50%;
-					}
+					.info-info {
+						padding: 1%;
+						width: 30vw;
 
-					.image {
-						height: 150px;
-						overflow: hidden;
-						width: 150px;
+						.index {
+							background-color: black;
+							border-radius: 40px;
+							color: white;
+							display: flex;
+							flex-direction: column;
+							font-size: 30px;
+							height: 50px;
+							justify-content: space-around;
+							margin: 0 auto 20px auto;
+							padding: 10px;
+							text-align: center;
+							width: 50px;
+						}
 
-						img {
-							height: 100%;
-							width: 100%;
+						.header {
+							color: black;
+							font-size: 20px;
+							text-align: center;
+						}
+
+						.image {
+							height: 300px;
+							margin: 20px auto 0 auto;
+							overflow: hidden;
+							width: 300px;
+
+							img {
+								height: 100%;
+								width: 100%;
+							}
 						}
 					}
 				}
@@ -136,5 +178,11 @@
 			padding: 20px 0;
 			text-align: center;
 		}
+	}
+
+	#footer {
+		font-size: 20px;
+		padding: 100px 0 50px 0;
+		text-align: center;
 	}
 }
