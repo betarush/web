@@ -75,6 +75,7 @@ export default function Header() {
 	            <Button onClick={() => window.location = "/rejections"} sx={{ my: 2, color: 'white', display: 'block' }}>Rejections</Button>
 	            <Button onClick={() => window.location = "/earnings"} sx={{ my: 2, color: 'white', display: 'block' }}>Withdraw reward: ${earnings.toFixed(2)}</Button>
 	            <Button onClick={() => window.location = "/listproduct"} sx={{ my: 2, color: 'white', display: 'block' }}>Submit your product</Button>
+	            <Button onClick={() => window.location = "/seefeedbacks"} sx={{ my: 2, color: 'white', display: 'block' }}>See Feedbacks</Button>
 	            <Button onClick={() => logout()} sx={{ my: 2, color: 'white', display: 'block' }}>Log-Out</Button>
 	          </Box>
 

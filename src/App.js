@@ -10,8 +10,9 @@ import Main from './pages/main'
 import Feedback from './pages/feedback'
 import Rejections from './pages/rejections'
 import Earnings from './pages/earnings'
+import Seefeedbacks from './pages/seefeedbacks';
 import Listproduct from './pages/listproduct'
-import Payment from './pages/payment'
+//import Payment from './pages/payment'
 
 function App() {
   const [userId, setUserid] = useState('')
@@ -33,8 +34,8 @@ function App() {
         <Route path="/feedback/:id" element={<Feedback/>}/>
         <Route path="/rejections" element={<Rejections/>}/>
         <Route path="/earnings" element={<Earnings/>}/>
+        <Route path="/seefeedbacks" element={<Seefeedbacks/>}/>
         <Route path="/listproduct" element={<Listproduct/>}/>
-        <Route path="/payment" element={<Payment/>}/>
       </Routes>
     </BrowserRouter>
   );

@@ -1,0 +1,135 @@
+#seefeedbacks {
+	background-color: #efefef;
+	height: 100vh;
+	width: 100vw;
+
+	#feedbacks {
+		margin: 20px 0;
+
+		.product {
+			background-color: white;
+			border-radius: 20px;
+			margin: 0 auto;
+			padding: 10px;
+			width: 600px;
+
+			.info {
+				.logo {
+					background-color: rgba(0, 0, 0, 0.2);
+					border-radius: 50px;
+					height: 100px;
+					margin: 0 auto;
+					width: 100px;
+
+					img {
+						height: 100%;
+						width: 100%;
+					}
+				}
+			}
+
+			#feedbacks-header {
+				font-size: 20px;
+				margin: 20px 0;
+				text-align: center;
+			}
+
+			#product-feedbacks {
+				.feedback {
+					margin: 30px 0;
+
+					.feedback-header {
+						font-size: 18px;
+						font-weight: bold;
+					}
+
+					.feedback-actions {
+						display: flex;
+						flex-direction: row;
+
+						.feedback-action {
+							border-radius: 10px;
+							border-style: solid;
+							border-width: 1px;
+							font-size: 15px;
+							margin: 0 10px;
+							padding: 5px 0;
+							text-align: center;
+							width: 150px;
+
+							&:hover {
+								background-color: rgba(0, 0, 0, 0.5);
+								cursor: pointer;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	#no-result {
+		margin: 10% 0;
+		text-align: center;
+	}
+
+	#hidden-box {
+		background-color: rgba(0, 0, 0, 0.7);
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+		justify-content: space-around;
+		position: absolute;
+		top: 0;
+		width: 100vw;
+
+		#reject-box {
+			background-color: #efefef;
+			display: flex;
+			flex-direction: column;
+			height: 500px;
+			justify-content: space-around;
+			margin: 0 auto;
+			width: 500px;
+
+			#reject-header {
+				font-size: 30px;
+				font-weight: bold;
+				text-align: center;
+			}
+
+			#reject-input {
+				border-radius: 20px;
+				font-size: 20px;
+				height: 50%;
+				margin: 0 auto;
+				padding: 10px;
+				resize: none;
+				width: 90%;
+			}
+
+			#actions {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-around;
+
+				.action {
+					background-color: black;
+					border-radius: 20px;
+					color: white;
+					font-size: 15px;
+					font-weight: bold;
+					margin: 0 auto;
+					padding: 10px;
+					text-align: center;
+					width: 200px;
+
+					&:hover {
+						cursor: pointer;
+						opacity: 0.5;
+					}
+				}
+			}
+		}
+	}
+}

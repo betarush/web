@@ -10,8 +10,9 @@ import Button from '@mui/material/Button';
 
 // components
 import Header from '../../components/header'
+
 import { rewardCustomer, rejectFeedback } from '../../apis/user'
-import { getFeedbacks } from '../../apis/product'
+import { getProductFeedbacks } from '../../apis/product'
 
 const LOGO_URL = process.env.REACT_APP_LOGO_URL
 
@@ -26,10 +27,10 @@ export default function Feedbacks(props) {
 	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {} })
 	const [loaded, setLoaded] = useState(false)
 
-	const getTheFeedbacks = () => {
+	const getTheProductFeedbacks = () => {
 		const data = { productId: id }
 
-		getFeedbacks(data)
+		getProductFeedbacks(data)
 			.then((res) => {
 				if (res.status == 200) {
 					return res.json()
@@ -117,7 +118,7 @@ export default function Feedbacks(props) {
 	}
 
 	useEffect(() => {
-		getTheFeedbacks()
+		getTheProductFeedbacks()
 	}, [])
 
 	return (
