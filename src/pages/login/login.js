@@ -28,7 +28,7 @@ const theme = createTheme({
 })
 
 export default function Login() {
-	const [email, setEmail] = useState('test@gmail.com')
+	const [email, setEmail] = useState('kevin.mai.730@gmail.com')
 	const [password, setPassword] = useState('qqqqqqq')
 	const [errorMsg, setErrormsg] = useState('')
 

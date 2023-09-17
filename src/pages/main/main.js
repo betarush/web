@@ -31,7 +31,7 @@ export default function Main() {
 	const [products, setProducts] = useState([])
 	const [viewType, setViewtype] = useState('')
 	const [rewardAmount, setRewardamount] = useState(0)
-	const [feedback, setFeedback] = useState({ show: false, input: '', id: null, index: -1 })
+	const [feedback, setFeedback] = useState({ show: false, input: '', id: null, index: -1, amountSpent: 0 })
 	const [relaunch, setRelaunch] = useState({ show: false, cardInfo: {}, productId: null })
 
 	const [bankaccountDone, setBankaccountdone] = useState(false)
@@ -53,7 +53,6 @@ export default function Main() {
 				if (res) {
 					setBankaccountdone(res.bankaccountDone)
 					setUserid(id)
-					setRewardamount(res.rewardAmount)
 				}
 			})
 			.catch((err) => {
@@ -172,8 +171,8 @@ export default function Main() {
 			})
 			.catch((err) => {
 				if (err.status == 400) {
-					err.json().then(() => {
-
+					err.json().then(({ status }) => {
+						console.log(status)
 					})
 				}
 			})
@@ -338,7 +337,7 @@ export default function Main() {
 														<div className="header">{product.earned ? "Earned $" + rewardAmount + " for trying" : product.gave_feedback && "Waiting for creator to reward you"}</div>
 
 														{!product.gave_feedback && (
-															<Button variant="contained" onClick={() => setFeedback({ show: true, input: '', id: product.id, index })}>Give feedback & Earn ${product.reward.toFixed(2)}</Button>
+															<Button variant="contained" onClick={() => setFeedback({ show: true, input: '', id: product.id, index, amountSpent: product.amountSpent })}>Give feedback & Earn ${product.reward.toFixed(2)}</Button>
 														)}
 													</div>
 													:
@@ -355,14 +354,13 @@ export default function Main() {
 
 																{product.numFeedback > 0 && (
 																	<div className="header">
-																		{product.numTesting} people gave feedback<br/>
+																		{product.numFeedback} people gave feedback<br/>
 																		<div className="reward" onClick={() => window.location = '/feedback/' + product.id}>Reward them</div>
 																	</div>
-																)}															
-																	
-																<div className="header">
-																	{product.numTested} people rewarded
-																</div>
+																)}
+
+																{product.numRewarded > 0 && <div className="header">{product.numRewarded} people rewarded</div>}
+																{product.numRejected > 0 && <div className="header">{product.numRejected} people rejected</div>}
 															</>
 															:
 															<div className="header">
@@ -391,7 +389,7 @@ export default function Main() {
 				<div id="hidden-box">
 					{feedback.show && (
 						<div id="feedback-box">
-							<div id="feedback-header">Write a good feedback to earn ${rewardAmount.toFixed(2)}</div>
+							<div id="feedback-header">Write a good feedback to earn ${(feedback.amountSpent / 5).toFixed(2)}</div>
 
 							<textarea id="feedback-input" maxlength="200" onChange={e => setFeedback({ ...feedback, input: e.target.value })} value={feedback.input}/>
 

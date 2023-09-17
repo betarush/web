@@ -76,6 +76,7 @@ export default function Seefeedbacks() {
 						}
 
 						setProducts(newProducts)
+						setRejectreasonbox({ show: false, reason: '' })
 					}
 				})
 		}
