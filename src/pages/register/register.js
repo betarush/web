@@ -61,6 +61,15 @@ export default function Register() {
 										setPassword(password)
 									}
 								})
+								.catch((err) => {
+									if (err.status == 400) {
+										err.json().then(({ status }) => {
+											if (status == "exist") {
+												setErrormsg("E-mail already in used")
+											}
+										})
+									}
+								})
 						} else {
 						}
 					} else {
@@ -101,7 +110,7 @@ export default function Register() {
 						if (res) {
 							localStorage.setItem("id", res.id)
 
-							window.location = "/main"
+							window.location = "/intro"
 						}
 					})
 					.catch((err) => {

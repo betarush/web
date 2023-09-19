@@ -122,7 +122,7 @@ export default function Listproduct() {
 			} else {
 				localStorage.setItem("productInfo", JSON.stringify({ userId, name, desc, link, image }))
 
-				const data = { userId }
+				const data = { userId, redirect: "listproduct" }
 
 				createCheckout(data)
 					.then((res) => {
@@ -248,7 +248,7 @@ export default function Listproduct() {
           <Typography component="h1" variant="h5">What is your product</Typography>
           <Box component="form" onSubmit={listTheProduct} noValidate sx={{ mt: 1 }}>
           	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product name:" name="name" variant="standard" disabled={loading} defaultValue={name}/>
-          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product information:" name="desc" variant="standard" disabled={loading} defaultValue={desc}/>
+          	<TextField margin="normal" required fullWidth multiline id="standard-size-small" label="Enter product information:" name="desc" variant="standard" disabled={loading} defaultValue={desc}/>
           	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product link to lead customers:" name="link" variant="standard" disabled={loading} defaultValue={link}/>
 
           	<Button
@@ -273,7 +273,7 @@ export default function Listproduct() {
 
 						<Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
-            <Button type="submit" fullWidth variant="contained" color="submit" disabled={loading} sx={{ mt: 3, mb: 2 }}>{paymentDone ? "PAY & LAUNCH" : "ENTER PAYMENT & LAUNCH"}</Button>
+            <Button type="submit" fullWidth variant="contained" color="submit" disabled={loading} sx={{ mt: 3, mb: 2 }}>LAUNCH</Button>
           </Box>
         </Box>
         <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>

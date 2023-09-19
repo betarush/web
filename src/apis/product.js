@@ -25,8 +25,8 @@ export const getUntestedProducts = data => {
 	})
 }
 
-export const getTestedProducts = data => {
-	return fetch(`${routeUrl}/get_tested_products`, {
+export const getTestingProducts = data => {
+	return fetch(`${routeUrl}/get_testing_products`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify(data)

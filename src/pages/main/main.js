@@ -2,8 +2,8 @@ import './main.scss';
 import { useEffect, useState } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
 import { resizePhoto } from 'geottuse-tools';
-import { getUserInfo, getPaymentInfo } from '../../apis/user'
-import { getUntestedProducts, getTestedProducts, getMyProducts, tryProduct, relistProduct } from '../../apis/product'
+import { getUserInfo, getPaymentInfo, createCheckout, createCustomerPayment } from '../../apis/user'
+import { getUntestedProducts, getTestingProducts, getMyProducts, tryProduct, relistProduct } from '../../apis/product'
 import { submitFeedback } from '../../apis/producttesting'
 
 // material ui components
@@ -27,10 +27,12 @@ const LOGO_URL = process.env.REACT_APP_LOGO_URL
 
 export default function Main() {
 	const [userId, setUserid] = useState('')
+	const [isCreator, setIscreator] = useState(false)
 
 	const [products, setProducts] = useState([])
 	const [viewType, setViewtype] = useState('')
-	const [rewardAmount, setRewardamount] = useState(0)
+
+	const [intro, setIntro] = useState(false)
 	const [feedback, setFeedback] = useState({ show: false, input: '', id: null, index: -1, amountSpent: 0 })
 	const [relaunch, setRelaunch] = useState({ show: false, cardInfo: {}, productId: null })
 
@@ -53,6 +55,7 @@ export default function Main() {
 				if (res) {
 					setBankaccountdone(res.bankaccountDone)
 					setUserid(id)
+					setIscreator(res.isCreator)
 				}
 			})
 			.catch((err) => {
@@ -91,12 +94,12 @@ export default function Main() {
 				}
 			})
 	}
-	const getTheTestedProducts = () => {
+	const getTheTestingProducts = () => {
 		const data = { userId }
 
 		setLoaded(false)
 
-		getTestedProducts(data)
+		getTestingProducts(data)
 			.then((res) => {
 				if (res.status == 200) {
 					return res.json()
@@ -165,8 +168,10 @@ export default function Main() {
 
 					setProducts(newProducts)
 
-					getTheTestedProducts()
-					window.open(link)
+					setTimeout(function () {
+						getTheTestingProducts()
+						window.open(link)
+					}, 2000)
 				}
 			})
 			.catch((err) => {
@@ -234,7 +239,7 @@ export default function Main() {
 				if (res) {
 					setFeedback({ show: false, input: '', id: null, index: -1 })
 
-					getTheTestedProducts()
+					getTheTestingProducts()
 				}
 			})
 			.catch((err) => {
@@ -248,6 +253,12 @@ export default function Main() {
 
 	useEffect(() => {
 		getTheUserInfo()
+
+		if (localStorage.getItem("testerIntro")) {
+			localStorage.removeItem("testerIntro")
+
+			setIntro(true)
+		}
 	}, [])
 
 	useEffect(() => {
@@ -283,21 +294,23 @@ export default function Main() {
 			          </ListItemButton>
 			        </ListItem>
 			        <ListItem role="none">
-			          <ListItemButton style={{ backgroundColor: viewType == 'tested' ? 'rgba(0, 0, 0, 0.5)' : '' }} role="menuitem" onClick={() => viewType != 'tested' && getTheTestedProducts()}>
+			          <ListItemButton style={{ backgroundColor: viewType == 'tested' ? 'rgba(0, 0, 0, 0.5)' : '' }} role="menuitem" onClick={() => viewType != 'tested' && getTheTestingProducts()}>
 			            <ListItemDecorator>
 			              <SpeedRoundedIcon />
 			            </ListItemDecorator>
 			            <div style={{ color: viewType == 'tested' ? 'white' : 'black' }}>Testing by you</div>
 			          </ListItemButton>
 			        </ListItem>
-			        <ListItem role="none">
-			          <ListItemButton style={{ backgroundColor: viewType == 'myproducts' ? 'rgba(0, 0, 0, 0.5)' : '' }} role="menuitem" onClick={() => viewType != 'myproducts' && getTheMyProducts()}>
-			            <ListItemDecorator>
-			              <PersonIcon />
-			            </ListItemDecorator>
-			            <div style={{ color: viewType == 'myproducts' ? 'white' : 'black' }}>Your products</div>
-			          </ListItemButton>
-			        </ListItem>
+			        {isCreator == true && (
+			        	<ListItem role="none">
+				          <ListItemButton style={{ backgroundColor: viewType == 'myproducts' ? 'rgba(0, 0, 0, 0.5)' : '' }} role="menuitem" onClick={() => viewType != 'myproducts' && getTheMyProducts()}>
+				            <ListItemDecorator>
+				              <PersonIcon />
+				            </ListItemDecorator>
+				            <div style={{ color: viewType == 'myproducts' ? 'white' : 'black' }}>Your products</div>
+				          </ListItemButton>
+				        </ListItem>
+			        )}
 			      </List>
 			    </Box>
 				</div>
@@ -323,18 +336,22 @@ export default function Main() {
 												<div className="info">
 													<div className="header">{product.numTried} people left can try</div>
 
-													<Button disabled={product.trying} variant={!product.trying ? "contained" : ""} onClick={() => {
-														if (!product.trying) {
-															tryTheProduct(index, product.id, product.link)
-														}
-													}}>Try first</Button>
+													{!product.trying ? 
+														<Button disabled={product.trying} variant="contained" onClick={() => tryTheProduct(index, product.id, product.link)}>Try first</Button>
+														:
+														<div className="header">
+															Come back to give feedback when you're done testing
+															<br/><br/>
+															redirecting to website....
+														</div>
+													}
 												</div>
 											</div>
 											:
 											<div className="column">
 												{viewType == "tested" ? 
 													<div className="info">
-														<div className="header">{product.earned ? "Earned $" + rewardAmount + " for trying" : product.gave_feedback && "Waiting for creator to reward you"}</div>
+														<div className="header">{product.earned ? "Earned $" + product.reward + " for trying" : product.gave_feedback && "Waiting for creator to reward you"}</div>
 
 														{!product.gave_feedback && (
 															<Button variant="contained" onClick={() => setFeedback({ show: true, input: '', id: product.id, index, amountSpent: product.amountSpent })}>Give feedback & Earn ${product.reward.toFixed(2)}</Button>
@@ -385,8 +402,29 @@ export default function Main() {
 				}
 			</div>
 
-			{(feedback.show || relaunch.show) && (
+			{(intro || feedback.show || relaunch.show) && (
 				<div id="hidden-box">
+					{intro && (
+						<div id="intro">
+							<div id="intro-header">Welcome</div>
+
+							<div className="intro-mini-header">
+								We built this platform that enables you to earn some money
+								by helping creators improve their product.
+								<br/><br/>
+								All you have to do is tryout products and write a good feedback.
+								<br/><br/>
+								You will get rewarded with some money if the creator likes your feedback so
+								make sure to write a few good words
+								<br/><br/>
+								That's it! Enjoy your time making money here:)
+							</div>
+
+							<div id="intro-actions">
+								<div className="intro-action" onClick={() => setIntro(false)}>OK</div>
+							</div>
+						</div>
+					)}
 					{feedback.show && (
 						<div id="feedback-box">
 							<div id="feedback-header">Write a good feedback to earn ${(feedback.amountSpent / 5).toFixed(2)}</div>
@@ -430,11 +468,11 @@ export default function Main() {
 			      				<br/>
 			      				*********{relaunch.cardInfo.last4}
 			      			</div>
-			      			<div id="update" onClick={() => {
+			      			{/*<div id="update" onClick={() => {
 			      				localStorage.setItem("relaunchProduct", relaunch.productId.toString())
 
 			      				window.location = "/payment"
-			      			}}>Update payment</div>
+			      			}}>Update payment</div>*/}
 			      		</div>
 			      	)}
 

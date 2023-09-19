@@ -6,6 +6,7 @@ import './App.css';
 import Landing from './pages/landing'
 import Register from './pages/register'
 import Login from './pages/login'
+import Intro from './pages/intro'
 import Main from './pages/main'
 import Feedback from './pages/feedback'
 import Rejections from './pages/rejections'
@@ -30,6 +31,7 @@ function App() {
         <Route path="/landing" element={<Landing/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/login" element={<Login/>}/>
+        <Route path="/intro" element={<Intro/>}/>
         <Route path="/main" element={<Main/>}/>
         <Route path="/feedback/:id" element={<Feedback/>}/>
         <Route path="/rejections" element={<Rejections/>}/>

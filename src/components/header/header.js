@@ -24,6 +24,8 @@ export default function Header() {
 	const [username, setUsername] = useState('')
 	const [earnings, setEarnings] = useState(0.0)
 	const [numRejected, setNumrejected] = useState(0)
+	const [firstTime, setFirsttime] = useState(false)
+	const [isCreator, setIscreator] = useState(false)
 
 	const getTheUserInfo = () => {
 		const data = { userId: localStorage.getItem("id") }
@@ -41,6 +43,8 @@ export default function Header() {
 					setUsername(res.username)
 					setEarnings(res.earnings)
 					setNumrejected(res.rejectedReasons)
+					setFirsttime(res.firstTime)
+					setIscreator(res.isCreator)
 				}
 			})
 			.catch((err) => {
@@ -71,11 +75,16 @@ export default function Header() {
 	        	</div>
 
 	          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
-	            <Button onClick={() => window.location = "/main"} sx={{ my: 2, color: 'white', display: 'block' }}>Products</Button>
-	            <Button onClick={() => window.location = "/rejections"} sx={{ my: 2, color: 'white', display: 'block' }}>Rejections</Button>
-	            <Button onClick={() => window.location = "/earnings"} sx={{ my: 2, color: 'white', display: 'block' }}>Withdraw reward: ${earnings.toFixed(2)}</Button>
-	            <Button onClick={() => window.location = "/listproduct"} sx={{ my: 2, color: 'white', display: 'block' }}>Submit your product</Button>
-	            <Button onClick={() => window.location = "/seefeedbacks"} sx={{ my: 2, color: 'white', display: 'block' }}>See Feedbacks</Button>
+	          	{firstTime == false && (
+	          		<>
+			            <Button onClick={() => window.location = "/main"} sx={{ my: 2, color: 'white', display: 'block' }}>Products</Button>
+			            <Button onClick={() => window.location = "/rejections"} sx={{ my: 2, color: 'white', display: 'block' }}>Rejections</Button>
+			            <Button onClick={() => window.location = "/earnings"} sx={{ my: 2, color: 'white', display: 'block' }}>Withdraw reward: ${earnings.toFixed(2)}</Button>
+			            <Button onClick={() => window.location = "/listproduct"} sx={{ my: 2, color: 'white', display: 'block' }}>Submit your product</Button>
+			            {isCreator == true && <Button onClick={() => window.location = "/seefeedbacks"} sx={{ my: 2, color: 'white', display: 'block' }}>See Feedbacks</Button>}
+		            </>
+	          	)}
+		          	
 	            <Button onClick={() => logout()} sx={{ my: 2, color: 'white', display: 'block' }}>Log-Out</Button>
 	          </Box>
 

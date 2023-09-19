@@ -33,6 +33,14 @@ export const getUserInfo = data => {
 	})
 }
 
+export const updateFirstTime = data => {
+	return fetch(`${routeUrl}/update_first_time`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(data)
+	})
+}
+
 export const getPaymentInfo = data => {
 	return fetch(`${routeUrl}/get_payment_info`, {
 		method: "POST",

@@ -222,7 +222,7 @@ export default function Earnings() {
 					setTimeout(function () {
 						setEarnedbox({ show: false, earned: 0.0, pending: false })
 						window.location = "/main"
-					}, 2000)
+					}, 3000)
 				}
 			})
 	}

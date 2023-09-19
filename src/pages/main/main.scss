@@ -150,6 +150,48 @@
 		top: 0;
 		width: 100vw;
 
+		#intro {
+			background-color: #efefef;
+			display: flex;
+			flex-direction: column;
+			height: 500px;
+			justify-content: space-around;
+			margin: 0 auto;
+			width: 500px;
+
+			#intro-header {
+				font-size: 30px;
+				text-align: center;
+			}
+
+			.intro-mini-header {
+				font-size: 20px;
+				padding: 0 5%;
+				text-align: center;
+			}
+
+			#intro-actions {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-around;
+				width: 100%;
+
+				.intro-action {
+					background-color: black;
+					border-radius: 20px;
+					color: white;
+					padding: 5px 10px;
+					text-align: center;
+					width: 45%;
+
+					&:hover {
+						cursor: pointer;
+						opacity: 0.5;
+					}
+				}
+			}
+		}
+
 		#feedback-box {
 			background-color: #efefef;
 			display: flex;
