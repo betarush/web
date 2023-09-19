@@ -23,22 +23,21 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 // components
 import Header from '../../components/header'
 
-let stripe = require('stripe')('sk_test_51NmA1PFqjgkiO0WHxOmFjOzgwHorLyTxjyWJ926HiBK10KHnTnh7q8skEmQ5c0NpHxI3mk2fbejMASjazhPlmGkv00L98uIq8G');
+let stripe = require('stripe')(process.env.REACT_APP_STRIPE_KEY);
 
 export default function Payment() {
 	const [userId, setUserid] = useState('')
 
 	// test card
-	const [name, setName] = useState('the account')
-	const [number, setNumber] = useState('4000000000000077')
-	const [cvc, setCvc] = useState('234')
-	const [expdate, setExpdate] = useState('1224')
+	// const [name, setName] = useState('the account')
+	// const [number, setNumber] = useState('4000000000000077')
+	// const [cvc, setCvc] = useState('234')
+	// const [expdate, setExpdate] = useState('1224')
 
-	// real card
-	// const [name, setName] = useState('Kevin Hien Luong Mai')
-	// const [number, setNumber] = useState('4512238770577855')
-	// const [cvc, setCvc] = useState('086')
-	// const [expdate, setExpdate] = useState('1123')
+	const [name, setName] = useState('')
+	const [number, setNumber] = useState('')
+	const [cvc, setCvc] = useState('')
+	const [expdate, setExpdate] = useState('')
 
 	const [cardInfo, setCardinfo] = useState({ last4: '', name: '' })
 

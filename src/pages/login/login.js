@@ -28,8 +28,11 @@ const theme = createTheme({
 })
 
 export default function Login() {
-	const [email, setEmail] = useState('kevin.mai.730@gmail.com')
-	const [password, setPassword] = useState('qqqqqqq')
+	// const [email, setEmail] = useState('kmrobogram@gmail.com')
+	// const [password, setPassword] = useState('qqqqqqq')
+
+	const [email, setEmail] = useState('')
+	const [password, setPassword] = useState('')
 	const [errorMsg, setErrormsg] = useState('')
 
 	const theLogin = event => {
@@ -58,8 +61,8 @@ export default function Login() {
 				})
 				.catch((err) => {
 					if (err.status == 400) {
-						err.json().then(() => {
-							
+						err.json().then(({ status }) => {
+							if (status == "passwordWrong") setErrormsg("Password is wrong")
 						})
 					}
 				})

@@ -23,31 +23,31 @@ import StackButton from '@mui/material/Button';
 // components
 import Header from '../../components/header'
 
-let stripe = require('stripe')('sk_test_51NmA1PFqjgkiO0WHxOmFjOzgwHorLyTxjyWJ926HiBK10KHnTnh7q8skEmQ5c0NpHxI3mk2fbejMASjazhPlmGkv00L98uIq8G');
+let stripe = require('stripe')(process.env.REACT_APP_STRIPE_KEY);
 
 export default function Earnings() {
 	const [userId, setUserid] = useState('')
 
-	const [line1, setLine1] = useState('1111 Dundas Steet E')
-	const [zipcode, setZipcode] = useState('M4M3H5')
-	const [dob, setDob] = useState('07301996')
-	const [firstName, setFirstname] = useState('Kevin')
-	const [lastName, setLastname] = useState('Mai')
-	const [country, setCountry] = useState('CA')
-	const [currency, setCurrency] = useState('cad')
-	const [routingNumber, setRoutingnumber] = useState('11000000')
-	const [accountNumber, setAccountnumber] = useState('000123456789')
-
-	// real data
-	// const [line1, setLine1] = useState('275 Broadview Avenue')
+	// test data
+	// const [line1, setLine1] = useState('1111 Dundas Steet E')
 	// const [zipcode, setZipcode] = useState('M4M3H5')
 	// const [dob, setDob] = useState('07301996')
 	// const [firstName, setFirstname] = useState('Kevin')
 	// const [lastName, setLastname] = useState('Mai')
 	// const [country, setCountry] = useState('CA')
 	// const [currency, setCurrency] = useState('cad')
-	// const [routingNumber, setRoutingnumber] = useState('000305842')
-	// const [accountNumber, setAccountnumber] = useState('5207790')
+	// const [routingNumber, setRoutingnumber] = useState('11000000')
+	// const [accountNumber, setAccountnumber] = useState('000123456789')
+
+	const [line1, setLine1] = useState('')
+	const [zipcode, setZipcode] = useState('')
+	const [dob, setDob] = useState('')
+	const [firstName, setFirstname] = useState('')
+	const [lastName, setLastname] = useState('')
+	const [country, setCountry] = useState('')
+	const [currency, setCurrency] = useState('')
+	const [routingNumber, setRoutingnumber] = useState('')
+	const [accountNumber, setAccountnumber] = useState('')
 
 	const [bankInfo, setBankinfo] = useState('')
 
@@ -296,23 +296,23 @@ export default function Earnings() {
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Ener your Date of Birth:</FormLabel>
-				          <Input placeholder="DDMMYY" name="dob" disabled={loading} defaultValue={dob}/>
+				          <Input placeholder="MMDDYY" name="dob" disabled={loading} defaultValue={dob}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your first name:</FormLabel>
-				          <Input placeholder="Enter cardholder's full name" name="firstName" disabled={loading} defaultValue={firstName}/>
+				          <Input placeholder="Enter your first name" name="firstName" disabled={loading} defaultValue={firstName}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your last name:</FormLabel>
-				          <Input placeholder="Enter cardholder's last name" name="lastName" disabled={loading} defaultValue={lastName}/>
+				          <Input placeholder="Enter your last name" name="lastName" disabled={loading} defaultValue={lastName}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter country:</FormLabel>
-				          <Input placeholder="Enter country" name="country" disabled={loading} defaultValue={country}/>
+				          <Input placeholder="Enter country, etc: CA" name="country" disabled={loading} defaultValue={country}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter currency</FormLabel>
-				          <Input placeholder="Enter currency" name="currency" disabled={loading} defaultValue={currency}/>
+				          <Input placeholder="Enter currency, etc: cad" name="currency" disabled={loading} defaultValue={currency}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your routing number:</FormLabel>
@@ -331,6 +331,12 @@ export default function Earnings() {
 				            <div style={{ marginLeft: 10 }}><LockOutlinedIcon /></div>
 				          </Button>
 				        </CardActions>
+
+				        {loading && (
+		            	<div style={{ height: 20, margin: '20px auto', width: 20 }}>
+										<ClipLoader color="black" size={20}/>
+									</div>
+		            )}
 				      </CardContent>
 				     </Box>
 			    </Card>

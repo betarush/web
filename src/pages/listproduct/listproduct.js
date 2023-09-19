@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getId, resizePhoto } from 'geottuse-tools';
+import ClipLoader from "react-spinners/ClipLoader";
 import { getUserInfo, createCheckout, createCustomerPayment } from '../../apis/user';
 import { listProduct } from '../../apis/product'
 
@@ -48,9 +49,14 @@ if (window.location.search.includes("session_id")) {
 export default function Listproduct() {
 	const [userId, setUserid] = useState('')
 
-	const [name, setName] = useState('chatee')
-	const [desc, setDesc] = useState('match with friends, explore their posts and like their posts to talk with them')
-	const [link, setLink] = useState('https://www.chatee.app')
+	// const [name, setName] = useState('chatee')
+	// const [desc, setDesc] = useState('match with friends, explore their posts and like their posts to talk with them')
+	// const [link, setLink] = useState('https://www.chatee.app')
+	// const [image, setImage] = useState({ uri: '', width: 0, height: 0 })
+
+	const [name, setName] = useState('')
+	const [desc, setDesc] = useState('')
+	const [link, setLink] = useState('')
 	const [image, setImage] = useState({ uri: '', width: 0, height: 0 })
 	const [file, setFile] = useState(null)
 	const [errorMsg, setErrormsg] = useState('')
@@ -256,6 +262,7 @@ export default function Listproduct() {
 						  variant="contained"
 						  startIcon={<CloudUploadIcon />}
 						  href="#file-upload"
+						  disabled={loading}
 						>
 						  Upload a logo
 						  <VisuallyHiddenInput 
@@ -274,6 +281,12 @@ export default function Listproduct() {
 						<Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
             <Button type="submit" fullWidth variant="contained" color="submit" disabled={loading} sx={{ mt: 3, mb: 2 }}>LAUNCH</Button>
+
+            {loading && (
+            	<div style={{ height: 20, margin: '20px auto', width: 20 }}>
+								<ClipLoader color="black" size={20}/>
+							</div>
+            )}
           </Box>
         </Box>
         <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>

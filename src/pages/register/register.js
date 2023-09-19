@@ -27,9 +27,13 @@ const theme = createTheme({
 })
 
 export default function Register() {
-	const [email, setEmail] = useState('kmrobogram@gmail.com')
-	const [password, setPassword] = useState('qqqqqqq')
-	const [confirmPassword, setConfirmpassword] = useState('qqqqqqq')
+	// const [email, setEmail] = useState('kmrobogram@gmail.com')
+	// const [password, setPassword] = useState('qqqqqqq')
+	// const [confirmPassword, setConfirmpassword] = useState('qqqqqq')
+
+	const [email, setEmail] = useState('')
+	const [password, setPassword] = useState('')
+	const [confirmPassword, setConfirmpassword] = useState('')
 	const [verified, setVerified] = useState(false)
 	const [verifyCode, setVerifycode] = useState('')
 	const [userCode, setUsercode] = useState('')
