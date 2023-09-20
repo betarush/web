@@ -36,7 +36,7 @@ export default function Main() {
 
 	const [intro, setIntro] = useState(false)
 	const [feedback, setFeedback] = useState({ show: false, input: '', id: null, index: -1, amountSpent: 0 })
-	const [relaunch, setRelaunch] = useState({ show: false, cardInfo: {}, productId: null })
+	const [relaunch, setRelaunch] = useState({ show: false, cardInfo: {}, productId: null, loading: false })
 
 	const [bankaccountDone, setBankaccountdone] = useState(false)
 	const [loaded, setLoaded] = useState(false)
@@ -246,6 +246,8 @@ export default function Main() {
 					}
 				})
 		} else {
+			setRelaunch({ ...relaunch, loading: true })
+
 			relistProduct({ productId: relaunch.productId })
 				.then((res) => {
 					if (res.status == 200) {
@@ -418,14 +420,14 @@ export default function Main() {
 
 														{!product.gave_feedback && (
 															<>
-																<Button variant="contained" onClick={() => setFeedback({ show: true, input: '', id: product.id, index, amountSpent: product.amountSpent })}>Give feedback & Earn ${product.reward.toFixed(2)}</Button>
-																<Button variant="contained" onClick={() => window.open(product.link)}>Try product</Button>
+																<Button variant="contained" style={{ marginBottom: 10 }} onClick={() => setFeedback({ show: true, input: '', id: product.id, index, amountSpent: product.amountSpent })}>Give feedback & Earn ${product.reward.toFixed(2)}</Button>
+																<Button variant="contained" onClick={() => window.open(product.link)}>Try Product</Button>
 															</>
 														)}
 													</div>
 													:
 													<div className="info-container">
-														{product.numLeftover < 5 ? 
+														{product.numLeftover > 0 ? 
 															<>
 																<div className="header">Amount spent: ${product.amountSpent.toFixed(2)}</div>
 
@@ -453,7 +455,7 @@ export default function Main() {
 															</>
 															:
 															<div className="header">
-																{product.numLeftover} people rewarded
+																{5 - product.numLeftover} people rewarded
 																<div className="relaunch" onClick={() => relaunchTheProduct(product.id)}>Relaunch for testers</div>
 															</div>
 														}
@@ -522,12 +524,12 @@ export default function Main() {
 							<div className="relaunch-div"/>
 
 							<div id="relaunch-infos">
-								<div className="relaunch-info-header">Subtotal: $20.00</div>
-								<div className="relaunch-info-header">Service fee: $5.00</div>
+								<div className="relaunch-info-header"><strong>Subtotal:</strong> $20.00</div>
+								<div className="relaunch-info-header"><strong>Service fee:</strong> $5.00</div>
 
 								<div className="relaunch-div"/>
 
-								<div className="relaunch-info-header">Total: $25.00</div>
+								<div className="relaunch-info-header"><strong>Total:</strong> $25.00</div>
 							</div>
 
 							{relaunch.cardInfo.last4 && (
@@ -555,9 +557,15 @@ export default function Main() {
 			      	)}
 
 							<div id="actions">
-								<div className="action" onClick={() => setRelaunch({ show: false, cardInfo: {} })}>Cancel</div>
-								<div className="action" onClick={() => relaunchTheProduct()}>Pay and launch again</div>
+								<div className="action" style={{ opacity: relaunch.loading ? 0.5 : 1 }} onClick={() => !relaunch.loading && setRelaunch({ show: false, cardInfo: {} })}>Cancel</div>
+								<div className="action" style={{ opacity: relaunch.loading ? 0.5 : 1 }} onClick={() => !relaunch.loading && relaunchTheProduct()}>Pay and launch again</div>
 							</div>
+
+							{relaunch.loading && (
+								<div style={{ height: 20, margin: '5px auto', width: 20 }}>
+									<ClipLoader color="black" size={20}/>
+								</div>
+							)}
 						</div>
 					)}
 				</div>

@@ -59,7 +59,11 @@ export default function Login() {
 				.catch((err) => {
 					if (err.status == 400) {
 						err.json().then(({ status }) => {
-							if (status == "passwordWrong") setErrormsg("Password is wrong")
+							if (status == "passwordWrong") {
+								setErrormsg("Password is wrong")
+							} else if (status == "nonExist") {
+								setErrormsg("E-mail is not found")
+							}
 						})
 					}
 				})
