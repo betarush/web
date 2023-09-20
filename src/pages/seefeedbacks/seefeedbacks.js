@@ -19,14 +19,18 @@ export default function Seefeedbacks() {
 	const [userId, setUserid] = useState('')
 
 	const [products, setProducts] = useState([])
+	const [offset, setOffset] = useState(0)
+
 	const [name, setName] = useState('')
 	const [image, setImage] = useState({ name: '', width: 0, height: 0 })
 	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {} })
 	const [loaded, setLoaded] = useState(false)
+
+	const [rewarding, setRewarding] = useState(false)
  
-	const getTheFeedbacks = () => {
+	const getTheFeedbacks = start => {
 		const id = localStorage.getItem("id")
-		const data = { userId: id }
+		const data = { userId: id, offset: start ? 0 : offset }
 
 		getFeedbacks(data)
 			.then((res) => {
@@ -38,7 +42,13 @@ export default function Seefeedbacks() {
 			})
 			.then((res) => {
 				if (res) {
-					setProducts(res.products)
+					if (start) {
+						setProducts(res.products)
+					} else {
+						setProducts([...products, ...res.products])
+					}
+
+					setOffset(res.offset)
 					setUserid(id)
 					setLoaded(true)
 				}
@@ -85,6 +95,8 @@ export default function Seefeedbacks() {
 		const data = { productId: id, testerId }
 		const newProducts = [...products]
 
+		setRewarding(true)
+
 		rewardCustomer(data)
 			.then((res) => {
 				if (res.status == 200) {
@@ -102,6 +114,7 @@ export default function Seefeedbacks() {
 					}
 
 					setProducts(newProducts)
+					setRewarding(false)
 				}
 			})
 			.catch((err) => {
@@ -114,7 +127,7 @@ export default function Seefeedbacks() {
 	}
 
 	useEffect(() => {
-		getTheFeedbacks()
+		getTheFeedbacks(true)
 	}, [])
 
 	return (
@@ -123,7 +136,13 @@ export default function Seefeedbacks() {
 
 			{loaded ? 
 				products.length > 0 ? 
-					<div id="feedbacks">
+					<div id="feedbacks" onScroll={(e) => {
+						const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+
+						if (bottom) {
+							getTheFeedbacks()
+						}
+					}}>
 						{products.map((product, productIndex) => (
 							<div className="product">
 								<div className="info">
@@ -145,8 +164,8 @@ export default function Seefeedbacks() {
 
 											<Stack>
 												<div className="feedback-actions">
-													<Button style={{ margin: '0 5px' }} variant="contained" onClick={() => rejectTheFeedback(product.id, feedback.testerId, productIndex, feedbackIndex)}>Reject feedback</Button>
-													<Button style={{ margin: '0 5px' }} variant="contained" onClick={() => rewardTheCustomer(product.id, feedback.testerId, productIndex, feedbackIndex)}>Reward customer</Button>
+													<Button style={{ margin: '0 5px' }} variant="contained" disabled={rewarding} onClick={() => rejectTheFeedback(product.id, feedback.testerId, productIndex, feedbackIndex)}>Reject feedback</Button>
+													<Button style={{ margin: '0 5px' }} variant="contained" disabled={rewarding} onClick={() => rewardTheCustomer(product.id, feedback.testerId, productIndex, feedbackIndex)}>Reward customer</Button>
 												</div>
 											</Stack>
 										</div>

@@ -1,4 +1,6 @@
 #header {
+	height: 80px;
+
 	#logo {
 		height: 50px;
 		overflow: hidden;
@@ -9,8 +11,13 @@
 			width: 100%;
 		}
 
-		&:hover {
-			cursor: pointer;
+		Button {
+			font-weight: bold;
+			margin-left: 50px;
+
+			&:hover {
+				cursor: pointer;
+			}
 		}
 	}
 }

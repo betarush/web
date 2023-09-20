@@ -28,26 +28,15 @@ let stripe = require('stripe')(process.env.REACT_APP_STRIPE_KEY);
 export default function Earnings() {
 	const [userId, setUserid] = useState('')
 
-	// test data
-	// const [line1, setLine1] = useState('1111 Dundas Steet E')
-	// const [zipcode, setZipcode] = useState('M4M3H5')
-	// const [dob, setDob] = useState('07301996')
-	// const [firstName, setFirstname] = useState('Kevin')
-	// const [lastName, setLastname] = useState('Mai')
-	// const [country, setCountry] = useState('CA')
-	// const [currency, setCurrency] = useState('cad')
-	// const [routingNumber, setRoutingnumber] = useState('11000000')
-	// const [accountNumber, setAccountnumber] = useState('000123456789')
-
-	const [line1, setLine1] = useState('')
-	const [zipcode, setZipcode] = useState('')
-	const [dob, setDob] = useState('')
-	const [firstName, setFirstname] = useState('')
-	const [lastName, setLastname] = useState('')
-	const [country, setCountry] = useState('')
-	const [currency, setCurrency] = useState('')
-	const [routingNumber, setRoutingnumber] = useState('')
-	const [accountNumber, setAccountnumber] = useState('')
+	const [line1, setLine1] = useState(process.env.REACT_APP_MODE == 'dev' ? '1111 Dundas Steet E' : '')
+	const [zipcode, setZipcode] = useState(process.env.REACT_APP_MODE == 'dev' ? 'M4M3H5' : '')
+	const [dob, setDob] = useState(process.env.REACT_APP_MODE == 'dev' ? '07301996' : '')
+	const [firstName, setFirstname] = useState(process.env.REACT_APP_MODE == 'dev' ? 'Kevin' : '')
+	const [lastName, setLastname] = useState(process.env.REACT_APP_MODE == 'dev' ? 'Mai' : '')
+	const [country, setCountry] = useState(process.env.REACT_APP_MODE == 'dev' ? 'CA' : '')
+	const [currency, setCurrency] = useState(process.env.REACT_APP_MODE == 'dev' ? 'cad' : '')
+	const [routingNumber, setRoutingnumber] = useState(process.env.REACT_APP_MODE == 'dev' ? '11000000' : '')
+	const [accountNumber, setAccountnumber] = useState(process.env.REACT_APP_MODE == 'dev' ? '000123456789' : '')
 
 	const [bankInfo, setBankinfo] = useState('')
 
@@ -57,6 +46,7 @@ export default function Earnings() {
 
 	const [loaded, setLoaded] = useState(false)
 	const [loading, setLoading] = useState(false)
+	const [gettingMoney, setGettingmoney] = useState(false)
 	const [errorMsg, setErrormsg] = useState('')
 
 	const getTheUserInfo = () => {
@@ -206,6 +196,8 @@ export default function Earnings() {
 	const getTheEarnings = () => {
 		const data = { userId }
 
+		setGettingmoney(true)
+
 		getEarnings(data)
 			.then((res) => {
 				if (res.status == 200) {
@@ -216,13 +208,19 @@ export default function Earnings() {
 			})
 			.then((res) => {
 				if (res) {
-					setEarnings(0.0)
-					setEarnedbox({ show: true, earned: res.earnedAmount, pending: res.pendingEarned })
+					if (!res.leftover) setEarnings(0.0)
+					setEarnedbox({ show: true, earned: res.earnedAmount, pending: res.pendingEarned, leftover: res.leftover })
 
 					setTimeout(function () {
 						setEarnedbox({ show: false, earned: 0.0, pending: false })
-						window.location = "/main"
-					}, 3000)
+						setGettingmoney(false)
+
+						if (!res.leftover) {
+							window.location = "/main"
+						} else {
+							window.location = "/earnings"
+						}
+					}, (res.leftover ? 5000 : 3000))
 				}
 			})
 	}
@@ -243,8 +241,21 @@ export default function Earnings() {
 				<>
 					{(bankaccountDone && earnings > 0) && (
 						<>
+							{gettingMoney && (
+								<>
+									<div style={{ height: 20, margin: '10px auto', width: 20 }}>
+										<ClipLoader color="black" size={20}/>
+									</div>
+									<div style={{ textAlign: 'center' }}>
+										Transferring your money to your bank account
+										<br/>
+										Please wait a moment...
+									</div>
+								</>
+							)}
+
 							<Stack>
-								<StackButton style={{ margin: '50px auto 0 auto', width: 200 }} variant="contained" onClick={() => getTheEarnings()}>Get earnings now</StackButton>
+								<StackButton style={{ margin: '50px auto 0 auto', width: 200 }} variant="contained" disabled={gettingMoney} onClick={() => getTheEarnings()}>Get earnings now</StackButton>
 							</Stack>
 
 							{bankInfo.last4 && (
@@ -288,45 +299,45 @@ export default function Earnings() {
 				      >
 				      	<FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your address line 1:</FormLabel>
-				          <Input placeholder="Address line #1" name="line1" disabled={loading} defaultValue={line1}/>
+				          <Input placeholder="Address line #1" name="line1" disabled={loading || gettingMoney} defaultValue={line1}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your Zipcode:</FormLabel>
-				          <Input placeholder="Zipcode" name="zipcode" disabled={loading} defaultValue={zipcode}/>
+				          <Input placeholder="Zipcode" name="zipcode" disabled={loading || gettingMoney} defaultValue={zipcode}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Ener your Date of Birth:</FormLabel>
-				          <Input placeholder="MMDDYY" name="dob" disabled={loading} defaultValue={dob}/>
+				          <Input placeholder="MMDDYY" name="dob" disabled={loading || gettingMoney} defaultValue={dob}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your first name:</FormLabel>
-				          <Input placeholder="Enter your first name" name="firstName" disabled={loading} defaultValue={firstName}/>
+				          <Input placeholder="Enter your first name" name="firstName" disabled={loading || gettingMoney} defaultValue={firstName}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your last name:</FormLabel>
-				          <Input placeholder="Enter your last name" name="lastName" disabled={loading} defaultValue={lastName}/>
+				          <Input placeholder="Enter your last name" name="lastName" disabled={loading || gettingMoney} defaultValue={lastName}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter country:</FormLabel>
-				          <Input placeholder="Enter country, etc: CA" name="country" disabled={loading} defaultValue={country}/>
+				          <Input placeholder="Enter country, etc: CA" name="country" disabled={loading || gettingMoney} defaultValue={country}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter currency</FormLabel>
-				          <Input placeholder="Enter currency, etc: cad" name="currency" disabled={loading} defaultValue={currency}/>
+				          <Input placeholder="Enter currency, etc: cad" name="currency" disabled={loading || gettingMoney} defaultValue={currency}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your routing number:</FormLabel>
-				          <Input placeholder="Routing number" name="routingNumber" disabled={loading} defaultValue={routingNumber}/>
+				          <Input placeholder="Routing number" name="routingNumber" disabled={loading || gettingMoney} defaultValue={routingNumber}/>
 				        </FormControl>
 				        <FormControl sx={{ gridColumn: '1/-1' }}>
 				          <FormLabel>Enter your account number:</FormLabel>
-				          <Input placeholder="Account number" name="accountNumber" disabled={loading} defaultValue={accountNumber}/>
+				          <Input placeholder="Account number" name="accountNumber" disabled={loading || gettingMoney} defaultValue={accountNumber}/>
 				        </FormControl>
 
 				        <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
 				        <CardActions sx={{ gridColumn: '1/-1' }}>
-				          <Button type="submit" disabled={loading} variant="solid" color="primary">
+				          <Button type="submit" disabled={loading || gettingMoney} variant="solid" color="primary">
 				            {earnings > 0 ? "Save and get earnings" : "Save bank information"}
 				            <div style={{ marginLeft: 10 }}><LockOutlinedIcon /></div>
 				          </Button>
@@ -362,6 +373,8 @@ export default function Earnings() {
            				We are processing your withdrawal. You will get an e-mail to withdraw your money soon.
            			</div>
            		)}
+
+           		{earnedBox.leftover && <div style={{ fontSize: 20, padding: '5%' }}>We only do 5 money transfers at a time.<br/>You still have more transfers</div>}
 
             	<br/><br/>
 

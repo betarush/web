@@ -28,11 +28,8 @@ const theme = createTheme({
 })
 
 export default function Login() {
-	// const [email, setEmail] = useState('kmrobogram@gmail.com')
-	// const [password, setPassword] = useState('qqqqqqq')
-
-	const [email, setEmail] = useState('')
-	const [password, setPassword] = useState('')
+	const [email, setEmail] = useState(process.env.REACT_APP_MODE == 'dev' ? 'kmrobogram@gmail.com' : '')
+	const [password, setPassword] = useState(process.env.REACT_APP_MODE == 'dev' ? 'qqqqqqq' : '')
 	const [errorMsg, setErrormsg] = useState('')
 
 	const theLogin = event => {

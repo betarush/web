@@ -22,6 +22,7 @@ export default function Feedbacks(props) {
 	const [userId, setUserid] = useState('')
 
 	const [feedbacks, setFeedbacks] = useState([])
+
 	const [name, setName] = useState('')
 	const [image, setImage] = useState({ name: '', width: 0, height: 0 })
 	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {} })

@@ -30,7 +30,7 @@ export default function Landing() {
 							HAVE A <strong>HIGH</strong> GUARANTEE NOTICE AND USAGE OF YOUR PRODUCT WITH LITTLE INVESTMENT
 						</div>
 						<div id="info-header">
-							Reward some users to tryout your product and give you feedbacks
+							Reward users to tryout your product and give you feedbacks
 						</div>
 
 						<div id="learnmore" onClick={() => window.location = "/register"}>GET STARTED</div>

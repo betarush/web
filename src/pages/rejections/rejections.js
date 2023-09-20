@@ -13,11 +13,12 @@ export default function Rejections() {
 	const [userId, setUserid] = useState(null)
 
 	const [rejections, setRejections] = useState([])
+	const [offset, setOffset] = useState(0)
 	const [loaded, setLoaded] = useState(false)
 
-	const getTheRejections = () => {
+	const getTheRejections = start => {
 		const id = localStorage.getItem("id")
-		const data = { userId: id }
+		const data = { userId: id, offset: start ? 0 : offset }
 
 		getRejections(data)
 			.then((res) => {
@@ -31,6 +32,7 @@ export default function Rejections() {
 				if (res) {
 					if (res) {
 						setRejections(res.rejections)
+						setOffset(res.offset)
 						setLoaded(true)
 					}
 				}
@@ -54,7 +56,13 @@ export default function Rejections() {
 
 			{loaded ? 
 				rejections.length > 0 ? 
-					<div id="rejections">
+					<div id="rejections" onScroll={(e) => {
+						const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+
+						if (bottom) {
+							getTheRejections()
+						}
+					}}>
 						{rejections.map((rejection, index) => (
 							<div className="product" key={rejection.key}>
 								<div className="info">

@@ -49,15 +49,11 @@ if (window.location.search.includes("session_id")) {
 export default function Listproduct() {
 	const [userId, setUserid] = useState('')
 
-	// const [name, setName] = useState('chatee')
-	// const [desc, setDesc] = useState('match with friends, explore their posts and like their posts to talk with them')
-	// const [link, setLink] = useState('https://www.chatee.app')
-	// const [image, setImage] = useState({ uri: '', width: 0, height: 0 })
-
-	const [name, setName] = useState('')
-	const [desc, setDesc] = useState('')
-	const [link, setLink] = useState('')
+	const [name, setName] = useState(process.env.REACT_APP_MODE == 'dev' ? 'chatee' : '')
+	const [desc, setDesc] = useState(process.env.REACT_APP_MODE == 'dev' ? 'match with friends, explore their posts and like their posts to talk with them' : '')
+	const [link, setLink] = useState(process.env.REACT_APP_MODE == 'dev' ? 'https://www.chatee.app' : '')
 	const [image, setImage] = useState({ uri: '', width: 0, height: 0 })
+
 	const [file, setFile] = useState(null)
 	const [errorMsg, setErrormsg] = useState('')
 
@@ -98,7 +94,7 @@ export default function Listproduct() {
 		const data = new FormData(event.currentTarget);
 		const name = data.get('name'), desc = data.get('desc'), link = data.get('link')
 
-		if (name && desc && link) {
+		if (name && desc && link && image.uri) {
 			if (paymentDone) {
 				const id = localStorage.getItem("id")
 				const json = { userId: id, name, desc, link, image: JSON.stringify(image) }
@@ -152,12 +148,16 @@ export default function Listproduct() {
 					})
 			}
 		} else {
+			setLoading(false)
+			
 			if (!name) {
 				setErrormsg("Please enter your product name")
 			} else if (!desc) {
 				setErrormsg("Please enter your product information")
-			} else {
+			} else if (!link) {
 				setErrormsg("Please enter your product website")
+			} else {
+				setErrormsg("Please upload a logo for your product")
 			}
 		}
 	}

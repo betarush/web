@@ -1,5 +1,6 @@
 import './header.scss';
 import { useEffect, useState } from 'react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { getUserInfo } from '../../apis/user'
 
 // material ui components
@@ -19,6 +20,17 @@ import AdbIcon from '@mui/icons-material/Adb';
 
 const pages = ['Products', 'Rejections', 'Withdraw'];
 const fullWidth = window.innerWidth
+
+const theme = createTheme({
+  palette: {
+    primary: {
+    	main: 'rgba(127, 127, 127, 0.9)',
+		  light: '#fff',
+		  dark: '#fff',
+		  contrastText: '#fff',
+    }
+  },
+});
 
 export default function Header() {
 	const [username, setUsername] = useState('')
@@ -66,39 +78,41 @@ export default function Header() {
 	}, [])
 
 	return (
-		<div id="header">
-			<AppBar position="static">
-	      <Container maxWidth={fullWidth}>
-	        <Toolbar >
-	        	<div id="logo" onClick={() => window.location = "/"}>
-	        		<img src="/logo.png"/>
-	        	</div>
+		<ThemeProvider theme={theme}>
+			<div id="header">
+				<AppBar color="primary" position="static" enableColorOnDark>
+		      <Container maxHeight={80} maxWidth={fullWidth}>
+		        <Toolbar >
+		        	<div id="logo" onClick={() => window.location = "/"}>
+		        		<img src="/logo.png"/>
+		        	</div>
 
-	          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
-	          	{firstTime == false && (
-	          		<>
-			            <Button onClick={() => window.location = "/main"} sx={{ my: 2, color: 'white', display: 'block' }}>Products</Button>
-			            <Button onClick={() => window.location = "/rejections"} sx={{ my: 2, color: 'white', display: 'block' }}>Rejections</Button>
-			            <Button onClick={() => window.location = "/earnings"} sx={{ my: 2, color: 'white', display: 'block' }}>Withdraw reward: ${earnings.toFixed(2)}</Button>
-			            <Button onClick={() => window.location = "/listproduct"} sx={{ my: 2, color: 'white', display: 'block' }}>Submit your product</Button>
-			            {isCreator == true && <Button onClick={() => window.location = "/seefeedbacks"} sx={{ my: 2, color: 'white', display: 'block' }}>See Feedbacks</Button>}
-		            </>
-	          	)}
-		          	
-	            <Button onClick={() => logout()} sx={{ my: 2, color: 'white', display: 'block' }}>Log-Out</Button>
-	          </Box>
+		          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
+		          	{firstTime == false && (
+		          		<>
+				            <Button onClick={() => window.location = "/main"} sx={{ my: 2, color: 'white' }}>Products</Button>
+				            <Button onClick={() => window.location = "/rejections"} sx={{ my: 2, color: 'white' }}>Rejections</Button>
+				            <Button onClick={() => window.location = "/earnings"} sx={{ my: 2, color: 'white' }}>Withdraw reward: ${earnings.toFixed(2)}</Button>
+				            <Button onClick={() => window.location = "/listproduct"} sx={{ my: 2, color: 'white' }}>Submit your product</Button>
+				            {isCreator == true && <Button onClick={() => window.location = "/seefeedbacks"} sx={{ my: 2, color: 'white' }}>See Feedbacks</Button>}
+			            </>
+		          	)}
+			          	
+		            <Button onClick={() => logout()} sx={{ my: 2, color: 'white', display: 'block' }}>Log-Out</Button>
+		          </Box>
 
-	          <Typography
-	            variant="h6"
-	            noWrap
-	            component="a"
-	            sx={{ mr: 2, display: { xs: 'flex', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, color: 'inherit', textDecoration: 'none' }}
-	          >
-	            You are {username}
-	          </Typography>
-	        </Toolbar>
-	      </Container>
-	    </AppBar>
-	  </div>
+		          <Typography
+		            variant="h6"
+		            noWrap
+		            component="a"
+		            sx={{ mr: 2, display: { xs: 'flex', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, color: 'inherit', textDecoration: 'none' }}
+		          >
+		            You are {username}
+		          </Typography>
+		        </Toolbar>
+		      </Container>
+		    </AppBar>
+		  </div>
+		</ThemeProvider>
 	)
 }

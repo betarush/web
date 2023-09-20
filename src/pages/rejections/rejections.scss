@@ -1,10 +1,12 @@
 #rejection {
 	background-color: #efefef;
 	height: 100vh;
+	overflow: hidden;
 	width: 100vw;
 
 	#rejections {
 		margin: 20px 0;
+		overflow-y: scroll;
 
 		.product {
 			background-color: white;

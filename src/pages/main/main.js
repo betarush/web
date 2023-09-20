@@ -30,6 +30,8 @@ export default function Main() {
 	const [isCreator, setIscreator] = useState(false)
 
 	const [products, setProducts] = useState([])
+	const [offset, setOffset] = useState(0)
+
 	const [viewType, setViewtype] = useState('')
 
 	const [intro, setIntro] = useState(false)
@@ -38,6 +40,7 @@ export default function Main() {
 
 	const [bankaccountDone, setBankaccountdone] = useState(false)
 	const [loaded, setLoaded] = useState(false)
+	const [loading, setLoading] = useState(false)
 
 	const getTheUserInfo = () => {
 		const id = localStorage.getItem("id")
@@ -66,10 +69,14 @@ export default function Main() {
 				}
 			})
 	}
-	const getTheUntestedProducts = () => {
-		const data = { userId }
+	const getTheUntestedProducts = start => {
+		const data = { userId, offset: start ? 0 : offset }
 
-		setLoaded(false)
+		if (!start) {
+			setLoading(true)
+		} else {
+			setLoaded(false)
+		}
 
 		getUntestedProducts(data)
 			.then((res) => {
@@ -81,9 +88,20 @@ export default function Main() {
 			})
 			.then((res) => {
 				if (res) {
-					setProducts(res.products)
+					if (start) {
+						setProducts(res.products)
+					} else {
+						setProducts([...products, ...res.products])
+					}
+
+					setOffset(res.offset)
 					setViewtype('untested')
-					setLoaded(true)
+
+					if (start) {
+						setLoaded(true)
+					} else {
+						setLoading(false)
+					}
 				}
 			})
 			.catch((err) => {
@@ -94,10 +112,14 @@ export default function Main() {
 				}
 			})
 	}
-	const getTheTestingProducts = () => {
-		const data = { userId }
+	const getTheTestingProducts = start => {
+		const data = { userId, offset: start ? 0 : offset }
 
-		setLoaded(false)
+		if (!start) {
+			setLoading(true)
+		} else {
+			setLoaded(false)
+		}
 
 		getTestingProducts(data)
 			.then((res) => {
@@ -109,9 +131,20 @@ export default function Main() {
 			})
 			.then((res) => {
 				if (res) {
-					setProducts(res.products)
-					setViewtype('tested')
-					setLoaded(true)
+					if (start) {
+						setProducts(res.products)
+					} else {
+						setProducts([...products, ...res.products])
+					}
+					
+					setOffset(res.offset)
+					setViewtype('testing')
+
+					if (start) {
+						setLoaded(true)
+					} else {
+						setLoading(false)
+					}
 				}
 			})
 			.catch((err) => {
@@ -120,12 +153,16 @@ export default function Main() {
 
 					})
 				}
-			})
+			})	
 	}
-	const getTheMyProducts = () => {
-		const data = { userId }
+	const getTheMyProducts = start => {
+		const data = { userId, offset: start ? 0 : offset }
 
-		setLoaded(false)
+		if (!start) {
+			setLoading(true)
+		} else {
+			setLoaded(false)
+		}
 
 		getMyProducts(data)
 			.then((res) => {
@@ -137,9 +174,20 @@ export default function Main() {
 			})
 			.then((res) => {
 				if (res) {
-					setProducts(res.products)
+					if (start) {
+						setProducts(res.products)
+					} else {
+						setProducts([...products, ...res.products])
+					}
+					
+					setOffset(res.offset)
 					setViewtype('myproducts')
-					setLoaded(true)
+
+					if (start) {
+						setLoaded(true)
+					} else {
+						setLoading(false)
+					}
 				}
 			})
 			.catch((err) => {
@@ -169,7 +217,7 @@ export default function Main() {
 					setProducts(newProducts)
 
 					setTimeout(function () {
-						getTheTestingProducts()
+						getTheTestingProducts(true)
 						window.open(link)
 					}, 2000)
 				}
@@ -239,7 +287,9 @@ export default function Main() {
 				if (res) {
 					setFeedback({ show: false, input: '', id: null, index: -1 })
 
-					getTheTestingProducts()
+					newProducts[index].gave_feedback = true
+
+					setProducts(newProducts)
 				}
 			})
 			.catch((err) => {
@@ -266,9 +316,9 @@ export default function Main() {
 			if (localStorage.getItem("viewMyProducts")) {
 				localStorage.removeItem("viewMyProducts")
 
-				getTheMyProducts()
+				getTheMyProducts(true)
 			} else {
-				getTheUntestedProducts()
+				getTheUntestedProducts(true)
 			}
 		}
 	}, [userId])
@@ -286,26 +336,26 @@ export default function Main() {
 			        sx={{ '--List-radius': '8px', '--List-padding': '4px', '--List-gap': '8px' }}
 			      >
 			        <ListItem role="none">
-			          <ListItemButton style={{ backgroundColor: viewType == 'untested' ? 'rgba(0, 0, 0, 0.5)' : '' }} role="menuitem" onClick={() => viewType != 'untested' && getTheUntestedProducts()}>
+			          <ListItemButton style={{ backgroundColor: viewType == 'untested' ? 'rgba(0, 0, 0, 0.5)' : '' }} role="menuitem" onClick={() => getTheUntestedProducts(true)}>
 			            <ListItemDecorator>
-			              <BuildIcon />
+			              <BuildIcon/>
 			            </ListItemDecorator>
 			            <div style={{ color: viewType == 'untested' ? 'white' : 'black' }}>Untested by you</div>
 			          </ListItemButton>
 			        </ListItem>
 			        <ListItem role="none">
-			          <ListItemButton style={{ backgroundColor: viewType == 'tested' ? 'rgba(0, 0, 0, 0.5)' : '' }} role="menuitem" onClick={() => viewType != 'tested' && getTheTestingProducts()}>
+			          <ListItemButton style={{ backgroundColor: viewType == 'testing' ? 'rgba(0, 0, 0, 0.5)' : '' }} role="menuitem" onClick={() => getTheTestingProducts(true)}>
 			            <ListItemDecorator>
-			              <SpeedRoundedIcon />
+			              <SpeedRoundedIcon/>
 			            </ListItemDecorator>
-			            <div style={{ color: viewType == 'tested' ? 'white' : 'black' }}>Testing by you</div>
+			            <div style={{ color: viewType == 'testing' ? 'white' : 'black' }}>Testing by you</div>
 			          </ListItemButton>
 			        </ListItem>
 			        {isCreator == true && (
 			        	<ListItem role="none">
-				          <ListItemButton style={{ backgroundColor: viewType == 'myproducts' ? 'rgba(0, 0, 0, 0.5)' : '' }} role="menuitem" onClick={() => viewType != 'myproducts' && getTheMyProducts()}>
+				          <ListItemButton style={{ backgroundColor: viewType == 'myproducts' ? 'rgba(0, 0, 0, 0.5)' : '' }} role="menuitem" onClick={() => getTheMyProducts(true)}>
 				            <ListItemDecorator>
-				              <PersonIcon />
+				              <PersonIcon/>
 				            </ListItemDecorator>
 				            <div style={{ color: viewType == 'myproducts' ? 'white' : 'black' }}>Your products</div>
 				          </ListItemButton>
@@ -317,13 +367,26 @@ export default function Main() {
 
 				{loaded ? 
 					products.length > 0 ? 
-						<div id="products">
+						<div id="products" onScroll={(e) => {
+							const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+
+							if (bottom) {
+								if (viewType == "untested") {
+									getTheUntestedProducts()
+								} else if (viewType == "testing") {
+									getTheTestingProducts()
+								} else {
+									getTheMyProducts()
+								}
+							}
+						}}>
 							{products.map((product, index) => (
 								<div className="product" key={product.key}>
 									<div className="product-row">
 										<div className="image" style={resizePhoto(product.logo, 100, 100)}>
 											<img src={LOGO_URL + '/' + product.logo.name}/>
 										</div>
+
 										<div className="desc">
 											<div style={{ fontWeight: 'bold' }}>{product.name}</div><br/>
 											{product.info}
@@ -334,7 +397,7 @@ export default function Main() {
 										{viewType == 'untested' ? 
 											<div className="column">
 												<div className="info">
-													<div className="header">{product.numTried} people left can try</div>
+													{!product.trying && <div className="header">{product.numLeftover} people left can try</div>}
 
 													{!product.trying ? 
 														<Button disabled={product.trying} variant="contained" onClick={() => tryTheProduct(index, product.id, product.link)}>Try first</Button>
@@ -349,23 +412,32 @@ export default function Main() {
 											</div>
 											:
 											<div className="column">
-												{viewType == "tested" ? 
+												{viewType == "testing" ? 
 													<div className="info">
 														<div className="header">{product.earned ? "Earned $" + product.reward + " for trying" : product.gave_feedback && "Waiting for creator to reward you"}</div>
 
 														{!product.gave_feedback && (
-															<Button variant="contained" onClick={() => setFeedback({ show: true, input: '', id: product.id, index, amountSpent: product.amountSpent })}>Give feedback & Earn ${product.reward.toFixed(2)}</Button>
+															<>
+																<Button variant="contained" onClick={() => setFeedback({ show: true, input: '', id: product.id, index, amountSpent: product.amountSpent })}>Give feedback & Earn ${product.reward.toFixed(2)}</Button>
+																<Button variant="contained" onClick={() => window.open(product.link)}>Try product</Button>
+															</>
 														)}
 													</div>
 													:
 													<div className="info-container">
-														{product.numTested < 5 ? 
+														{product.numLeftover < 5 ? 
 															<>
 																<div className="header">Amount spent: ${product.amountSpent.toFixed(2)}</div>
 
 																{product.numTesting > 0 && (
 																	<div className="header">
 																		{product.numTesting + " people testing"}
+																	</div>
+																)}
+
+																{product.numLeftover > 0 && (
+																	<div className="header">
+																		{product.numLeftover + " people left can try"}
 																	</div>
 																)}
 
@@ -381,7 +453,7 @@ export default function Main() {
 															</>
 															:
 															<div className="header">
-																{product.numTested} people rewarded
+																{product.numLeftover} people rewarded
 																<div className="relaunch" onClick={() => relaunchTheProduct(product.id)}>Relaunch for testers</div>
 															</div>
 														}
@@ -392,6 +464,12 @@ export default function Main() {
 									</Stack>
 								</div>
 							))}
+
+							{loading && (
+								<div style={{ height: 20, margin: '10px auto', width: 20 }}>
+									<ClipLoader color="black" size={20}/>
+								</div>
+							)}
 						</div>
 						:
 						<div id="no-result">No Results</div>

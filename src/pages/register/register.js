@@ -27,13 +27,9 @@ const theme = createTheme({
 })
 
 export default function Register() {
-	// const [email, setEmail] = useState('kmrobogram@gmail.com')
-	// const [password, setPassword] = useState('qqqqqqq')
-	// const [confirmPassword, setConfirmpassword] = useState('qqqqqq')
-
-	const [email, setEmail] = useState('')
-	const [password, setPassword] = useState('')
-	const [confirmPassword, setConfirmpassword] = useState('')
+	const [email, setEmail] = useState(process.env.REACT_APP_MODE == 'dev' ? 'kmrobogram@gmail.com' : '')
+	const [password, setPassword] = useState(process.env.REACT_APP_MODE == 'dev' ? 'qqqqqqq' : '')
+	const [confirmPassword, setConfirmpassword] = useState(process.env.REACT_APP_MODE == 'dev' ? 'qqqqqqq' : '')
 	const [verified, setVerified] = useState(false)
 	const [verifyCode, setVerifycode] = useState('')
 	const [userCode, setUsercode] = useState('')
@@ -61,8 +57,6 @@ export default function Register() {
 								.then((res) => {
 									if (res) {
 										setVerifycode(res.verifycode)
-										setEmail(email)
-										setPassword(password)
 									}
 								})
 								.catch((err) => {
@@ -150,9 +144,9 @@ export default function Register() {
 	            <LockOutlinedIcon />
 	          </Avatar>
 	          <Typography component="h1" variant="h5">Register</Typography>
-	          <Box component="form" onSubmit={theRegister} noValidate sx={{ mt: 1 }}>
+	          
 	          	{!verifyCode ? 
-	          		<>
+	          		<Box component="form" onSubmit={theRegister} sx={{ mt: 1 }}>
 		          		<TextField margin="normal" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" autoFocus defaultValue={email}/>
 			            <TextField margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" defaultValue={password}/>
 			            <TextField margin="normal" required fullWidth name="confirmPassword" label="Password" type="password" id="confirmPassword" autoComplete="current-password" defaultValue={confirmPassword}/>
@@ -167,10 +161,13 @@ export default function Register() {
 			                </Link>
 			              </Grid>
 			            </Grid>
-		          	</>
+		          	</Box>
 	          		:
-	          		<>
-		          		<TextField margin="normal" required fullWidth id="usercode" label="Enter verification code" name="usercode" autoFocus defaultValue=""/>
+	          		<Box component="form" onSubmit={theRegister} sx={{ mt: 1 }}>
+		          		<TextField margin="normal" required fullWidth id="usercode" label="Enter verification code" name="usercode" autoFocus defaultValue={userCode}/>
+		          		<TextField margin="normal" required fullWidth defaultValue=""/>
+		          		<TextField margin="normal" required fullWidth defaultValue=""/>
+		          		<TextField margin="normal" required fullWidth defaultValue=""/>
 
 			            <Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
@@ -182,9 +179,9 @@ export default function Register() {
 			                </Link>
 			              </Grid>
 			            </Grid>
-		          	</>
+		          	</Box>
 	          	}
-	          </Box>
+	          
 	        </Box>
 	        <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>
 			      {'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}
