@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getId, resizePhoto } from 'geottuse-tools';
 import ClipLoader from "react-spinners/ClipLoader";
-import { getUserInfo, createCheckout, createCustomerPayment } from '../../apis/user';
-import { listProduct } from '../../apis/product'
+import { getUserInfo, createCheckout, createCustomerPayment } from '../../../apis/user';
+import { listProduct } from '../../../apis/product'
 
 // material ui components
 import { styled } from '@mui/material/styles';
@@ -16,7 +16,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // components
-import Header from '../../components/header'
+import Header from '../../../components/mobile/header'
 
 const theme = createTheme({
 	palette: {

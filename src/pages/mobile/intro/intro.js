@@ -2,8 +2,8 @@ import './intro.scss';
 import { useEffect, useState } from 'react';
 import { getId, resizePhoto } from 'geottuse-tools';
 import ClipLoader from "react-spinners/ClipLoader";
-import { createCheckout, createCustomerPayment, updateFirstTime } from '../../apis/user';
-import { listProduct } from '../../apis/product'
+import { createCheckout, createCustomerPayment, updateFirstTime } from '../../../apis/user';
+import { listProduct } from '../../../apis/product'
 
 // material ui components
 import { styled } from '@mui/material/styles';
@@ -17,7 +17,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // components
-import Header from '../../components/header'
+import Header from '../../../components/mobile/header'
 
 const theme = createTheme({
 	palette: {
@@ -216,7 +216,7 @@ export default function Intro() {
 	}, [])
 
 	return (
-		<div id="intro">
+		<div id="mobile-intro">
 			<Header/>
 
 			{accountType ? 
@@ -231,7 +231,6 @@ export default function Intro() {
 					<ThemeProvider theme={theme}>
 						<Container component="main" maxWidth="xs">
         			<CssBaseline />
-
 				      <Box
 			          sx={{
 			            display: 'flex',

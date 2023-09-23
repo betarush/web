@@ -1,0 +1,21 @@
+#mobile-header {
+	#logo {
+		height: 50px;
+		margin: 0 auto;
+		overflow: hidden;
+		width: 50px;
+
+		img {
+			height: 100%;
+			width: 100%;
+		}
+
+		Button {
+			font-weight: bold;
+
+			&:hover {
+				cursor: pointer;
+			}
+		}
+	}
+}

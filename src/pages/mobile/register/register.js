@@ -1,6 +1,6 @@
 import './register.scss';
 import { useEffect, useState } from 'react';
-import { register, verify } from '../../apis/user'
+import { register, verify } from '../../../apis/user'
 import { getId } from 'geottuse-tools';
 
 // material ui components
@@ -131,7 +131,7 @@ export default function Register() {
 	}
 
 	return (
-		<div id="register">
+		<div id="mobile-register">
 			<ThemeProvider theme={theme}>
 				<div id="logo" onClick={() => window.location = "/"}>
 	    		<img src="/logo.png"/>

@@ -1,7 +1,7 @@
-import './header.scss';
+import './header.scss'
 import { useEffect, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { getUserInfo } from '../../apis/user'
+import { getUserInfo } from '../../../apis/user'
 
 // material ui components
 import AppBar from '@mui/material/AppBar';
@@ -79,40 +79,37 @@ export default function Header() {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<div id="header">
-				<AppBar color="primary" position="static" enableColorOnDark>
+			<div id="mobile-header">        
+	      <AppBar color="primary" position="static" enableColorOnDark>
+	      	<Typography
+            variant="h6"
+            noWrap
+            component="a"
+            sx={{ mr: 2, display: { xs: 'flex', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, flexDirection: 'row', color: 'inherit', justifyContent: 'space-around', textDecoration: 'none' }}
+          >
+            You are {username}
+          </Typography>
+          <div id="logo" onClick={() => window.location = "/"}>
+        		<img src="/logo.png"/>
+        	</div>
 		      <Container maxHeight={80} maxWidth={fullWidth}>
-		        <Toolbar >
-		        	<div id="logo" onClick={() => window.location = "/"}>
-		        		<img src="/logo.png"/>
-		        	</div>
-
+		        <Toolbar>
 		          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
 		          	{firstTime == false && (
-		          		<>
-				            <Button variant="contained" onClick={() => window.location = "/main"} sx={{ my: 2, color: 'white' }}>Products</Button>
-				            <Button variant="contained" onClick={() => window.location = "/rejections"} sx={{ my: 2, color: 'white' }}>Rejections</Button>
-				            <Button variant="contained" onClick={() => window.location = "/earnings"} sx={{ my: 2, color: 'white' }}>Withdraw reward: ${earnings.toFixed(2)}</Button>
-				            <Button variant="contained" onClick={() => window.location = "/listproduct"} sx={{ my: 2, color: 'white' }}>Submit your product</Button>
+			          	<div>
+				            <Button variant="contained" onClick={() => window.location = "/main"} sx={{ color: 'white' }}>Products</Button>
+				            <Button variant="contained" onClick={() => window.location = "/rejections"} sx={{ color: 'white' }}>Rejections</Button>
 				            {isCreator == true && <Button variant="contained" onClick={() => window.location = "/seefeedbacks"} sx={{ my: 2, color: 'white' }}>See Feedbacks</Button>}
-			            </>
+				            <Button variant="contained" onClick={() => window.location = "/earnings"} sx={{ color: 'white' }}>Withdraw reward: ${earnings.toFixed(2)}</Button>
+			            	<Button variant="contained" onClick={() => window.location = "/listproduct"} sx={{ color: 'white' }}>Submit your product</Button>
+			            </div>
 		          	)}
-			          	
-		            <Button variant="contained" onClick={() => logout()} sx={{ my: 2, color: 'white', display: 'block' }}>Log-Out</Button>
 		          </Box>
-
-		          <Typography
-		            variant="h6"
-		            noWrap
-		            component="a"
-		            sx={{ mr: 2, display: { xs: 'flex', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, color: 'inherit', textDecoration: 'none' }}
-		          >
-		            You are {username}
-		          </Typography>
 		        </Toolbar>
 		      </Container>
+		      <Button onClick={() => logout()} sx={{ my: 2, color: 'white', display: 'block' }}>Log-Out</Button>
 		    </AppBar>
-		  </div>
+			</div>
 		</ThemeProvider>
 	)
 }

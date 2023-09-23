@@ -2,9 +2,9 @@ import './main.scss';
 import { useEffect, useState } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
 import { resizePhoto } from 'geottuse-tools';
-import { getUserInfo, getPaymentInfo, createCheckout, createCustomerPayment } from '../../apis/user'
-import { getUntestedProducts, getTestingProducts, getMyProducts, tryProduct, relistProduct } from '../../apis/product'
-import { submitFeedback } from '../../apis/producttesting'
+import { getUserInfo, getPaymentInfo, createCheckout, createCustomerPayment } from '../../../apis/user'
+import { getUntestedProducts, getTestingProducts, getMyProducts, tryProduct, relistProduct } from '../../../apis/product'
+import { submitFeedback } from '../../../apis/producttesting'
 
 // material ui components
 import Stack from '@mui/material/Stack';
@@ -21,7 +21,7 @@ import SpeedRoundedIcon from '@mui/icons-material/SpeedRounded';
 import PersonIcon from '@mui/icons-material/Person';
 
 // components
-import Header from '../../components/header'
+import Header from '../../../components/mobile/header'
 
 const LOGO_URL = process.env.REACT_APP_LOGO_URL
 
@@ -328,10 +328,10 @@ export default function Main() {
 	}, [userId])
 
 	return (
-		<div id="main">
+		<div id="mobile-main">
 			<Header/>
 
-			<div id="main">
+			<div id="mobile-main">
 				<div className="row">
 					<Box>
 			      <List
@@ -386,20 +386,13 @@ export default function Main() {
 						}}>
 							{products.map((product, index) => (
 								<div className="product" key={product.key}>
-									<div className="product-row">
-										<div className="image" style={resizePhoto(product.logo, 100, 100)}>
+									<div className="row">
+										<div className="image" style={resizePhoto(product.logo, 50, 50)}>
 											<img src={LOGO_URL + '/' + product.logo.name}/>
 										</div>
 
-										<div className="desc">
-											<div style={{ fontWeight: 'bold' }}>{product.name}</div><br/>
-											{product.info}
-										</div>
-									</div>
-
-									<Stack>
-										{viewType == 'untested' ? 
-											<div className="column">
+										<Stack>
+											{viewType == 'untested' ? 
 												<div className="info">
 													{!product.trying && <div className="header">{product.numLeftover} people left can try</div>}
 
@@ -413,10 +406,8 @@ export default function Main() {
 														</div>
 													}
 												</div>
-											</div>
-											:
-											<div className="column">
-												{viewType == "testing" ? 
+												:
+												viewType == "testing" ? 
 													<div className="info">
 														<div className="header">{product.earned ? "Earned $" + product.reward + " for trying" : product.gave_feedback && "Waiting for creator to reward you"}</div>
 
@@ -462,10 +453,13 @@ export default function Main() {
 															</div>
 														}
 													</div>
-												}
-											</div>
-										}
-									</Stack>
+											}
+										</Stack>
+									</div>
+									<div className="desc">
+										<div style={{ fontWeight: 'bold' }}>{product.name}</div><br/>
+										{product.info}
+									</div>
 								</div>
 							))}
 

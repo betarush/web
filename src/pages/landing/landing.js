@@ -27,7 +27,7 @@ export default function Landing() {
 				<div id="masthead" style={{ height: window.innerHeight * 0.8, overflow: 'hidden', width: '100%' }}>
 					<div id="masthead-header">
 						<div id="top-header">
-							HAVE A <strong>HIGH</strong> GUARANTEE NOTICE AND USAGE OF YOUR PRODUCT WITH LITTLE INVESTMENT
+							HAVE A <strong>HIGH</strong> GUARANTEE NOTICE AND USAGE OF YOUR PRODUCT WITH AS LITTLE AS <strong>$20</strong>
 						</div>
 						<div id="info-header">
 							Reward users to tryout your product and give you feedbacks
@@ -41,7 +41,7 @@ export default function Landing() {
 				<div id="infos">
 					<div className="info">
 						<div className="info-header">
-							For creators (get product feedback)
+							For creators (to get customer's feedback)
 						</div>
 
 						<div className="info-row">
