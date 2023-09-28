@@ -60,28 +60,33 @@ export default function Feedbacks(props) {
 			setRejectreasonbox({ show: true, reason: '', info: { testerId, index } })
 		} else {
 			const { info, reason } = rejectReasonbox
-			const data = { productId: id, testerId: info.testerId, reason }
-			const newFeedbacks = [...feedbacks]
 
-			rejectFeedback(data)
-				.then((res) => {
-					if (res.status == 200) {
-						return res.json()
-					}
+			if (reason) {
+				const data = { productId: id, testerId: info.testerId, reason }
+				const newFeedbacks = [...feedbacks]
 
-					throw res
-				})
-				.then((res) => {
-					if (res) {
-						newFeedbacks.splice(info.index, 1)
-
-						if (newFeedbacks.length > 0) {
-							setFeedbacks(newFeedbacks)
-						} else {
-							window.location = '/main'
+				rejectFeedback(data)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
 						}
-					}
-				})
+
+						throw res
+					})
+					.then((res) => {
+						if (res) {
+							newFeedbacks.splice(info.index, 1)
+
+							if (newFeedbacks.length > 0) {
+								setFeedbacks(newFeedbacks)
+							} else {
+								window.location = '/main'
+							}
+						}
+					})
+			} else {
+				setRejectreasonbox({ ...rejectReasonbox, errorMsg: true })
+			}
 		}
 	}
 	const rewardTheCustomer = (testerId, index) => {
@@ -166,9 +171,11 @@ export default function Feedbacks(props) {
 			{rejectReasonbox.show && (
 				<div id="hidden-box">
 					<div id="reject-box">
-						<div id="reject-header">Why are you rejecting this feedback ? (Optional)</div>
+						<div id="reject-header">Why are you rejecting this feedback ?</div>
 
 						<textarea id="reject-input" maxlength="200" onChange={e => setRejectreasonbox({ ...rejectReasonbox, reason: e.target.value })} value={rejectReasonbox.reason}/>
+
+						{rejectReasonbox.errorMsg && <div className="errormsg">Please provide a good reason for rejection</div>}
 
 						<div id="actions">
 							<div className="action" onClick={() => setRejectreasonbox({ show: false, reason: '' })}>Cancel</div>

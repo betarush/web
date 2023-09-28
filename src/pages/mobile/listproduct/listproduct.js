@@ -1,3 +1,4 @@
+import './listproduct.scss';
 import { useEffect, useState } from 'react';
 import { getId, resizePhoto } from 'geottuse-tools';
 import ClipLoader from "react-spinners/ClipLoader";
@@ -238,61 +239,82 @@ export default function Listproduct() {
 	}, [])
 
 	return (
-		<ThemeProvider theme={theme}>
-			<Header/>
+		<div id="listproduct">
+			<ThemeProvider theme={theme}>
+				<Header/>
 
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Typography component="h1" variant="h5">What is your product</Typography>
-          <Box component="form" onSubmit={listTheProduct} noValidate sx={{ mt: 1 }}>
-          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product name:" name="name" variant="standard" disabled={loading} defaultValue={name} inputProps={{ maxLength: 50 }}/>
-          	<TextField margin="normal" required fullWidth multiline id="standard-size-small" label="Enter product information:" name="desc" variant="standard" disabled={loading} defaultValue={desc} inputProps={{ maxLength: 250 }}/>
-          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product link to lead customers:" name="link" variant="standard" disabled={loading} defaultValue={link} inputProps={{ maxLength: 50 }}/>
+				<Typography component="h1" variant="h6" style={{ margin: '50px 5% 5% 5%', textAlign: 'center' }}>
+      		We have a big user base of people who are looking to tryout products
+      		and give feedback. 
+      		<br/><br/><br/>
+      		Introduce your product and get awesome feedbacks from actual users
+      	</Typography>
 
-          	<Button
-						  component="label"
-						  variant="contained"
-						  startIcon={<CloudUploadIcon />}
-						  href="#file-upload"
-						  disabled={loading}
-						>
-						  Upload a logo
-						  <VisuallyHiddenInput 
-						  	type="file"
-						  	ref={r => setFile(r)}
-						  	onChange={chooseImage} 
-						  />
-						</Button>
+	      <Container component="main" maxWidth="xs">
+	        <CssBaseline />
+	        <Box
+	          sx={{
+	            marginTop: 8,
+	            display: 'flex',
+	            flexDirection: 'column',
+	            alignItems: 'center',
+	          }}
+	        >
+	          <Typography component="h1" variant="h5">What is your product</Typography>
+	          <Box component="form" onSubmit={listTheProduct} noValidate sx={{ mt: 1 }}>
+	          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product name:" name="name" variant="standard" disabled={loading} defaultValue={name} inputProps={{ maxLength: 50 }}/>
+	          	<TextField margin="normal" required fullWidth multiline id="standard-size-small" label="Enter product information:" name="desc" variant="standard" disabled={loading} defaultValue={desc} inputProps={{ maxLength: 100 }}/>
+	          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product link to lead customers:" name="link" variant="standard" disabled={loading} defaultValue={link} inputProps={{ maxLength: 50 }}/>
 
-						{image.uri && (
-							<div style={{ margin: '0 auto', ...resizePhoto(image, 300, 300) }}>
-								<img src={image.uri} style={{ height: '100%', width: '100%' }}/>
+	          	<Button
+							  component="label"
+							  variant="contained"
+							  startIcon={<CloudUploadIcon />}
+							  href="#file-upload"
+							  disabled={loading}
+							>
+							  Upload a logo
+							  <VisuallyHiddenInput 
+							  	type="file"
+							  	ref={r => setFile(r)}
+							  	onChange={chooseImage} 
+							  />
+							</Button>
+
+							{image.uri && (
+								<div style={{ margin: '0 auto', ...resizePhoto(image, 300, 300) }}>
+									<img src={image.uri} style={{ height: '100%', width: '100%' }}/>
+								</div>
+							)}
+
+							<Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
+
+							<div id="payment-infos">
+								<div className="payment-info"><strong>Subtotal:</strong> $20.00</div>
+								<div className="payment-info"><strong>Service fee:</strong> $5.00</div>
+								<div className="payment-info"><strong>Total:</strong> $25.00</div>
 							</div>
-						)}
 
-						<Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
+	            <Button type="submit" fullWidth variant="contained" color="submit" disabled={loading} sx={{ mt: 3, mb: 2 }}>LAUNCH</Button>
 
-            <Button type="submit" fullWidth variant="contained" color="submit" disabled={loading} sx={{ mt: 3, mb: 2 }}>LAUNCH</Button>
-
-            {loading && (
-            	<div style={{ height: 20, margin: '20px auto', width: 20 }}>
-								<ClipLoader color="black" size={20}/>
-							</div>
-            )}
-          </Box>
-        </Box>
-        <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>
-		      {'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}
-		    </Typography>
-      </Container>
-    </ThemeProvider>
+	            {loading && (
+	            	<div style={{ height: 20, margin: '20px auto', width: 20 }}>
+									<ClipLoader color="black" size={20}/>
+								</div>
+	            )}
+	          </Box>
+	        </Box>
+	        <div className="row">
+		      	<div style={{ display: 'flex', flexDirection: 'row' }}>
+		        	<div className="column">Powered by </div>
+		        	<img src="/stripe.png" style={{ height: 50, marginLeft: 10, width: 50 }}/>
+		        </div>
+		      </div>
+	        <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>
+			      {'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}
+			    </Typography>
+	      </Container>
+	    </ThemeProvider>
+	  </div>
 	)
 }

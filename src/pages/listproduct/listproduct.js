@@ -254,7 +254,7 @@ export default function Listproduct() {
           <Typography component="h1" variant="h5">What is your product</Typography>
           <Box component="form" onSubmit={listTheProduct} noValidate sx={{ mt: 1 }}>
           	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product name:" name="name" variant="standard" disabled={loading} defaultValue={name} inputProps={{ maxLength: 50 }}/>
-          	<TextField margin="normal" required fullWidth multiline id="standard-size-small" label="Enter product information:" name="desc" variant="standard" disabled={loading} defaultValue={desc} inputProps={{ maxLength: 250 }}/>
+          	<TextField margin="normal" required fullWidth multiline id="standard-size-small" label="Enter product information:" name="desc" variant="standard" disabled={loading} defaultValue={desc} inputProps={{ maxLength: 100 }}/>
           	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product link to lead customers:" name="link" variant="standard" disabled={loading} defaultValue={link} inputProps={{ maxLength: 50 }}/>
 
           	<Button
@@ -283,10 +283,17 @@ export default function Listproduct() {
             <Button type="submit" fullWidth variant="contained" color="submit" disabled={loading} sx={{ mt: 3, mb: 2 }}>LAUNCH</Button>
 
             {loading && (
-            	<div style={{ height: 20, margin: '20px auto', width: 20 }}>
+            	<div style={{ height: 25, margin: '20px auto', width: 25 }}>
 								<ClipLoader color="black" size={20}/>
 							</div>
             )}
+
+            <div className="row">
+			      	<div style={{ display: 'flex', flexDirection: 'row' }}>
+			        	<div className="column">Powered by </div>
+			        	<img src="/stripe.png" style={{ height: 50, marginLeft: 10, width: 50 }}/>
+			        </div>
+			      </div>
           </Box>
         </Box>
         <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>

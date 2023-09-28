@@ -339,31 +339,19 @@ export default function Main() {
 			        orientation="horizontal"
 			        sx={{ '--List-radius': '8px', '--List-padding': '4px', '--List-gap': '8px' }}
 			      >
-			        <ListItem role="none">
-			          <ListItemButton style={{ backgroundColor: viewType == 'untested' ? 'rgba(0, 0, 0, 0.5)' : '' }} role="menuitem" onClick={() => getTheUntestedProducts(true)}>
-			            <ListItemDecorator>
-			              <BuildIcon/>
-			            </ListItemDecorator>
-			            <div style={{ color: viewType == 'untested' ? 'white' : 'black' }}>Untested by you</div>
-			          </ListItemButton>
-			        </ListItem>
-			        <ListItem role="none">
-			          <ListItemButton style={{ backgroundColor: viewType == 'testing' ? 'rgba(0, 0, 0, 0.5)' : '' }} role="menuitem" onClick={() => getTheTestingProducts(true)}>
-			            <ListItemDecorator>
-			              <SpeedRoundedIcon/>
-			            </ListItemDecorator>
-			            <div style={{ color: viewType == 'testing' ? 'white' : 'black' }}>Testing by you</div>
-			          </ListItemButton>
-			        </ListItem>
+			        <div className="menubar-touch" style={{ backgroundColor: viewType == 'untested' ? 'rgba(0, 0, 0, 0.5)' : '', borderRadius: 10, padding: 5 }} onClick={() => getTheUntestedProducts(true)}>
+		            <div style={{ margin: '0 auto', width: 20 }}><BuildIcon/></div>
+		            <div style={{ color: viewType == 'untested' ? 'white' : 'black', fontSize: 15 }}>Untested</div>
+		          </div>
+			        <div className="menubar-touch" style={{ backgroundColor: viewType == 'testing' ? 'rgba(0, 0, 0, 0.5)' : '', borderRadius: 10, padding: 5 }} onClick={() => getTheTestingProducts(true)}>
+		            <div style={{ margin: '0 auto', width: 20 }}><SpeedRoundedIcon/></div>
+		            <div style={{ color: viewType == 'testing' ? 'white' : 'black', fontSize: 15 }}>Testing</div>
+		          </div>
 			        {isCreator == true && (
-			        	<ListItem role="none">
-				          <ListItemButton style={{ backgroundColor: viewType == 'myproducts' ? 'rgba(0, 0, 0, 0.5)' : '' }} role="menuitem" onClick={() => getTheMyProducts(true)}>
-				            <ListItemDecorator>
-				              <PersonIcon/>
-				            </ListItemDecorator>
-				            <div style={{ color: viewType == 'myproducts' ? 'white' : 'black' }}>Your products</div>
-				          </ListItemButton>
-				        </ListItem>
+				        <div className="menubar-touch" style={{ backgroundColor: viewType == 'myproducts' ? 'rgba(0, 0, 0, 0.5)' : '', borderRadius: 10, padding: 5 }} onClick={() => getTheMyProducts(true)}>
+				        	<div style={{ margin: '0 auto', width: 20 }}><PersonIcon/></div>
+				        	<div style={{ color: viewType == 'myproducts' ? 'white' : 'black', fontSize: 15 }}>Your Products</div>
+				        </div>
 			        )}
 			      </List>
 			    </Box>
@@ -386,14 +374,19 @@ export default function Main() {
 						}}>
 							{products.map((product, index) => (
 								<div className="product" key={product.key}>
-									<div className="row">
-										<div className="image" style={resizePhoto(product.logo, 50, 50)}>
-											<img src={LOGO_URL + '/' + product.logo.name}/>
-										</div>
+									<div className="image" style={resizePhoto(product.logo, 50, 50)}>
+										<img src={LOGO_URL + '/' + product.logo.name}/>
+									</div>
 
-										<Stack>
+									<div className="desc">
+										<div style={{ fontWeight: 'bold' }}>{product.name}</div><br/>
+										{product.info}
+									</div>
+
+									<Stack>
+										<div className="info-container">
 											{viewType == 'untested' ? 
-												<div className="info">
+												<>
 													{!product.trying && <div className="header">{product.numLeftover} people left can try</div>}
 
 													{!product.trying ? 
@@ -405,10 +398,10 @@ export default function Main() {
 															redirecting to website....
 														</div>
 													}
-												</div>
+												</>
 												:
 												viewType == "testing" ? 
-													<div className="info">
+													<>
 														<div className="header">{product.earned ? "Earned $" + product.reward + " for trying" : product.gave_feedback && "Waiting for creator to reward you"}</div>
 
 														{!product.gave_feedback && (
@@ -417,49 +410,42 @@ export default function Main() {
 																<Button variant="contained" onClick={() => window.open(product.link)}>Try Product</Button>
 															</>
 														)}
-													</div>
+													</>
 													:
-													<div className="info-container">
-														{product.numLeftover > 0 ? 
-															<>
-																<div className="header">Amount spent: ${product.amountSpent.toFixed(2)}</div>
+													product.numLeftover > 0 ? 
+														<>
+															<div className="header">Amount spent: ${product.amountSpent.toFixed(2)}</div>
 
-																{product.numTesting > 0 && (
-																	<div className="header">
-																		{product.numTesting + " people testing"}
-																	</div>
-																)}
+															{product.numTesting > 0 && (
+																<div className="header">
+																	{product.numTesting + " people testing"}
+																</div>
+															)}
 
-																{product.numLeftover > 0 && (
-																	<div className="header">
-																		{product.numLeftover + " people left can try"}
-																	</div>
-																)}
+															{product.numLeftover > 0 && (
+																<div className="header">
+																	{product.numLeftover + " people left can try"}
+																</div>
+															)}
 
-																{product.numFeedback > 0 && (
-																	<div className="header">
-																		{product.numFeedback} people gave feedback<br/>
-																		<div className="reward" onClick={() => window.location = '/feedback/' + product.id}>Reward them</div>
-																	</div>
-																)}
+															{product.numFeedback > 0 && (
+																<div className="header">
+																	{product.numFeedback} people gave feedback<br/>
+																	<div className="reward" onClick={() => window.location = '/feedback/' + product.id}>Reward them</div>
+																</div>
+															)}
 
-																{product.numRewarded > 0 && <div className="header">{product.numRewarded} people rewarded</div>}
-																{product.numRejected > 0 && <div className="header">{product.numRejected} people rejected</div>}
-															</>
-															:
-															<div className="header">
-																{5 - product.numLeftover} people rewarded
-																<div className="relaunch" onClick={() => relaunchTheProduct(product.id)}>Relaunch for testers</div>
-															</div>
-														}
-													</div>
+															{product.numRewarded > 0 && <div className="header">{product.numRewarded} people rewarded</div>}
+															{product.numRejected > 0 && <div className="header">{product.numRejected} people rejected</div>}
+														</>
+														:
+														<div className="header">
+															{5 - product.numLeftover} people rewarded
+															<div className="relaunch" onClick={() => relaunchTheProduct(product.id)}>Relaunch for testers</div>
+														</div>
 											}
-										</Stack>
-									</div>
-									<div className="desc">
-										<div style={{ fontWeight: 'bold' }}>{product.name}</div><br/>
-										{product.info}
-									</div>
+										</div>
+									</Stack>
 								</div>
 							))}
 
