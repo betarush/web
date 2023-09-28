@@ -342,13 +342,20 @@ export default function Earnings() {
 				            <div style={{ marginLeft: 10 }}><LockOutlinedIcon /></div>
 				          </Button>
 				        </CardActions>
-
-				        {loading && (
-		            	<div style={{ height: 20, margin: '20px auto', width: 20 }}>
-										<ClipLoader color="black" size={20}/>
-									</div>
-		            )}
 				      </CardContent>
+
+				      {loading && (
+	            	<div style={{ height: 20, margin: '20px auto', width: 20 }}>
+									<ClipLoader color="black" size={20}/>
+								</div>
+	            )}
+
+	            <div className="row">
+				      	<div style={{ display: 'flex', flexDirection: 'row' }}>
+				        	<div className="column">Powered by </div>
+				        	<img src="/stripe.png" style={{ height: 50, marginLeft: 10, width: 50 }}/>
+				        </div>
+				      </div>
 				     </Box>
 			    </Card>
 				</>

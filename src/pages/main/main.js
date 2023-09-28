@@ -496,7 +496,7 @@ export default function Main() {
 								<br/><br/>
 								All you have to do is tryout products and write a good feedback.
 								<br/><br/>
-								You will get rewarded with some money if the creator likes your feedback so
+								You will get rewarded with money if the creator likes your feedback so
 								make sure to write a few good words
 								<br/><br/>
 								That's it! Enjoy your time making money here:)

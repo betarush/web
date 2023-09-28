@@ -53,7 +53,11 @@ export default function Login() {
 					if (res) {
 						localStorage.setItem("id", res.id)
 
-						window.location = "/main"
+						if (res.firstTime == 1) {
+							window.location = "/intro"
+						} else {
+							window.location = "/main"
+						}
 					}
 				})
 				.catch((err) => {
