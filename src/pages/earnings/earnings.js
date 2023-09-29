@@ -272,7 +272,7 @@ export default function Earnings() {
 			      	)}
 						</>
 					)}
-
+					
 					<Card
 			      variant="outlined"
 			      sx={{

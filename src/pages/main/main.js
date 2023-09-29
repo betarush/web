@@ -404,7 +404,7 @@ export default function Main() {
 													{!product.trying && <div className="header">{product.numLeftover} people left can try</div>}
 
 													{!product.trying ? 
-														<Button disabled={product.trying} variant="contained" onClick={() => tryTheProduct(index, product.id, product.link)}>Try first</Button>
+														<Button disabled={product.trying} variant="contained" onClick={() => tryTheProduct(index, product.id, product.link)}>Try first then earn $$</Button>
 														:
 														<div className="header">
 															Come back to give feedback when you're done testing
@@ -423,7 +423,7 @@ export default function Main() {
 														{!product.gave_feedback && (
 															<>
 																<Button variant="contained" style={{ marginBottom: 10 }} onClick={() => setFeedback({ ...feedback, show: true, input: '', id: product.id, index, amountSpent: product.amountSpent, loading: false })}>Give feedback & Earn ${product.reward.toFixed(2)}</Button>
-																<Button variant="contained" onClick={() => window.open(product.link)}>Try Product</Button>
+																<Button variant="contained" onClick={() => window.open(product.link)}>Go To Product</Button>
 															</>
 														)}
 													</div>
