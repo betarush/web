@@ -66,7 +66,7 @@ export default function MobileLanding() {
 									<img src="/reward.png"/>
 								</div>
 								<div className="header">
-									See feedbacks given by 5 users, approve them and reward them $4 of your deposit
+									See feedbacks given by 5 users, approve the GOOD ones and reward them $4 of your deposit
 								</div>
 							</div>
 						</div>
@@ -97,7 +97,7 @@ export default function MobileLanding() {
 								</div>
 								<div className="header">
 									Tryout a product anyway you can and<br/>
-									write a good feedback
+									write a GOOD feedback that the creator might like
 								</div>
 							</div>
 						</div>

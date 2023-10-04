@@ -59,7 +59,7 @@ export default function Landing() {
 								<div className="info-info">
 									<div className="index">2</div>
 									<div className="header">
-										See feedbacks given by 5 users, approve them and reward them $4 of your deposit
+										See feedbacks given by 5 users, approve the GOOD ones and reward them $4 of your deposit
 									</div>
 									<div className="image" style={{ marginTop: -30 }}>
 										<img src="/reward.png"/>
@@ -89,7 +89,7 @@ export default function Landing() {
 									<div className="index">1</div>
 									<div className="header">
 										Tryout a product anyway you can and<br/>
-										write a good feedback
+										write a GOOD feedback that the creator might like
 									</div>
 									<div className="image" style={{ marginTop: -30 }}>
 										<img src="/5testers.png"/>
