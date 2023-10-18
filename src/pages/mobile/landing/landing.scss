@@ -26,14 +26,12 @@
 			flex-direction: row;
 
 			.nav {
-				border-radius: 10px;
-				font-weight: 100;
 				margin-right: 50px;
-				padding: 10px;
 				text-align: center;
+				width: 80px;
 
 				&:hover {
-					background-color: rgba(0, 0, 0, 0.1);
+					font-weight: bold;
 					cursor: pointer;
 				}
 			}
@@ -79,7 +77,6 @@
 					border-radius: 10px;
 					color: white;
 					font-weight: bold;
-					margin: 0 auto;
 					padding: 10px;
 					text-align: center;
 					width: 150px;
@@ -97,24 +94,75 @@
 			}
 		}
 
-		.body-header {
-			font-size: 20px;
-			font-weight: bold;
-			padding: 50px 10% 0 10%;
-			text-align: center;
+		#benefits {
+			margin: 0 auto;
+			padding: 5% 0;
+
+			#benefit-header {
+				font-size: 30px;
+				font-weight: bold;
+				text-align: center;
+			}
+
+			.benefit-item {
+				margin-bottom: 30px;
+				padding: 0 5%;
+
+				.header {
+					color: rgba(0, 0, 0, 0.6);
+					font-size: 15px;
+					font-weight: 800;
+					text-align: center;
+				}
+
+				.image {
+					height: 80px;
+					margin: 0 auto;
+					width: 80px;
+
+					img {
+						height: 100%;
+						width: 100%;
+					}
+				}
+			}
 		}
 
 		#infos {
-			width: 100%;
-
-			.info:first-child {
-				border-style: solid;
-				border-width: 0 1px 0 0;
+			#infos-header {
+				font-size: 30px;
+				font-weight: bold;
+				text-align: center;
 			}
 
-			.info:nth-child(2) {
-				border-style: solid;
-				border-width: 0 0 0 1px;
+			#infos-options {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-around;
+				margin: 0 auto;
+				width: 400px;
+
+				[class^="option"] {
+					background-color: transparent;
+					border-radius: 30px;
+					border-style: solid;
+					font-weight: bold;
+					margin: 0 5px;
+					padding: 10px;
+					text-align: center;
+					width: 100%;
+				}
+
+				.option-selected {
+					background-color: black;
+					color: white;
+				}
+
+				.option:hover {
+					background-color: rgba(0, 0, 0, 0.5);
+					color: black;
+					cursor: pointer;
+				}
 			}
 
 			.info {
@@ -149,18 +197,6 @@
 						width: 30px;
 					}
 
-					.image {
-						border-radius: 10px;
-						height: 50px;
-						overflow: hidden;
-						width: 50px;
-
-						img {
-							height: 100%;
-							width: 100%;
-						}
-					}
-
 					.header {
 						color: black;
 						font-size: 20px;
@@ -178,9 +214,27 @@
 		}
 	}
 
+	#socialmedias {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		margin: 0 auto;
+		width: 300px;
+
+		.socialmedia {
+			height: 30px;
+			width: 30px;
+
+			img {
+				height: 100%;
+				width: 100%;
+			}
+		}
+	}
+
 	#footer {
-		font-size: 15px;
-		padding: 100px 0 50px 0;
+		font-size: 20px;
+		padding: 50px 0;
 		text-align: center;
 	}
 }

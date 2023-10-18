@@ -1,28 +1,31 @@
 import './landing.scss';
+import { useEffect, useState } from 'react';
 import { resizePhoto } from 'geottuse-tools';
 
 window.analytics.track('landing', { mobile: true });
 
 export default function MobileLanding() {
+	const [viewType, setViewtype] = useState('creators')
+
 	return (
 		<div id="mobile-landing">
 			<div id="landing-header">
 				<div className="row">
 					<div className="row">
 						<div className="column">
-							<div id="logo">
+							<div id="logo" onClick={() => window.location = "/"}>
 			      		<img src="/logo.png"/>
 			      	</div>
 						</div>
 
-						<div id="title">GET PRODUCT FEEDBACK</div>
+						<div className="column"><div id="title">GET PRODUCT FEEDBACK</div></div>
 					</div>
 				</div>
 
 				<div className="row">
 					<div id="navs">
-						<div className="nav" onClick={() => window.location = '/register'}>REGISTER</div>
-						<div className="nav" onClick={() => window.location = '/login'}>LOGIN</div>
+						<div className="nav" onClick={() => window.location = '/register'}>Register</div>
+						<div className="nav" onClick={() => window.location = '/login'}>Login</div>
 					</div>
 				</div>
 			</div>
@@ -31,10 +34,11 @@ export default function MobileLanding() {
 				<div id="masthead" style={{ height: 200, overflow: 'hidden', width: '100%' }}>
 					<div id="masthead-header">
 						<h1 id="top-header">
-							HAVE A <strong>HIGH</strong> GUARANTEE NOTICES AND USAGE OF YOUR PRODUCT WITH AS LITTLE AS <strong>$20</strong>
+							Have users tryout your product TODAY
 						</h1>
 						<div id="info-header">
-							<strong>Reward</strong> users to tryout your product and give you feedback
+							Reward users small amount of money to tryout your product
+							and give you a <strong>good</strong> feedback
 						</div>
 
 						<div id="learnmore" onClick={() => window.location = "/register"}>GET STARTED</div>
@@ -42,127 +46,126 @@ export default function MobileLanding() {
 					<img id="masthead-image" src="/background.jpeg" style={{ ...resizePhoto({ width: 1000, height: 597 }, window.innerWidth, 200, "width") }}/>
 				</div>
 
-				<div className="body-header">
-					<div className="header">Are you finished with your MVP and want some USEFUL FEEDBACK ?</div>
-					<img src="/mvp.png" style={{ height: 150, width: 150 }}/>
-				</div>
-				<div className="body-header">
-					<div className="header">
-						Don't waste your money on social media ads
-						<br/>(without proof of concept)
-					</div>
-					<img src="/wastemoney.png" style={{ height: 300, marginTop: -70, width: 300 }}/>
-				</div>
-				<div className="body-header">
-					<div className="header">
-						We have a userbase of people who are looking
-						to try new products, give their best feedback and get rewarded with $4
-					</div>
-					<img src="/userbase.png" style={{ height: 300, marginTop: -60, width: 300 }}/>
-				</div>
+				<div id="benefits">
+					<div id="benefit-header">What we are</div>
 
-				<div className="body-header">
-					<div className="header">
-						How it works?
+					<div id="benefit-row">
+						<div className="benefit-item">
+							<div className="header">Are you finished with your MVP and want some USEFUL FEEDBACK ?</div>
+							<div className="image"><img src="/mvp.png"/></div>
+						</div>
+						<div className="benefit-item">
+							<div className="header">
+								Don't risk your money running ads yet
+								until you have a solid proof of
+								solution that works
+							</div>
+							<div className="image"><img src="/burningmoney.png"/></div>
+						</div>
+						<div className="benefit-item">
+							<div className="header">
+								A community of people here are looking
+								to try new products, give their best feedback to them and get rewarded with money
+							</div>
+							<div className="image"><img src="/userbase.png"/></div>
+						</div>
 					</div>
 				</div>
 
 				<div id="infos">
-					<div className="info">
-						<div className="info-header">(for Project creators)</div>
+					<div id="infos-header">How it works?</div>
 
-						<div className="info-info">
-							<div className="index">1</div>
-							<div className="row">
-								<div className="image">
-									<img src="/launchproduct.png"/>
-								</div>
-								<div className="header">
-									Project creators can submit their product with a $20 deposit
-									<br/>($4 reward for each user of 5)
-								</div>
-							</div>
-						</div>
-
-						<div className="info-info">
-							<div className="index">2</div>
-							<div className="row">
-								<div className="image">
-									<img src="/reward.png"/>
-								</div>
-								<div className="header">
-									Project creators will get emails when testers write feedback about their product
-								</div>
-							</div>
-						</div>
-
-						<div className="info-info">
-							<div className="index">3</div>
-							<div className="row">
-								<div className="image">
-									<img src="/vote.png"/>
-								</div>
-								<div className="header">
-									Project creators 
-									<br/>
-									can either reject the feedback they don't like
-									<br/>or<br/>
-									approve the feedback they like and the tester will be rewarded $4
-									<br/>(and then iterate)
-								</div>
-							</div>
-						</div>
-
-						<div className="info-info">
-							<div className="index">4</div>
-							<div className="row">
-								<div className="image">
-									<img src="/accuracy.png"/>
-								</div>
-								<div className="header">
-									The most accurate way<br/>to hit product/market fit
-								</div>
-							</div>
-						</div>
+					<div id="infos-options">
+						<div className={"option" + (viewType == "creators" ? "-selected" : "")} onClick={() => setViewtype("creators")}>for Creators</div>
+						<div className={"option" + (viewType == "testers" ? "-selected" : "")} onClick={() => setViewtype("testers")}>for Testers</div>
 					</div>
-					<div className="info">
-						<div className="info-header">(for Testers)</div>
 
-						<div className="info-info">
-							<div className="index">1</div>
-							<div className="row">
-								<div className="image">
-									<img src="/5testers.png"/>
+					{viewType == "creators" ? 
+						<div className="info">
+							<div className="info-header">(for Project creators)</div>
+
+							<div className="info-info">
+								<div className="index">1</div>
+								<div className="row">
+									<div className="header">
+										Submit your product with a $20 deposit
+										<br/>(Reward each user $4)
+										<br/>(Maximum of 5 users can test)
+									</div>
 								</div>
-								<div className="header">
-									Tryout a product you like and<br/>
-									try to write a GOOD feedback that the creator will like
+							</div>
+
+							<div className="info-info">
+								<div className="index">2</div>
+								<div className="row">
+									<div className="header">
+										You will get an email when a tester writes a feedback about your product
+									</div>
+								</div>
+							</div>
+
+							<div className="info-info">
+								<div className="index">3</div>
+								<div className="row">
+									<div className="header">
+										You can either reject the feedback if you don't like it or
+										<br/>
+										approve the feedback if you like and the tester will be rewarded $4
+									</div>
+								</div>
+							</div>
+
+							<div className="info-info">
+								<div className="index">4</div>
+								<div className="row">
+									<div className="header">
+										You can have up to 5 users try out your product and give
+										you good feedback for every $20 you spent
+									</div>
 								</div>
 							</div>
 						</div>
+						:
+						<div className="info">
+							<div className="info-header">(for Testers)</div>
 
-						<div className="info-info">
-							<div className="index">2</div>
-							<div className="row">
-								<div className="image">
-									<img src="/earnmoney.png"/>
+							<div className="info-info">
+								<div className="index">1</div>
+								<div className="row">
+									<div className="header">
+										Tryout a product you like and<br/>
+										try to write a GOOD feedback that the creator will like
+									</div>
 								</div>
-								<div className="header">
-									The product creator can see the GOOD<br/>feedback, approve it and reward you $4
+							</div>
+
+							<div className="info-info">
+								<div className="index">2</div>
+								<div className="row">
+									<div className="header">
+										The product creator can see the GOOD<br/>feedback, approve it and reward you $4
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
-
-				<div id="infos-header">
-					That's it. It's that simple
-					<br/>
-					<div style={{ fontSize: 20, marginTop: 10 }}>Enjoy your feedback/earnings</div>
+					}
 				</div>
 			</div>
 
-			<div id="footer">{'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}</div>
+			<div>
+				<div id="socialmedias">
+					<div className="socialmedia">
+						<img src="/facebook-icon.png"/>
+					</div>
+					<div className="socialmedia">
+						<img src="/twitter-icon.png"/>
+					</div>
+					<div className="socialmedia">
+						<img src="/linkedin-icon.png"/>
+					</div>
+				</div>
+				<div id="footer">{'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}</div>
+			</div>
 		</div>
 	)
 }
