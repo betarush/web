@@ -213,6 +213,8 @@ export default function Intro() {
 
 		setAccounttype(localStorage.getItem("accountType") ? localStorage.getItem("accountType") : "")
 		setUserid(localStorage.getItem("id"))
+
+		window.analytics.track('intro', { id: localStorage.getItem("id"), mobile: true });
 	}, [])
 
 	return (

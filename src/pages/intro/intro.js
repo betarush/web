@@ -213,12 +213,14 @@ export default function Intro() {
 
 		setAccounttype(localStorage.getItem("accountType") ? localStorage.getItem("accountType") : "")
 		setUserid(localStorage.getItem("id"))
+
+		window.analytics.track('intro', { id: localStorage.getItem("id"), web: true });
 	}, [])
 
 	return (
 		<div id="intro">
 			<Header/>
-
+			
 			{accountType ? 
 				<div id="listproduct">
 					<Typography component="h1" variant="h5" style={{ fontWeight: 'bold', margin: '50px 20% 5% 20%', textAlign: 'center' }}>

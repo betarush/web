@@ -95,6 +95,8 @@ export default function Earnings() {
 					}
 
 					setLoaded(true)
+
+					window.analytics.track('earnings', { id, mobile: true });
 				}
 			})
 			.catch((err) => {

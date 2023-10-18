@@ -45,6 +45,8 @@ export default function Feedbacks(props) {
 					setName(res.name)
 					setImage(res.logo)
 					setLoaded(true)
+
+					window.analytics.track('feedback', { id: userId, mobile: true });
 				}
 			})
 			.catch((err) => {

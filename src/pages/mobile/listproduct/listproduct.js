@@ -77,6 +77,8 @@ export default function Listproduct() {
 				if (res) {
 					setPaymentdone(res.paymentDone)
 					setUserid(id)
+
+					window.analytics.track('listproduct', { id, mobile: true });
 				}
 			})
 			.catch((err) => {

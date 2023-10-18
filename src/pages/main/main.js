@@ -59,6 +59,8 @@ export default function Main() {
 					setBankaccountdone(res.bankaccountDone)
 					setUserid(id)
 					setIscreator(res.isCreator)
+
+					window.analytics.track('main', { id, web: true });
 				}
 			})
 			.catch((err) => {
@@ -96,6 +98,8 @@ export default function Main() {
 
 					setOffset(res.offset)
 					setViewtype('untested')
+
+					window.analytics.track('untested', { id: userId, web: true });
 
 					if (start) {
 						setLoaded(true)
@@ -145,6 +149,8 @@ export default function Main() {
 					} else {
 						setLoading(false)
 					}
+
+					window.analytics.track('testing', { id: userId, web: true });
 				}
 			})
 			.catch((err) => {
@@ -188,6 +194,8 @@ export default function Main() {
 					} else {
 						setLoading(false)
 					}
+
+					window.analytics.track('myprojects', { id: userId, web: true });
 				}
 			})
 			.catch((err) => {
@@ -215,6 +223,8 @@ export default function Main() {
 					newProducts[index].trying = true
 
 					setProducts(newProducts)
+
+					window.analytics.track('untested', { id: userId, productId, web: true });
 
 					setTimeout(function () {
 						getTheTestingProducts(true)
@@ -260,6 +270,7 @@ export default function Main() {
 					if (res) {
 						localStorage.setItem("viewMyProducts", "true")
 
+						window.analytics.track('relaunch', { id: userId, productId: relaunch.productId, web: true });
 						window.location = "/main"
 					}
 				})

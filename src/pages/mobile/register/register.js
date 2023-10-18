@@ -114,6 +114,7 @@ export default function Register() {
 						if (res) {
 							localStorage.setItem("id", res.id)
 
+							window.analytics.identify(res.id, { register: true, mobile: true });
 							window.location = "/intro"
 						}
 					})

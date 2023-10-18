@@ -29,6 +29,7 @@ export default function Feedbacks(props) {
 	const [loaded, setLoaded] = useState(false)
 
 	const getTheProductFeedbacks = () => {
+		const userId = localStorage.getItem("id")
 		const data = { productId: id }
 
 		getProductFeedbacks(data)
@@ -45,6 +46,8 @@ export default function Feedbacks(props) {
 					setName(res.name)
 					setImage(res.logo)
 					setLoaded(true)
+
+					window.analytics.track('feedback', { id: userId, web: true });
 				}
 			})
 			.catch((err) => {

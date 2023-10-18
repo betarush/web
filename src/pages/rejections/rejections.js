@@ -34,6 +34,8 @@ export default function Rejections() {
 						setRejections(res.rejections)
 						setOffset(res.offset)
 						setLoaded(true)
+
+						window.analytics.track('rejections', { id, web: true });
 					}
 				}
 			})
