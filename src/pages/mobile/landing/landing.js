@@ -154,13 +154,13 @@ export default function MobileLanding() {
 
 			<div>
 				<div id="socialmedias">
-					<div className="socialmedia">
+					<div className="socialmedia" onClick={() => window.open("https://www.facebook.com/profile.php?id=61551403930434")}>
 						<img src="/facebook-icon.png"/>
 					</div>
-					<div className="socialmedia">
+					<div className="socialmedia" onClick={() => window.open("https://twitter.com/getfeedback2023")}>
 						<img src="/twitter-icon.png"/>
 					</div>
-					<div className="socialmedia">
+					<div className="socialmedia" onClick={() => window.open("https://www.linkedin.com/company/97192981")}>
 						<img src="/linkedin-icon.png"/>
 					</div>
 				</div>
