@@ -52,7 +52,7 @@ export default function Seefeedbacks() {
 					setUserid(id)
 					setLoaded(true)
 
-					window.analytics.track('relistproduct', { id, web: true });
+					if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('relistproduct', { id, web: true });
 				}
 			})
 			.catch((err) => {
@@ -81,7 +81,7 @@ export default function Seefeedbacks() {
 				})
 				.then((res) => {
 					if (res) {
-						window.analytics.track('rejectfeedback', { id: userId, productId: info.id, testerId: info.testerId, web: true });
+						if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('rejectfeedback', { id: userId, productId: info.id, testerId: info.testerId, web: true });
 
 						newProducts[info.productIndex].feedbacks.splice(info.feedbackIndex, 1)
 
@@ -111,7 +111,7 @@ export default function Seefeedbacks() {
 			})
 			.then((res) => {
 				if (res) {
-					window.analytics.track('rewardcustomer', { id: userId, productId: id, testerId, web: true });
+					if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('rewardcustomer', { id: userId, productId: id, testerId, web: true });
 
 					newProducts[productIndex].feedbacks.splice(feedbackIndex, 1)
 

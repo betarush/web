@@ -26,6 +26,8 @@ const theme = createTheme({
 	}
 })
 
+if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('register', { mobile: true });
+
 export default function Register() {
 	const [email, setEmail] = useState(process.env.REACT_APP_MODE == 'dev' ? 'kmrobogram@gmail.com' : '')
 	const [password, setPassword] = useState(process.env.REACT_APP_MODE == 'dev' ? 'qqqqqqq' : '')
@@ -114,7 +116,7 @@ export default function Register() {
 						if (res) {
 							localStorage.setItem("id", res.id)
 
-							window.analytics.identify(res.id, { register: true, mobile: true });
+							if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.identify(res.id, { register: true, mobile: true });
 							window.location = "/intro"
 						}
 					})

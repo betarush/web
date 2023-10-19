@@ -114,7 +114,7 @@ export default function Register() {
 						if (res) {
 							localStorage.setItem("id", res.id)
 
-							window.analytics.identify(res.id, { register: true, web: true });
+							if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.identify(res.id, { register: true, web: true });
 							window.location = "/intro"
 						}
 					})

@@ -2,7 +2,7 @@ import './landing.scss';
 import { useEffect, useState } from 'react';
 import { resizePhoto } from 'geottuse-tools';
 
-window.analytics.track('landing', { web: true });
+if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('landing', { web: true });
 
 export default function Landing() {
 	const [viewType, setViewtype] = useState('creators')

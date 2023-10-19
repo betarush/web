@@ -35,7 +35,7 @@ export default function Rejections() {
 						setOffset(res.offset)
 						setLoaded(true)
 
-						window.analytics.track('rejections', { id, web: true });
+						if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('rejections', { id, web: true });
 					}
 				}
 			})

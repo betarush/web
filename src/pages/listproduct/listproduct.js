@@ -77,7 +77,7 @@ export default function Listproduct() {
 					setPaymentdone(res.paymentDone)
 					setUserid(id)
 
-					window.analytics.track('listproduct', { id, web: true });
+					if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('listproduct', { id, web: true });
 				}
 			})
 			.catch((err) => {

@@ -47,7 +47,7 @@ export default function Feedbacks(props) {
 					setImage(res.logo)
 					setLoaded(true)
 
-					window.analytics.track('feedback', { id: userId, web: true });
+					if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('feedback', { id: userId, web: true });
 				}
 			})
 			.catch((err) => {

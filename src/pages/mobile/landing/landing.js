@@ -2,7 +2,7 @@ import './landing.scss';
 import { useEffect, useState } from 'react';
 import { resizePhoto } from 'geottuse-tools';
 
-window.analytics.track('landing', { mobile: true });
+if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('landing', { mobile: true });
 
 export default function MobileLanding() {
 	const [viewType, setViewtype] = useState('creators')

@@ -64,7 +64,7 @@ export default function Payment() {
 					setUserid(id)
 					setLoaded(true)
 
-					window.analytics.track('payment', { id, web: true });
+					if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('payment', { id, web: true });
 				}
 			})
 			.catch((err) => {
@@ -105,7 +105,7 @@ export default function Payment() {
 				})
 				.then((res) => {
 					if (res) {
-						window.analytics.track('submitpayment', { id: userId, web: true });
+						if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('submitpayment', { id: userId, web: true });
 
 						if (localStorage.getItem("productInfo")) { // new product launching
 							const data = JSON.parse(localStorage.getItem("productInfo"))
@@ -123,7 +123,7 @@ export default function Payment() {
 								})
 								.then((res) => {
 									if (res) {
-										window.analytics.track('listproduct', { id: userId, web: true });
+										if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('listproduct', { id: userId, web: true });
 
 										localStorage.removeItem("productInfo")
 
@@ -144,7 +144,7 @@ export default function Payment() {
 								})
 								.then((res) => {
 									if (res) {
-										window.analytics.track('relistproduct', { id: userId, web: true });
+										if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('relistproduct', { id: userId, web: true });
 
 										localStorage.removeItem("relaunchProduct")
 

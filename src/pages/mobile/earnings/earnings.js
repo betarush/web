@@ -96,7 +96,7 @@ export default function Earnings() {
 
 					setLoaded(true)
 
-					window.analytics.track('earnings', { id, mobile: true });
+					if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('earnings', { id, mobile: true });
 				}
 			})
 			.catch((err) => {
