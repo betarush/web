@@ -13,7 +13,7 @@ export default function Landing() {
 				<div className="row">
 					<div className="column">
 						<div id="logo" onClick={() => window.location = "/"}>
-		      		<img src="/logo.png"/>
+		      		<img src="/logo.png" alt="product logo"/>
 		      	</div>
 					</div>
 
@@ -41,7 +41,7 @@ export default function Landing() {
 
 						<div id="learnmore" onClick={() => window.location = "/register"}>GET STARTED</div>
 					</div>
-					<img id="masthead-image" src="/background.jpeg" style={{ ...resizePhoto({ width: 1000, height: 597 }, window.innerWidth, 200, "width") }}/>
+					<img id="masthead-image" alt="masthead image" src="/background.jpeg" style={{ ...resizePhoto({ width: 1000, height: 597 }, window.innerWidth, 200, "width") }}/>
 				</div>
 
 				<div id="benefits">
@@ -50,7 +50,7 @@ export default function Landing() {
 					<div id="benefit-row">
 						<div className="benefit-item">
 							<div className="header">Are you finished with your MVP and want some USEFUL FEEDBACK ?</div>
-							<div className="image"><img src="/mvp.png"/></div>
+							<div className="image"><img alt="get useful feedback from users" src="/mvp.png"/></div>
 						</div>
 						<div className="benefit-item">
 							<div className="header">
@@ -58,14 +58,14 @@ export default function Landing() {
 								until you have a solid proof of
 								solution that works
 							</div>
-							<div className="image"><img src="/burningmoney.png"/></div>
+							<div className="image"><img alt="don't waste your money on ads yet" src="/burningmoney.png"/></div>
 						</div>
 						<div className="benefit-item">
 							<div className="header">
 								A community of people here are looking
-								to try new products, give their best feedback to them and get rewarded with money
+								to try new products, give their best <strong>APPROVABLE</strong> feedback to them and get rewarded with money
 							</div>
-							<div className="image"><img src="/userbase.png"/></div>
+							<div className="image"><img alt="a bunch of people waiting to test products and get rewarded" src="/userbase.png"/></div>
 						</div>
 					</div>
 				</div>
@@ -140,13 +140,13 @@ export default function Landing() {
 			<div>
 				<div id="socialmedias">
 					<div className="socialmedia" onClick={() => window.open("https://www.facebook.com/profile.php?id=61551403930434")}>
-						<img src="/facebook-icon.png"/>
+						<img alt="link to facebook page" src="/facebook-icon.png"/>
 					</div>
 					<div className="socialmedia" onClick={() => window.open("https://twitter.com/getfeedback2023")}>
-						<img src="/twitter-icon.png"/>
+						<img alt="link to twitter page" src="/twitter-icon.png"/>
 					</div>
 					<div className="socialmedia" onClick={() => window.open("https://www.linkedin.com/company/97192981")}>
-						<img src="/linkedin-icon.png"/>
+						<img alt="link to linkedin page" src="/linkedin-icon.png"/>
 					</div>
 				</div>
 
