@@ -164,9 +164,7 @@ export default function Intro() {
 		if (sessionId) {
 			setLoading(true)
 
-			const id = localStorage.getItem("id")
-
-			const data = { userId: id, sessionId }
+			const data = { userId: localStorage.getItem("id"), sessionId }
 
 			sessionId = ""
 
@@ -224,10 +222,10 @@ export default function Intro() {
 			{accountType ? 
 				<div id="listproduct">
 					<Typography component="h1" variant="h5" style={{ fontWeight: 'bold', margin: '50px 20% 5% 20%', textAlign: 'center' }}>
-        		We have a big user base of people who are desperately looking to tryout products
-        		and give feedbacks to earn some money. 
+        		A community of people here are desperately looking to tryout products
+        		and give qa advices/feedbacks to earn some money. 
         		<br/><br/><br/>
-        		Introduce your product and get awesome feedbacks from actual users
+        		Introduce your product and get awesome qa advices/feedbacks from users
         	</Typography>
 
 					<ThemeProvider theme={theme}>

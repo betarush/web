@@ -19,18 +19,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
 const pages = ['Products', 'Rejections', 'Withdraw'];
-const fullWidth = window.innerWidth
-
-const theme = createTheme({
-  palette: {
-    primary: {
-    	main: 'rgba(127, 127, 127, 0.9)',
-		  light: '#fff',
-		  dark: '#fff',
-		  contrastText: '#fff',
-    }
-  },
-});
+const fullWidth = window.innerWidth * 0.8
 
 export default function Header() {
 	const [username, setUsername] = useState('')
@@ -78,41 +67,30 @@ export default function Header() {
 	}, [])
 
 	return (
-		<ThemeProvider theme={theme}>
-			<div id="header">
-				<AppBar color="primary" position="static" enableColorOnDark>
-		      <Container maxHeight={80} maxWidth={fullWidth}>
-		        <Toolbar >
-		        	<div id="logo" onClick={() => window.location = "/"}>
-		        		<img src="/logo.png"/>
-		        	</div>
+		<div id="header">
+			<div id="header-row">
+				<div id="logo" onClick={() => window.location = "/"}>
+	    		<img src="/logo.png"/>
+	    	</div>
 
-		          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
-		          	{firstTime == false && (
-		          		<>
-				            <Button variant="contained" onClick={() => window.location = "/main"} sx={{ my: 2, color: 'white' }}>Products</Button>
-				            <Button variant="contained" onClick={() => window.location = "/rejections"} sx={{ my: 2, color: 'white' }}>Rejections</Button>
-				            <Button variant="contained" onClick={() => window.location = "/earnings"} sx={{ my: 2, color: 'white' }}>Withdraw reward: ${earnings.toFixed(2)}</Button>
-				            <Button variant="contained" onClick={() => window.location = "/listproduct"} sx={{ my: 2, color: 'white' }}>Submit your product</Button>
-				            {isCreator == true && <Button variant="contained" onClick={() => window.location = "/seefeedbacks"} sx={{ my: 2, color: 'white' }}>See Feedbacks</Button>}
-			            </>
-		          	)}
-			          	
-		            <Button variant="contained" onClick={() => logout()} sx={{ my: 2, color: 'white', display: 'block' }}>Log-Out</Button>
-		          </Box>
+	    	<div className="column">
+		      <div id="navs">
+		      	{firstTime == false && (
+		      		<>
+		            <div className="nav" onClick={() => window.location = "/main"} sx={{ my: 2, color: 'black' }}>Products</div>
+		            <div className="nav" onClick={() => window.location = "/rejections"} sx={{ my: 2, color: 'black' }}>Rejections</div>
+		            <div className="nav" onClick={() => window.location = "/earnings"} sx={{ my: 2, color: 'black' }}>Withdraw reward<br/>${earnings.toFixed(2)}</div>
+		            <div className="nav" onClick={() => window.location = "/listproduct"} sx={{ my: 2, color: 'black' }}>Submit your product</div>
+		            {isCreator == true && <div className="nav" onClick={() => window.location = "/seefeedbacks"} sx={{ my: 2, color: 'black' }}>See Feedbacks</div>}
+		          </>
+		      	)}
+		        	
+		        <div className="nav" onClick={() => logout()} sx={{ my: 2, color: 'black', display: 'block' }}>Log-Out</div>
+		      </div>
+		    </div>
 
-		          <Typography
-		            variant="h6"
-		            noWrap
-		            component="a"
-		            sx={{ mr: 2, display: { xs: 'flex', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, color: 'inherit', textDecoration: 'none' }}
-		          >
-		            You are {username}
-		          </Typography>
-		        </Toolbar>
-		      </Container>
-		    </AppBar>
-		  </div>
-		</ThemeProvider>
+	      <div className="column"><div id="user">You are {username}</div></div>
+	    </div>
+	  </div>
 	)
 }

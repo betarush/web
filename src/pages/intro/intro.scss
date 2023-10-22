@@ -37,15 +37,17 @@
 				display: flex;
 				flex-direction: row;
 				justify-content: space-around;
-				width: 100%;
+				margin: 0 auto;
+				width: 250px;
 
 				.account-type-action {
 					background-color: black;
-					border-radius: 10px;
+					border-radius: 20px;
 					color: white;
+					font-weight: bold;
 					padding: 10px;
 					text-align: center;
-					width: 40%;
+					width: 100px;
 
 					&:hover {
 						cursor: pointer;

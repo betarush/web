@@ -25,7 +25,7 @@ export default function Feedbacks(props) {
 
 	const [name, setName] = useState('')
 	const [image, setImage] = useState({ name: '', width: 0, height: 0 })
-	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {} })
+	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {}, errorMsg: "" })
 	const [loaded, setLoaded] = useState(false)
 
 	const getTheProductFeedbacks = () => {
@@ -63,28 +63,33 @@ export default function Feedbacks(props) {
 			setRejectreasonbox({ show: true, reason: '', info: { testerId, index } })
 		} else {
 			const { info, reason } = rejectReasonbox
-			const data = { productId: id, testerId: info.testerId, reason }
-			const newFeedbacks = [...feedbacks]
 
-			rejectFeedback(data)
-				.then((res) => {
-					if (res.status == 200) {
-						return res.json()
-					}
+			if (reason) {
+				const data = { productId: id, testerId: info.testerId, reason }
+				const newFeedbacks = [...feedbacks]
 
-					throw res
-				})
-				.then((res) => {
-					if (res) {
-						newFeedbacks.splice(info.index, 1)
-
-						if (newFeedbacks.length > 0) {
-							setFeedbacks(newFeedbacks)
-						} else {
-							window.location = '/main'
+				rejectFeedback(data)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
 						}
-					}
-				})
+
+						throw res
+					})
+					.then((res) => {
+						if (res) {
+							newFeedbacks.splice(info.index, 1)
+
+							if (newFeedbacks.length > 0) {
+								setFeedbacks(newFeedbacks)
+							} else {
+								window.location = '/main'
+							}
+						}
+					})
+			} else {
+				setRejectreasonbox({ ...rejectReasonbox, errorMsg: "Please include a reason" })
+			}
 		}
 	}
 	const rewardTheCustomer = (testerId, index) => {
@@ -147,12 +152,13 @@ export default function Feedbacks(props) {
 						<div id="product-feedbacks">
 							{feedbacks.map((feedback, index) => (
 								<div className="feedback" key={feedback.key}>
-									<div className="feedback-header">{feedback.header}</div>
+									<div className="feedback-header"><strong>Feedback:</strong> {feedback.feedback}</div>
+									<div className="feedback-header"><strong>Advice:</strong> {feedback.advice}</div>
 
 									<Stack>
 										<div className="feedback-actions">
-											<Button style={{ margin: '0 5px' }} variant="contained" onClick={() => rejectTheFeedback(feedback.testerId, index)}>Reject feedback</Button>
-											<Button style={{ margin: '0 5px' }} variant="contained" onClick={() => rewardTheCustomer(feedback.testerId, index)}>Reward customer</Button>
+											<div className="feedback-action" style={{ margin: '0 5px' }} onClick={() => rejectTheFeedback(feedback.testerId, index)}>Reject feedback</div>
+											<div className="feedback-action" style={{ margin: '0 5px' }} onClick={() => rewardTheCustomer(feedback.testerId, index)}>Reward customer</div>
 										</div>
 									</Stack>
 								</div>
@@ -169,9 +175,11 @@ export default function Feedbacks(props) {
 			{rejectReasonbox.show && (
 				<div id="hidden-box">
 					<div id="reject-box">
-						<div id="reject-header">Why are you rejecting this feedback ? (Optional)</div>
+						<div id="reject-header">Why are you rejecting ?</div>
 
-						<textarea id="reject-input" maxlength="200" onChange={e => setRejectreasonbox({ ...rejectReasonbox, reason: e.target.value })} value={rejectReasonbox.reason}/>
+						<textarea id="reject-input" maxlength="200" onChange={e => setRejectreasonbox({ ...rejectReasonbox, reason: e.target.value, errorMsg: "" })} value={rejectReasonbox.reason}/>
+
+						<div className="errormsg">{rejectReasonbox.errorMsg}</div>
 
 						<div id="actions">
 							<div className="action" onClick={() => setRejectreasonbox({ show: false, reason: '' })}>Cancel</div>

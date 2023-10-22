@@ -158,20 +158,21 @@ export default function Seefeedbacks() {
 								</div>
 
 								<div id="feedbacks-header">
-									Your feedbacks for <strong>{product.name}</strong>
+									QA advices/feedbacks for <strong>{product.name}</strong>
 									<br/>
-									<div style={{ fontSize: 20 }}>(Please save your feedback somewhere)</div>
+									<div style={{ fontSize: 13 }}>(Please save your feedback somewhere)</div>
 								</div>
 
 								<div id="product-feedbacks">
 									{product.feedbacks.map((feedback, feedbackIndex) => (
 										<div className="feedback" key={feedback.key}>
-											<div className="feedback-header">{feedback.header}</div>
+											<div className="feedback-header"><strong>Feedback:</strong> {feedback.feedback}</div>
+											<div className="feedback-header"><strong>Advice:</strong> {feedback.advice}</div>
 
 											<Stack>
 												<div className="feedback-actions">
-													<Button style={{ margin: '0 5px' }} variant="contained" disabled={rewarding} onClick={() => rejectTheFeedback(product.id, feedback.testerId, productIndex, feedbackIndex)}>Reject feedback</Button>
-													<Button style={{ margin: '0 5px' }} variant="contained" disabled={rewarding} onClick={() => rewardTheCustomer(product.id, feedback.testerId, productIndex, feedbackIndex)}>Reward customer</Button>
+													<Button style={{ margin: '0 5px' }} variant="contained" disabled={rewarding} onClick={() => rejectTheFeedback(product.id, feedback.testerId, productIndex, feedbackIndex)}>Reject</Button>
+													<Button style={{ margin: '0 5px' }} variant="contained" disabled={rewarding} onClick={() => rewardTheCustomer(product.id, feedback.testerId, productIndex, feedbackIndex)}>I like it. Approve</Button>
 												</div>
 											</Stack>
 										</div>

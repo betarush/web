@@ -2,6 +2,8 @@ import './landing.scss';
 import { useEffect, useState } from 'react';
 import { resizePhoto } from 'geottuse-tools';
 
+const amount = 20
+
 if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('landing', { web: true });
 
 export default function Landing() {
@@ -17,7 +19,7 @@ export default function Landing() {
 		      	</div>
 					</div>
 
-					<div className="column"><div id="title">GET PRODUCT FEEDBACK</div></div>
+					<div className="column"><div id="title">WAVER</div></div>
 				</div>
 
 				<div className="column">
@@ -36,7 +38,7 @@ export default function Landing() {
 						</h1>
 						<div id="info-header">
 							Reward users small amount of money to tryout your product
-							and give you a <strong>good</strong> feedback
+							and give you any good <strong>QA advices and feedback</strong> 
 						</div>
 
 						<div id="learnmore" onClick={() => window.location = "/register"}>GET STARTED</div>
@@ -49,21 +51,21 @@ export default function Landing() {
 
 					<div id="benefit-row">
 						<div className="benefit-item">
-							<div className="header">Are you finished with your MVP and want some USEFUL FEEDBACK ?</div>
+							<div className="header">Are you finished with your MVP and want some USEFUL <strong style={{ color: 'black' }}>QUALITY ASSURANCE ADVICES/FEEDBACK</strong> ?</div>
 							<div className="image"><img alt="get useful feedback from users" src="/mvp.png"/></div>
 						</div>
 						<div className="benefit-item">
 							<div className="header">
-								Don't risk your money running ads yet
-								until you have a solid proof of
-								solution that works
+								Don't risk your money on ads yet
+								until your product is <strong style={{ color: 'black' }}>bug free</strong> and have a <strong style={{ color: 'black' }}>solid proof of
+								solution</strong> that works
 							</div>
 							<div className="image"><img alt="don't waste your money on ads yet" src="/burningmoney.png"/></div>
 						</div>
 						<div className="benefit-item">
 							<div className="header">
 								A community of people here are looking
-								to try new products, give their best <strong>APPROVABLE</strong> feedback to them and get rewarded with money
+								to try new products, give their best <strong style={{ color: 'black' }}>approvable QUALITY ASSURANCE ADVICES/FEEDBACK</strong> to get rewarded with money
 							</div>
 							<div className="image"><img alt="a bunch of people waiting to test products and get rewarded" src="/userbase.png"/></div>
 						</div>
@@ -75,34 +77,33 @@ export default function Landing() {
 
 					<div id="infos-options">
 						<div className={"option" + (viewType == "creators" ? "-selected" : "")} onClick={() => setViewtype("creators")}>for Creators</div>
-						<div className={"option" + (viewType == "testers" ? "-selected" : "")} onClick={() => setViewtype("testers")}>for Testers</div>
+						<div className={"option" + (viewType == "testers" ? "-selected" : "")} onClick={() => setViewtype("testers")}>for User trying</div>
 					</div>
 
 					{viewType == "creators" ? 
 						<div className="info">
-							<div className="info-header">(for Project creators)</div>
 							<div className="info-info">
 								<div className="index">1</div>
 								<div className="header">
 									Submit your product with a $20 deposit
 									<br/>(Reward each user $4)
-									<br/>(Maximum of 5 users can test)
+									<br/>(Maximum of 5 users can try)
 								</div>
 							</div>
 
 							<div className="info-info">
 								<div className="index">2</div>
 								<div className="header">
-									You will get an email when a tester writes a feedback about your product
+									You will get an email when a user writes an
+									<br/>advice/feedback about your product
 								</div>
 							</div>
 
 							<div className="info-info">
 								<div className="index">3</div>
 								<div className="header">
-									You can either reject the feedback if you don't like it or
-									<br/>
-									approve the feedback if you like and the tester will be rewarded $4
+									You can either reject the advice/feedback if you don't like it or
+									<br/>approve the feedback if you like and the tester will be rewarded $4
 								</div>
 							</div>
 
@@ -110,26 +111,26 @@ export default function Landing() {
 								<div className="index">4</div>
 								<div className="header">
 									You can have up to 5 users try out your product and give
-									you good feedback for every $20 you spent
+									you good advice/feedback for every $20 you spent
 								</div>
 							</div>
 						</div>
 						:
 						<div className="info">
-							<div className="info-header">(for Testers)</div>
 							<div className="info-info">
 								<div className="index">1</div>
 								<div className="header">
 									Tryout a product you like and<br/>
-									try to write a GOOD feedback that the creator will like
+									try to write a GOOD advice/feedback that the creator will like
 								</div>
 							</div>
 
 							<div className="info-info">
 								<div className="index">2</div>
 								<div className="header">
-									The product creator can see the GOOD<br/>feedback, approve it, reward you
-									and then<br/>you can connect your bank account to withdraw the money
+									The creator can see the GOOD<br/>advice/feedback, approve it
+									and then
+									<br/>you can withdraw your money
 								</div>
 							</div>
 						</div>
@@ -142,7 +143,7 @@ export default function Landing() {
 					<div className="socialmedia" onClick={() => window.open("https://www.facebook.com/profile.php?id=61551403930434")}>
 						<img alt="link to facebook page" src="/facebook-icon.png"/>
 					</div>
-					<div className="socialmedia" onClick={() => window.open("https://twitter.com/getfeedback2023")}>
+					<div className="socialmedia" onClick={() => window.open("https://twitter.com/waver2023")}>
 						<img alt="link to twitter page" src="/twitter-icon.png"/>
 					</div>
 					<div className="socialmedia" onClick={() => window.open("https://www.linkedin.com/company/97192981")}>

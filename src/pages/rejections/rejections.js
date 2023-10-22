@@ -75,8 +75,19 @@ export default function Rejections() {
 								</div>
 
 								<div className="rejections-header">
-									Your feedback: <strong>"{rejection.feedback}",</strong> was rejected 
-									{rejection.header && " for this reason: " + rejection.header}
+									{rejection.advice && (
+										<div>
+											Your advice: <strong>{rejection.advice}</strong> was rejected
+										</div>
+									)}
+
+									{rejection.feedback && (
+										<div>
+											Your feedback: <strong>{rejection.feedback}</strong> was rejected
+										</div>
+									)}
+
+									The creator said: <strong>{rejection.reason}</strong>
 								</div>
 							</div>
 						))}
