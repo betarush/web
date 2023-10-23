@@ -79,16 +79,16 @@ export default function Header() {
 	        		<div className="row">
 		            <div className="nav" onClick={() => window.location = "/main"} sx={{ color: 'black' }}>
 		            	<div className="column"><AiOutlineCodeSandbox style={{ fontSize: 20 }}/></div>
-		            	<div className="column">Products</div>
+		            	<div className="column" style={{ marginLeft: 10 }}>Products</div>
 		            </div>
 		            <div className="nav" onClick={() => window.location = "/rejections"} sx={{ color: 'black' }}>
 		            	<div className="column"><FaRegFaceFrownOpen style={{ fontSize: 20 }}/></div>
-		            	<div className="column">Rejections</div>
+		            	<div className="column" style={{ marginLeft: 10 }}>Rejections</div>
 		            </div>
 		            {isCreator == true && (
 		            	<div className="nav" onClick={() => window.location = "/seefeedbacks"} sx={{ my: 2, color: 'white' }}>
 		            		<div className="column"><VscFeedback style={{ fontSize: 20 }}/></div>
-		            		<div className="column">See Feedbacks</div>
+		            		<div className="column" style={{ marginLeft: 10 }}>See Feedbacks</div>
 		            	</div>
 		            )}
 		          </div>
@@ -97,11 +97,11 @@ export default function Header() {
 		        	<div className="row">
 		            <div className="nav" onClick={() => window.location = "/earnings"} sx={{ color: 'black' }}>
 		            	<div className="column"><AiFillDollarCircle style={{ fontSize: 20 }}/></div>
-		            	<div className="column">Withdraw reward: ${earnings.toFixed(2)}</div>
+		            	<div className="column" style={{ marginLeft: 10 }}>Withdraw reward: ${earnings.toFixed(2)}</div>
 		            </div>
 		          	<div className="nav" onClick={() => window.location = "/listproduct"} sx={{ color: 'black' }}>
 		          		<div className="column"><HiRocketLaunch style={{ fontSize: 20 }}/></div>
-		          		<div className="column">Submit your product</div>
+		          		<div className="column" style={{ marginLeft: 10 }}>Submit your product</div>
 		          	</div>
 		          </div>
 		        </div>
