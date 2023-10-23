@@ -1,6 +1,9 @@
 import './header.scss'
 import { useEffect, useState } from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { AiOutlineCodeSandbox, AiFillDollarCircle } from "react-icons/ai";
+import { FaRegFaceFrownOpen } from "react-icons/fa6";
+import { VscFeedback } from "react-icons/vsc";
+import { HiRocketLaunch } from "react-icons/hi2";
 import { getUserInfo } from '../../../apis/user'
 
 // material ui components
@@ -17,20 +20,6 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-
-const pages = ['Products', 'Rejections', 'Withdraw'];
-const fullWidth = window.innerWidth
-
-const theme = createTheme({
-  palette: {
-    primary: {
-    	main: 'rgba(127, 127, 127, 0.9)',
-		  light: '#fff',
-		  dark: '#fff',
-		  contrastText: '#fff',
-    }
-  },
-});
 
 export default function Header() {
 	const [username, setUsername] = useState('')
@@ -78,38 +67,48 @@ export default function Header() {
 	}, [])
 
 	return (
-		<ThemeProvider theme={theme}>
-			<div id="mobile-header">        
-	      <AppBar color="primary" position="static" enableColorOnDark>
-	      	<Typography
-            variant="h6"
-            noWrap
-            component="a"
-            sx={{ mr: 2, display: { xs: 'flex', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, flexDirection: 'row', color: 'inherit', justifyContent: 'space-around', textDecoration: 'none' }}
-          >
-            You are {username}
-          </Typography>
-          <div id="logo" onClick={() => window.location = "/"}>
-        		<img src="/logo.png"/>
-        	</div>
-		      <Container maxHeight={80} maxWidth={fullWidth}>
-		        <Toolbar>
-		          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
-		          	{firstTime == false && (
-			          	<div>
-				            <Button variant="contained" onClick={() => window.location = "/main"} sx={{ color: 'white' }}>Products</Button>
-				            <Button variant="contained" onClick={() => window.location = "/rejections"} sx={{ color: 'white' }}>Rejections</Button>
-				            {isCreator == true && <Button variant="contained" onClick={() => window.location = "/seefeedbacks"} sx={{ my: 2, color: 'white' }}>See Feedbacks</Button>}
-				            <Button variant="contained" onClick={() => window.location = "/earnings"} sx={{ color: 'white' }}>Withdraw reward: ${earnings.toFixed(2)}</Button>
-			            	<Button variant="contained" onClick={() => window.location = "/listproduct"} sx={{ color: 'white' }}>Submit your product</Button>
-			            </div>
-		          	)}
-		          </Box>
-		        </Toolbar>
-		      </Container>
-		      <Button onClick={() => logout()} sx={{ my: 2, color: 'white', display: 'block' }}>Log-Out</Button>
-		    </AppBar>
-			</div>
-		</ThemeProvider>
+		<div id="mobile-header">        
+      <div id="user">You are {username}</div>
+      <div id="logo" onClick={() => window.location = "/"}>
+    		<img src="/logo.png"/>
+    	</div>
+      <div id="navs">
+    		{firstTime == false && (
+        	<>
+	        	<div className="row">
+	        		<div className="row">
+		            <div className="nav" onClick={() => window.location = "/main"} sx={{ color: 'black' }}>
+		            	<div className="column"><AiOutlineCodeSandbox style={{ fontSize: 20 }}/></div>
+		            	<div className="column">Products</div>
+		            </div>
+		            <div className="nav" onClick={() => window.location = "/rejections"} sx={{ color: 'black' }}>
+		            	<div className="column"><FaRegFaceFrownOpen style={{ fontSize: 20 }}/></div>
+		            	<div className="column">Rejections</div>
+		            </div>
+		            {isCreator == true && (
+		            	<div className="nav" onClick={() => window.location = "/seefeedbacks"} sx={{ my: 2, color: 'white' }}>
+		            		<div className="column"><VscFeedback style={{ fontSize: 20 }}/></div>
+		            		<div className="column">See Feedbacks</div>
+		            	</div>
+		            )}
+		          </div>
+	        	</div>
+		        <div className="row">
+		        	<div className="row">
+		            <div className="nav" onClick={() => window.location = "/earnings"} sx={{ color: 'black' }}>
+		            	<div className="column"><AiFillDollarCircle style={{ fontSize: 20 }}/></div>
+		            	<div className="column">Withdraw reward: ${earnings.toFixed(2)}</div>
+		            </div>
+		          	<div className="nav" onClick={() => window.location = "/listproduct"} sx={{ color: 'black' }}>
+		          		<div className="column"><HiRocketLaunch style={{ fontSize: 20 }}/></div>
+		          		<div className="column">Submit your product</div>
+		          	</div>
+		          </div>
+		        </div>
+          </>
+      	)}
+    	</div>
+      <div id="logout" onClick={() => logout()} sx={{ my: 2, color: 'black', display: 'block' }}>Log-Out</div>
+		</div>
 	)
 }

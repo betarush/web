@@ -39,7 +39,6 @@
 
 					.feedback-header {
 						font-size: 18px;
-						font-weight: bold;
 					}
 
 					.feedback-actions {
@@ -47,14 +46,16 @@
 						flex-direction: row;
 
 						.feedback-action {
-							border-radius: 10px;
+							background-color: black;
+							border-radius: 20px;
 							border-style: solid;
 							border-width: 1px;
+							color: white;
 							font-size: 15px;
 							margin: 0 10px;
-							padding: 5px 0;
+							padding: 10px;
 							text-align: center;
-							width: 150px;
+							width: 200px;
 
 							&:hover {
 								background-color: rgba(0, 0, 0, 0.5);

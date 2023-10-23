@@ -31,7 +31,12 @@
 		justify-content: space-around;
 
 		.nav {
+			background-color: white;
+			border-radius: 20px;
+			display: flex;
+			flex-direction: row;
 			font-size: 15px;
+			justify-content: space-around;
 			margin: 0 10px;
 			text-align: center;
 

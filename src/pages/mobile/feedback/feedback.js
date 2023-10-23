@@ -87,7 +87,7 @@ export default function Feedbacks(props) {
 						}
 					})
 			} else {
-				setRejectreasonbox({ ...rejectReasonbox, errorMsg: true })
+				setRejectreasonbox({ ...rejectReasonbox, errorMsg: "Please include a reason" })
 			}
 		}
 	}
@@ -155,8 +155,8 @@ export default function Feedbacks(props) {
 
 									<Stack>
 										<div className="feedback-actions">
-											<Button style={{ margin: '0 5px' }} variant="contained" onClick={() => rejectTheFeedback(feedback.testerId, index)}>Reject feedback</Button>
-											<Button style={{ margin: '0 5px' }} variant="contained" onClick={() => rewardTheCustomer(feedback.testerId, index)}>Reward customer</Button>
+											<div className="feedback-action" onClick={() => rejectTheFeedback(feedback.testerId, index)}>Reject</div>
+											<div className="feedback-action" onClick={() => rewardTheCustomer(feedback.testerId, index)}>I like it. Approve</div>
 										</div>
 									</Stack>
 								</div>

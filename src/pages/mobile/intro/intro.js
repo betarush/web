@@ -224,10 +224,10 @@ export default function Intro() {
 			{accountType ? 
 				<div id="listproduct">
 					<Typography component="h1" variant="h5" style={{ margin: '50px 5% 5% 5%', textAlign: 'center' }}>
-        		We have a big user base of people who are looking to tryout products
-        		and give feedbacks. 
+        		A community of people here are desperately looking to tryout products
+        		and give qa advices/feedbacks to earn some money. 
         		<br/><br/><br/>
-        		Introduce your product and get awesome feedbacks from actual users
+        		Introduce your product and get awesome qa advices/feedbacks from users
         	</Typography>
 
 					<ThemeProvider theme={theme}>

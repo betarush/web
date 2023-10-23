@@ -157,8 +157,8 @@ export default function Feedbacks(props) {
 
 									<Stack>
 										<div className="feedback-actions">
-											<div className="feedback-action" style={{ margin: '0 5px' }} onClick={() => rejectTheFeedback(feedback.testerId, index)}>Reject feedback</div>
-											<div className="feedback-action" style={{ margin: '0 5px' }} onClick={() => rewardTheCustomer(feedback.testerId, index)}>Reward customer</div>
+											<div className="feedback-action" style={{ margin: '0 5px' }} onClick={() => rejectTheFeedback(feedback.testerId, index)}>Reject</div>
+											<div className="feedback-action" style={{ margin: '0 5px' }} onClick={() => rewardTheCustomer(feedback.testerId, index)}>I like it. Approve</div>
 										</div>
 									</Stack>
 								</div>

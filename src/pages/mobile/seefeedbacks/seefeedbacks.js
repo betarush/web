@@ -23,7 +23,7 @@ export default function Seefeedbacks() {
 
 	const [name, setName] = useState('')
 	const [image, setImage] = useState({ name: '', width: 0, height: 0 })
-	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {} })
+	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {}, errorMsg: '' })
 	const [loaded, setLoaded] = useState(false)
 
 	const [rewarding, setRewarding] = useState(false)
@@ -68,31 +68,36 @@ export default function Seefeedbacks() {
 			setRejectreasonbox({ show: true, reason: '', info: { id, testerId, productIndex, feedbackIndex } })
 		} else {
 			const { info, reason } = rejectReasonbox
-			const data = { productId: info.id, testerId: info.testerId, reason }
-			const newProducts = [...products]
 
-			rejectFeedback(data)
-				.then((res) => {
-					if (res.status == 200) {
-						return res.json()
-					}
+			if (reason) {
+				const data = { productId: info.id, testerId: info.testerId, reason }
+				const newProducts = [...products]
 
-					throw res
-				})
-				.then((res) => {
-					if (res) {
-						if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('rejectfeedback', { id: userId, productId: info.id, testerId: info.testerId, mobile: true });
-
-						newProducts[info.productIndex].feedbacks.splice(info.feedbackIndex, 1)
-
-						if (newProducts[info.productIndex].feedbacks.length == 0) {
-							newProducts.splice(info.productIndex, 1)
+				rejectFeedback(data)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
 						}
 
-						setProducts(newProducts)
-						setRejectreasonbox({ show: false, reason: '' })
-					}
-				})
+						throw res
+					})
+					.then((res) => {
+						if (res) {
+							if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('rejectfeedback', { id: userId, productId: info.id, testerId: info.testerId, mobile: true });
+
+							newProducts[info.productIndex].feedbacks.splice(info.feedbackIndex, 1)
+
+							if (newProducts[info.productIndex].feedbacks.length == 0) {
+								newProducts.splice(info.productIndex, 1)
+							}
+
+							setProducts(newProducts)
+							setRejectreasonbox({ show: false, reason: '' })
+						}
+					})
+			} else {
+				setRejectreasonbox({ ...rejectReasonbox, errorMsg: "Please include a reason" })
+			}
 		}
 	}
 	const rewardTheCustomer = (id, testerId, productIndex, feedbackIndex) => {
@@ -158,20 +163,21 @@ export default function Seefeedbacks() {
 								</div>
 
 								<div id="feedbacks-header">
-									Your feedbacks for <strong>{product.name}</strong>
+									QA advices/feedbacks for <strong>{product.name}</strong>
 									<br/>
-									<div style={{ fontSize: 20 }}>(Please save your feedback somewhere)</div>
+									<div style={{ fontSize: 13 }}>(Please save your feedback somewhere)</div>
 								</div>
 
 								<div id="product-feedbacks">
 									{product.feedbacks.map((feedback, feedbackIndex) => (
 										<div className="feedback" key={feedback.key}>
-											<div className="feedback-header">{feedback.header}</div>
+											<div className="feedback-header"><strong>Feedback:</strong> {feedback.feedback}</div>
+											<div className="feedback-header"><strong>Advice:</strong> {feedback.advice}</div>
 
 											<Stack>
 												<div className="feedback-actions">
-													<Button style={{ margin: '0 5px' }} variant="contained" disabled={rewarding} onClick={() => rejectTheFeedback(product.id, feedback.testerId, productIndex, feedbackIndex)}>Reject feedback</Button>
-													<Button style={{ margin: '0 5px' }} variant="contained" disabled={rewarding} onClick={() => rewardTheCustomer(product.id, feedback.testerId, productIndex, feedbackIndex)}>Reward customer</Button>
+													<Button style={{ margin: '0 5px' }} variant="contained" disabled={rewarding} onClick={() => rejectTheFeedback(product.id, feedback.testerId, productIndex, feedbackIndex)}>Reject</Button>
+													<Button style={{ margin: '0 5px' }} variant="contained" disabled={rewarding} onClick={() => rewardTheCustomer(product.id, feedback.testerId, productIndex, feedbackIndex)}>I like it. Approve</Button>
 												</div>
 											</Stack>
 										</div>
@@ -191,9 +197,11 @@ export default function Seefeedbacks() {
 			{rejectReasonbox.show && (
 				<div id="hidden-box">
 					<div id="reject-box">
-						<div id="reject-header">Why are you rejecting this feedback ? (Optional)</div>
+						<div id="reject-header">Why are you rejecting this feedback ?</div>
 
 						<textarea id="reject-input" maxlength="200" onChange={e => setRejectreasonbox({ ...rejectReasonbox, reason: e.target.value })} value={rejectReasonbox.reason}/>
+
+						<div className="errormsg">{rejectReasonbox.errormsg}</div>
 
 						<div id="actions">
 							<div className="action" onClick={() => setRejectreasonbox({ show: false, reason: '' })}>Cancel</div>

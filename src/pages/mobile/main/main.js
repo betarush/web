@@ -35,7 +35,7 @@ export default function Main() {
 	const [viewType, setViewtype] = useState('')
 
 	const [intro, setIntro] = useState(false)
-	const [feedback, setFeedback] = useState({ show: false, input: '', id: null, index: -1, amountSpent: 0, loading: false })
+	const [userWrite, setUserwrite] = useState({ show: false, feedback: '', advice: '', id: null, index: -1, amountSpent: 0, loading: false })
 	const [relaunch, setRelaunch] = useState({ show: false, cardInfo: {}, productId: null, loading: false })
 
 	const [bankaccountDone, setBankaccountdone] = useState(false)
@@ -284,36 +284,41 @@ export default function Main() {
 		}
 	}
 	const submitTheFeedback = () => {
-		setFeedback({ ...feedback, loading: true })
+		setUserwrite({ ...userWrite, loading: true })
 
-		const { input, id, index } = feedback
-		const data = { userId, productId: id, feedback: input }
-		const newProducts = [...products]
+		const { advice, feedback, id, index } = userWrite
+		
+		if (advice || feedback) {
+			const data = { userId, productId: id, advice, feedback }
+			const newProducts = [...products]
 
-		submitFeedback(data)
-			.then((res) => {
-				if (res.status == 200) {
-					return res.json()
-				}
+			submitFeedback(data)
+				.then((res) => {
+					if (res.status == 200) {
+						return res.json()
+					}
 
-				throw res
-			})
-			.then((res) => {
-				if (res) {
-					setFeedback({ ...feedback, show: false, input: '', id: null, index: -1, loading: false })
+					throw res
+				})
+				.then((res) => {
+					if (res) {
+						setUserwrite({ ...userWrite, show: false, advice: '', feedback: '', id: null, index: -1, loading: false })
 
-					newProducts[index].gave_feedback = true
+						newProducts[index].gave_feedback = true
 
-					setProducts(newProducts)
-				}
-			})
-			.catch((err) => {
-				if (err.status == 400) {
-					err.json().then(() => {
+						setProducts(newProducts)
+					}
+				})
+				.catch((err) => {
+					if (err.status == 400) {
+						err.json().then(() => {
 
-					})
-				}
-			})
+						})
+					}
+				})
+		} else {
+			setUserwrite({ ...userWrite, errorMsg: 'You need to write an advice or feedback' })
+		}
 	}
 
 	useEffect(() => {
@@ -342,30 +347,32 @@ export default function Main() {
 		<div id="mobile-main">
 			<Header/>
 
-			<div id="mobile-main">
-				<div className="row">
-					<Box>
-			      <List
-			        role="menubar"
-			        orientation="horizontal"
-			        sx={{ '--List-radius': '8px', '--List-padding': '4px', '--List-gap': '8px' }}
-			      >
-			        <div className="menubar-touch" style={{ backgroundColor: viewType == 'untested' ? 'rgba(0, 0, 0, 0.5)' : '', borderRadius: 10, padding: 5 }} onClick={() => getTheUntestedProducts(true)}>
-		            <div style={{ margin: '0 auto', width: 20 }}><BuildIcon/></div>
-		            <div style={{ color: viewType == 'untested' ? 'white' : 'black', fontSize: 15 }}>Untested</div>
-		          </div>
-			        <div className="menubar-touch" style={{ backgroundColor: viewType == 'testing' ? 'rgba(0, 0, 0, 0.5)' : '', borderRadius: 10, padding: 5 }} onClick={() => getTheTestingProducts(true)}>
-		            <div style={{ margin: '0 auto', width: 20 }}><SpeedRoundedIcon/></div>
-		            <div style={{ color: viewType == 'testing' ? 'white' : 'black', fontSize: 15 }}>Testing</div>
-		          </div>
-			        {isCreator == true && (
-				        <div className="menubar-touch" style={{ backgroundColor: viewType == 'myproducts' ? 'rgba(0, 0, 0, 0.5)' : '', borderRadius: 10, padding: 5 }} onClick={() => getTheMyProducts(true)}>
-				        	<div style={{ margin: '0 auto', width: 20 }}><PersonIcon/></div>
-				        	<div style={{ color: viewType == 'myproducts' ? 'white' : 'black', fontSize: 15 }}>Your Products</div>
-				        </div>
-			        )}
-			      </List>
-			    </Box>
+			<div id="mobile-main-body">
+				<div className="page-navs">
+					<div className="page-nav" onClick={() => getTheUntestedProducts(true)}>
+						<div className="row">
+							<ListItemDecorator>
+	              <BuildIcon/>
+	            </ListItemDecorator>
+							<div className="column">Untested by<br/>you</div>
+						</div>
+					</div>
+					<div className="page-nav" onClick={() => getTheTestingProducts(true)}>
+						<div className="row">
+							<ListItemDecorator>
+	              <SpeedRoundedIcon/>
+	            </ListItemDecorator>
+							<div className="column">Testing by<br/>you</div>
+						</div>
+					</div>
+					<div className="page-nav" onClick={() => getTheMyProducts(true)}>
+						<div className="row">
+							<ListItemDecorator>
+	              <PersonIcon/>
+	            </ListItemDecorator>
+							<div className="column">Your<br/>products</div>
+						</div>
+					</div>
 				</div>
 
 				{loaded ? 
@@ -401,7 +408,7 @@ export default function Main() {
 													{!product.trying && <div className="header">{product.numLeftover} people left can try</div>}
 
 													{!product.trying ? 
-														<Button disabled={product.trying} variant="contained" onClick={() => tryTheProduct(index, product.id, product.link)}>Try first then earn $$</Button>
+														<div disabled={product.trying} className="product-action" onClick={() => tryTheProduct(index, product.id, product.link)}>Try first then earn $$</div>
 														:
 														<div className="header">
 															Come back to give feedback when you're done testing
@@ -417,8 +424,8 @@ export default function Main() {
 
 														{!product.gave_feedback && (
 															<>
-																<Button variant="contained" style={{ marginBottom: 10 }} onClick={() => setFeedback({ ...feedback, show: true, input: '', id: product.id, index, amountSpent: product.amountSpent, loading: false })}>Give feedback & Earn ${product.reward.toFixed(2)}</Button>
-																<Button variant="contained" onClick={() => window.open(product.link)}>Go To Product</Button>
+																<div className="product-action" style={{ marginBottom: 10 }} onClick={() => setUserwrite({ ...userWrite, show: true, input: '', id: product.id, index, amountSpent: product.amountSpent, loading: false })}>Give advice/feedback & Earn ${product.reward.toFixed(2)}</div>
+																<div className="product-action" onClick={() => window.open(product.link)}>Go To Product</div>
 															</>
 														)}
 													</>
@@ -441,8 +448,8 @@ export default function Main() {
 
 															{product.numFeedback > 0 && (
 																<div className="header">
-																	{product.numFeedback} people gave feedback<br/>
-																	<div className="reward" onClick={() => window.location = '/feedback/' + product.id}>Reward them</div>
+																	{product.numFeedback} people gave feedback<br/><br/>
+																	<div className="product-action" onClick={() => window.location = '/feedback/' + product.id}>Reward them</div>
 																</div>
 															)}
 
@@ -475,7 +482,7 @@ export default function Main() {
 				}
 			</div>
 
-			{(intro || feedback.show || relaunch.show) && (
+			{(intro || userWrite.show || relaunch.show) && (
 				<div id="hidden-box">
 					{intro && (
 						<div id="intro">
@@ -498,15 +505,18 @@ export default function Main() {
 							</div>
 						</div>
 					)}
-					{feedback.show && (
+					{userWrite.show && (
 						<div id="feedback-box">
-							<div id="feedback-header">Write a good feedback to earn ${(feedback.amountSpent / 5).toFixed(2)}</div>
+							<div id="feedback-header">What's your advice</div>
+							<textarea id="feedback-input" maxlength="500" disabled={userWrite.loading} placeholder="Write a good advice" onChange={e => setUserwrite({ ...userWrite, advice: e.target.value })} value={userWrite.advice}/>
+							<div id="feedback-header">What's your feedback</div>
+							<textarea id="feedback-input" maxlength="500" disabled={userWrite.loading} placeholder="Write a good feedback" onChange={e => setUserwrite({ ...userWrite, feedback: e.target.value })} value={userWrite.feedback}/>
 
-							<textarea id="feedback-input" maxlength="500" disabled={feedback.loading} placeholder="Write here" onChange={e => setFeedback({ ...feedback, input: e.target.value })} value={feedback.input}/>
+							<div className="errormsg">{userWrite.errorMsg}</div>
 
 							<div id="actions">
-								<div className="action" style={{ opacity: feedback.loading ? 0.5 : 1 }} onClick={() => !feedback.loading && setFeedback({ show: false, input: '' })}>Cancel</div>
-								<div className="action" style={{ opacity: feedback.loading ? 0.5 : 1 }} onClick={() => !feedback.loading && submitTheFeedback()}>Submit</div>
+								<div className="action" style={{ opacity: userWrite.loading ? 0.5 : 1 }} onClick={() => !userWrite.loading && setUserwrite({ show: false, advice: '', feedback: '' })}>Cancel</div>
+								<div className="action" style={{ opacity: userWrite.loading ? 0.5 : 1 }} onClick={() => !userWrite.loading && submitTheFeedback()}>Submit</div>
 							</div>
 						</div>
 					)}

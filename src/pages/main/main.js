@@ -453,8 +453,8 @@ export default function Main() {
 
 																{product.numFeedback > 0 && (
 																	<div className="header">
-																		{product.numFeedback} people gave feedback<br/>
-																		<div className="reward" onClick={() => window.location = '/feedback/' + product.id}>Reward them</div>
+																		{product.numFeedback} people gave feedback<br/><br/>
+																		<div className="product-action" onClick={() => window.location = '/feedback/' + product.id}>Reward them</div>
 																	</div>
 																)}
 
@@ -516,11 +516,8 @@ export default function Main() {
 					{userWrite.show && (
 						<div id="feedback-box">
 							<div id="feedback-header">What's your advice</div>
-
 							<textarea id="feedback-input" maxlength="500" disabled={userWrite.loading} placeholder="Write a good advice" onChange={e => setUserwrite({ ...userWrite, advice: e.target.value })} value={userWrite.advice}/>
-							
 							<div id="feedback-header">What's your feedback</div>
-
 							<textarea id="feedback-input" maxlength="500" disabled={userWrite.loading} placeholder="Write a good feedback" onChange={e => setUserwrite({ ...userWrite, feedback: e.target.value })} value={userWrite.feedback}/>
 
 							<div className="errormsg">{userWrite.errorMsg}</div>

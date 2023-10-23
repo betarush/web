@@ -11,15 +11,13 @@ export default function MobileLanding() {
 		<div id="mobile-landing">
 			<div id="landing-header">
 				<div className="row">
-					<div className="row">
-						<div className="column">
-							<div id="logo" onClick={() => window.location = "/"}>
-			      		<img src="/logo.png" alt="product logo"/>
-			      	</div>
-						</div>
-
-						<div className="column"><div id="title">GET PRODUCT FEEDBACK</div></div>
+					<div className="column">
+						<div id="logo" onClick={() => window.location = "/"}>
+		      		<img src="/logo.png" alt="product logo"/>
+		      	</div>
 					</div>
+
+					<div className="column"><div id="title">GET PRODUCT FEEDBACK</div></div>
 				</div>
 
 				<div className="row">
