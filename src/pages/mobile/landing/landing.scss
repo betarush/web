@@ -1,7 +1,9 @@
 #mobile-landing {
-	height: 100vh;
+	background-image: linear-gradient(white, lightblue, white);
+	height: 100%;
 
 	#landing-header {
+		padding: 10px 0;
 		width: 100%;
 
 		#logo {
@@ -17,8 +19,9 @@
 		}
 
 		#title {
-			font-weight: bold;
-			padding: 20px 10px;
+			font-family: Geologica;
+			font-size: 30px;
+			font-weight: 100;
 		}
 
 		#navs {
@@ -26,7 +29,12 @@
 			flex-direction: row;
 
 			.nav {
-				margin-right: 50px;
+				background-color: black;
+				border-radius: 20px;
+				color: white;
+				font-weight: bold;
+				margin: 10px;
+				padding: 10px;
 				text-align: center;
 				width: 80px;
 
@@ -45,16 +53,15 @@
 			justify-content: space-around;
 
 			#masthead-header {
-				background-color: rgba(255, 255, 255, 0.5);
 				border-radius: 5px;
 				color: black;
 				display: flex;
 				flex-direction: column;
+				font-family: Geologica;
 				justify-content: space-around;
-				margin: 0 5%;
 				position: absolute;
-				padding: 5px;
-				width: calc(90% - 10px);
+				text-align: center;
+				padding: 5%;
 
 				.header {
 					margin: 5% 0;
@@ -65,21 +72,23 @@
 				}
 
 				#top-header {
-					font-size: 15px;
+					font-size: 20px;
+					font-weight: 100;
 				}
 
 				#info-header {
 					font-size: 15px;
+					font-weight: bold;
 				}
 
 				#learnmore {
 					background-color: black;
-					border-radius: 10px;
+					border-radius: 25px;
 					color: white;
 					font-weight: bold;
+					margin: 10px auto;
 					padding: 10px;
 					text-align: center;
-					width: 150px;
 
 					&:hover {
 						cursor: pointer;
@@ -90,34 +99,36 @@
 
 			img {
 				height: 100%;
+				opacity: 0.2;
 				width: 100%;
 			}
 		}
 
 		#benefits {
+			font-family: Geologica;
 			margin: 0 auto;
 			padding: 5% 0;
 
 			#benefit-header {
-				font-size: 30px;
+				font-size: 40px;
 				font-weight: bold;
+				margin: 40px 0;
 				text-align: center;
 			}
 
 			.benefit-item {
-				margin-bottom: 30px;
 				padding: 0 5%;
 
-				.header {
-					color: rgba(0, 0, 0, 0.6);
-					font-size: 15px;
-					font-weight: 800;
-					text-align: center;
-				}
-
 				.image {
+					background-color: black;
+					border-radius: 45px;
+					border-style: solid;
+					border-width: 3px;
+					display: flex;
+					flex-direction: column;
 					height: 80px;
-					margin: 0 auto;
+					justify-content: space-around;
+					margin: 0 auto 20px auto;
 					width: 80px;
 
 					img {
@@ -125,13 +136,47 @@
 						width: 100%;
 					}
 				}
+
+				.header {
+					font-size: 25px;
+					font-weight: 800;
+					text-align: center;
+				}
+
+				.header-info {
+					color: black;
+					font-size: 18px;
+					font-weight: 500;
+					line-height: 25px;
+					text-align: center;
+
+					ul {
+						margin: 20px auto;
+						width: 70%;
+
+						li {
+							font-weight: bold;
+							list-style-type: numeric;
+							text-align: left;
+						}
+					}
+				}
+			}
+
+			.benefit-arrow {
+				height: 50px;
+				margin: 20px auto;
+				width: 50px;
 			}
 		}
 
 		#infos {
+			font-family: Geologica;
+			
 			#infos-header {
-				font-size: 30px;
+				font-size: 40px;
 				font-weight: bold;
+				margin: 40px 0;
 				text-align: center;
 			}
 
@@ -144,6 +189,7 @@
 
 				[class^="option"] {
 					background-color: transparent;
+					border-color: black;
 					border-radius: 30px;
 					border-style: solid;
 					font-weight: bold;
@@ -167,7 +213,6 @@
 
 			.info {
 				font-weight: bold;
-				margin-bottom: 100px;
 				width: 100%;
 
 				.info-header {
@@ -178,7 +223,6 @@
 				}
 
 				.info-info {
-					margin-bottom: 20px;
 					padding: 1%;
 					width: 98%;
 
@@ -201,16 +245,47 @@
 						color: black;
 						font-size: 20px;
 						width: calc(100% - 60px);
+
+						.header-title {
+							color: black;
+							font-size: 25px;
+							font-weight: bold;
+							margin: 20px 0;
+							text-align: center;
+						}
+
+						.header-info {
+							color: black;
+							font-size: 20px;
+							font-weight: 400;
+							line-height: 25px;
+							text-align: center;
+						}
 					}
+				}
+
+				.info-arrow {
+					height: 50px;
+					margin: 20px auto;
+					width: 50px;
 				}
 			}
 		}
 
-		#infos-header {
-			font-size: 20px;
+		#getstarted {
+			background-color: black;
+			border-radius: 30px;
+			color: white;
 			font-weight: bold;
-			padding: 20px 0;
+			margin: 50px auto;
+			padding: 20px;
 			text-align: center;
+			width: 150px;
+
+			&:hover {
+				cursor: pointer;
+				opacity: 0.5;
+			}
 		}
 	}
 
@@ -233,8 +308,35 @@
 	}
 
 	#footer {
-		font-size: 20px;
-		padding: 50px 0;
-		text-align: center;
+		background-color: #202020;
+		display: flex;
+		flex-direction: column;
+		height: 150px;
+		justify-content: space-around;
+
+		#socialmedias {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+			margin: 0 auto;
+			width: 300px;
+
+			.socialmedia {
+				height: 30px;
+				width: 30px;
+
+				img {
+					height: 100%;
+					width: 100%;
+				}
+			}
+		}
+
+		#footer-header {
+			color: white;
+			font-size: 20px;
+			font-weight: 400;
+			text-align: center;
+		}
 	}
 }

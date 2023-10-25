@@ -1,6 +1,10 @@
 import './landing.scss';
 import { useEffect, useState } from 'react';
 import { resizePhoto } from 'geottuse-tools';
+import { BiNotepad } from "react-icons/bi";
+import { FaMoneyBillAlt } from "react-icons/fa";
+import { FaPeopleGroup } from "react-icons/fa6";
+import { BsArrowDown } from "react-icons/bs";
 
 if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('landing', { mobile: true });
 
@@ -11,13 +15,15 @@ export default function MobileLanding() {
 		<div id="mobile-landing">
 			<div id="landing-header">
 				<div className="row">
-					<div className="column">
-						<div id="logo" onClick={() => window.location = "/"}>
-		      		<img src="/logo.png" alt="product logo"/>
-		      	</div>
-					</div>
+					<div className="row">
+						<div className="column">
+							<div id="logo" onClick={() => window.location = "/"}>
+								<img src="/logo.png" alt="product logo"/>
+							</div>
+						</div>
 
-					<div className="column"><div id="title">GET PRODUCT FEEDBACK</div></div>
+						<div className="column"><div id="title">SHAPER</div></div>
+					</div>
 				</div>
 
 				<div className="row">
@@ -29,19 +35,14 @@ export default function MobileLanding() {
 			</div>
 
 			<div id="body">
-				<div id="masthead" style={{ height: 200, overflow: 'hidden', width: '100%' }}>
+				<div id="masthead" style={{ height: 300, overflow: 'hidden', width: '100%' }}>
 					<div id="masthead-header">
-						<h1 id="top-header">
-							Have users tryout your product TODAY
-						</h1>
-						<div id="info-header">
-							Reward users small amount of money to tryout your product
-							and give you a <strong>good</strong> feedback
-						</div>
+						<h1 id="top-header">SHAPE YOUR PRODUCT THE WAY YOUR USERS LOVE/NEED IT</h1>
+						<div id="info-header">Reward people cash to tryout your product and provide their QA advices/feedback</div>
 
 						<div id="learnmore" onClick={() => window.location = "/register"}>GET STARTED</div>
 					</div>
-					<img id="masthead-image" alt="masthead image" src="/background.jpeg" style={{ ...resizePhoto({ width: 1000, height: 597 }, window.innerWidth, 200, "width") }}/>
+					<img id="masthead-image" alt="masthead image" src="/masthead.png" style={{ ...resizePhoto({ width: 1920, height: 1268 }, window.innerWidth, 300, "width") }}/>
 				</div>
 
 				<div id="benefits">
@@ -49,29 +50,49 @@ export default function MobileLanding() {
 
 					<div id="benefit-row">
 						<div className="benefit-item">
-							<div className="header">Are you finished with your MVP and want some USEFUL FEEDBACK ?</div>
-							<div className="image"><img alt="get useful feedback from users" src="/mvp.png"/></div>
-						</div>
-						<div className="benefit-item">
-							<div className="header">
-								Don't risk your money running ads yet
-								until you have a solid proof of
-								solution that works
+							<div className="image">
+								<BiNotepad style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
 							</div>
-							<div className="image"><img alt="don't waste your money on ads yet" src="/burningmoney.png"/></div>
-						</div>
-						<div className="benefit-item">
-							<div className="header">
-								A community of people here are looking
-								to try new products, give their best <strong>APPROVABLE</strong> feedback to them and get rewarded with money
+							<div className="header">YOU HAVE A PRODUCT</div>
+							<div className="header-info">
+								Are you finished with your product and wants some 
+								<strong style={{ color: 'black' }}> QA ADVICES/FEEDBACK</strong> ?
 							</div>
-							<div className="image"><img alt="a bunch of people waiting to test products and get rewarded" src="/userbase.png"/></div>
+						</div>
+						<div className="benefit-arrow"><BsArrowDown style={{ color: 'black', height: '100%', width: '100%' }}/></div>
+						<div className="benefit-item">
+							<div className="image">
+								<FaPeopleGroup style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
+							</div>
+							<div className="header">PEOPLE</div>
+							<div className="header-info">
+								We have recruited alot of people
+								to try products and write 
+								<strong style={{ color: 'black' }}> approvable QA ADVICES/FEEDBACK </strong> 
+								to earn cash as an reward
+							</div>
+						</div>
+						<div className="benefit-arrow"><BsArrowDown style={{ color: 'black', height: '100%', width: '100%' }}/></div>
+						<div className="benefit-item">
+							<div className="image">
+								<FaMoneyBillAlt style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
+							</div>
+							<div className="header">ITERATE BEFORE ADS</div>
+							<div className="header-info">
+								We help you make sure your product has three things before you start running ads<br/>
+
+								<ul>
+									<li>Bug-free</li>
+									<li>Usable</li>
+									<li>Has a proof of solution</li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>
 
 				<div id="infos">
-					<div id="infos-header">How it works?</div>
+					<div id="infos-header">How it works</div>
 
 					<div id="infos-options">
 						<div className={"option" + (viewType == "creators" ? "-selected" : "")} onClick={() => setViewtype("creators")}>for Creators</div>
@@ -80,89 +101,106 @@ export default function MobileLanding() {
 
 					{viewType == "creators" ? 
 						<div className="info">
-							<div className="info-header">(for Project creators)</div>
-
 							<div className="info-info">
 								<div className="index">1</div>
 								<div className="row">
 									<div className="header">
-										Submit your product with a $20 deposit
-										<br/>(Reward each user $4)
-										<br/>(Maximum of 5 users can test)
+										<div className="header-title">PRODUCT SUBMISSION</div>
+										<div className="header-info">
+											Start a project submission along with $20 to reward users
+										</div>
 									</div>
 								</div>
 							</div>
-
+							<div className="info-arrow"><BsArrowDown style={{ color: 'black', height: '100%', width: '100%' }}/></div>
 							<div className="info-info">
 								<div className="index">2</div>
 								<div className="row">
 									<div className="header">
-										You will get an email when a tester writes a feedback about your product
+										<div className="header-title">REJECT/APPROVE</div>
+										<div className="header-info">
+											Approve the QA advice/feedback you like and 
+											the tester will be notified that they are rewarded
+										</div>
 									</div>
 								</div>
 							</div>
-
+							<div className="info-arrow"><BsArrowDown style={{ color: 'black', height: '100%', width: '100%' }}/></div>
 							<div className="info-info">
 								<div className="index">3</div>
 								<div className="row">
 									<div className="header">
-										You can either reject the feedback if you don't like it or
-										<br/>
-										approve the feedback if you like and the tester will be rewarded $4
+										<div className="header-title">RECEIVE E-MAILS</div>
+										<div className="header-info">
+											Receive an email when a user writes a
+											QA advice/feedback about your product
+										</div>
 									</div>
 								</div>
 							</div>
-
+							<div className="info-arrow"><BsArrowDown style={{ color: 'black', height: '100%', width: '100%' }}/></div>
 							<div className="info-info">
 								<div className="index">4</div>
 								<div className="row">
 									<div className="header">
-										You can have up to 5 users try out your product and give
-										you good feedback for every $20 you spent
+										<div className="header-title">5 TESTERS FOR A SUBMISSION</div>
+										<div className="header-info">
+											You can have up to 5 users try out your product and give
+											you good QA advices/feedback for every submission
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 						:
 						<div className="info">
-							<div className="info-header">(for Testers)</div>
-
 							<div className="info-info">
 								<div className="index">1</div>
 								<div className="row">
 									<div className="header">
-										Tryout a product you like and<br/>
-										try to write a GOOD feedback that the creator will like
+										<div className="header-title">TRY PRODUCTS</div>
+										<div className="header-info">
+											Tryout a product you like and
+											write a good QA advice/feedback that
+											the creator would approve
+										</div>
 									</div>
 								</div>
 							</div>
-
+							<div className="info-arrow"><BsArrowDown style={{ color: 'black', height: '100%', width: '100%' }}/></div>
 							<div className="info-info">
 								<div className="index">2</div>
 								<div className="row">
 									<div className="header">
-										The product creator can see the GOOD<br/>feedback, approve it and reward you $4
+										<div className="header-title">EARN FOR YOUR CONTRIBUTION</div>
+										<div className="header-info">
+											The creator can see the good QA advice/feedback, approve it
+											and then reward you a portion of their deposit
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					}
 				</div>
+
+				<div id="getstarted" onClick={() => window.location = "/register"}>GET STARTED</div>
 			</div>
 
-			<div>
+			<div id="footer">
 				<div id="socialmedias">
-					<div className="socialmedia" onClick={() => window.open("https://www.facebook.com/profile.php?id=61551403930434")}>
+					<div className="socialmedia" onClick={() => window.open("https://www.facebook.com/shaper.app2023")}>
 						<img alt="link to facebook page" src="/facebook-icon.png"/>
 					</div>
-					<div className="socialmedia" onClick={() => window.open("https://twitter.com/getfeedback2023")}>
+					<div className="socialmedia" onClick={() => window.open("https://twitter.com/shaper2023")}>
 						<img alt="link to twitter page" src="/twitter-icon.png"/>
 					</div>
 					<div className="socialmedia" onClick={() => window.open("https://www.linkedin.com/company/97192981")}>
 						<img alt="link to linkedin page" src="/linkedin-icon.png"/>
 					</div>
 				</div>
-				<div id="footer">{'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}</div>
+
+				<div id="footer-header">{'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}</div>
 			</div>
 		</div>
 	)

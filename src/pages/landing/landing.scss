@@ -1,5 +1,6 @@
 #landing {
-	height: 100vh;
+	background-image: linear-gradient(white, lightblue, white);
+	height: 100%;
 
 	#landing-header {
 		display: flex;
@@ -23,10 +24,9 @@
 			}
 
 			#title {
-				font-family: Helvetica;
+				font-family: Geologica;
 				font-size: 30px;
 				font-weight: 100;
-				padding: 20px 10px;
 			}
 		}
 
@@ -35,13 +35,18 @@
 			flex-direction: row;
 
 			.nav {
+				background-color: black;
+				border-radius: 20px;
+				color: white;
+				font-weight: bold;
 				margin-right: 50px;
+				padding: 10px;
 				text-align: center;
 				width: 80px;
 
 				&:hover {
-					font-weight: bold;
 					cursor: pointer;
+					opacity: 0.5;
 				}
 			}
 		}
@@ -54,11 +59,11 @@
 			justify-content: space-around;
 
 			#masthead-header {
-				background-color: rgba(255, 255, 255, 0.9);
 				border-radius: 5px;
 				color: black;
 				display: flex;
 				flex-direction: column;
+				font-family: Geologica;
 				justify-content: space-around;
 				margin: 0 5%;
 				position: absolute;
@@ -75,16 +80,18 @@
 
 				#top-header {
 					font-size: 50px;
-					font-weight: 700;
+					font-weight: 100;
 				}
 
 				#info-header {
 					font-size: 20px;
+					line-height: 25px;
+					margin: 30px 0;
 				}
 
 				#learnmore {
 					background-color: black;
-					border-radius: 10px;
+					border-radius: 25px;
 					color: white;
 					font-weight: bold;
 					padding: 10px;
@@ -100,17 +107,19 @@
 
 			img {
 				height: 100%;
+				margin-left: calc(50%);
 				width: 100%;
 			}
 		}
 
 		#benefits {
+			font-family: Geologica;
 			margin: 0 auto;
 			padding: 5% 0;
 
 			#benefit-header {
 				font-size: 50px;
-				font-weight: bold;
+				margin: 40px 0;
 				text-align: center;
 			}
 
@@ -125,33 +134,67 @@
 					padding: 0 5%;
 					width: 30%;
 
-					.header {
-						color: rgba(0, 0, 0, 0.6);
-						font-size: 20px;
-						font-weight: 800;
-						text-align: center;
-					}
-
 					.image {
-						height: 150px;
-						margin: 0 auto;
-						width: 150px;
+						background-color: black;
+						border-radius: 45px;
+						border-style: solid;
+						border-width: 3px;
+						display: flex;
+						flex-direction: column;
+						height: 80px;
+						justify-content: space-around;
+						margin: 0 auto 20px auto;
+						width: 80px;
 
 						img {
 							height: 100%;
 							width: 100%;
 						}
 					}
+
+					.header {
+						font-size: 25px;
+						font-weight: 500;
+						margin: 30px 0;
+						text-align: center;
+					}
+
+					.header-info {
+						color: black;
+						font-size: 18px;
+						font-weight: 500;
+						height: 100px;
+						line-height: 25px;
+						text-align: center;
+
+						ul {
+							margin: 20px auto;
+							width: 70%;
+
+							li {
+								font-weight: bold;
+								list-style-type: numeric;
+								text-align: left;
+							}
+						}
+					}
+				}
+
+				.benefit-arrow {
+					height: 50px;
+					margin: 20px auto;
+					width: 50px;
 				}
 			}
 		}
 
 		#infos {
-			height: 700px;
+			font-family: Geologica;
+			height: 550px;
 
 			#infos-header {
 				font-size: 50px;
-				font-weight: bold;
+				margin: 40px 0;
 				text-align: center;
 			}
 
@@ -164,6 +207,7 @@
 
 				[class^="option"] {
 					background-color: transparent;
+					border-color: black;
 					border-radius: 20px;
 					border-style: solid;
 					font-weight: bold;
@@ -193,7 +237,8 @@
 				.info-info {
 					display: flex;
 					flex-direction: row;
-					margin-bottom: 50px;
+					margin: 30px auto;
+					width: 550px;
 
 					.index {
 						background-color: black;
@@ -210,43 +255,75 @@
 					}
 
 					.header {
-						color: black;
-						font-size: 20px;
-						margin-left: 10px;
+						margin-left: 20px;
+						width: 500px;
+
+						.header-title {
+							color: black;
+							font-size: 25px;
+							font-weight: bold;
+							margin-bottom: 10px;
+						}
+
+						.header-info {
+							color: black;
+							font-size: 20px;
+							font-weight: 400;
+							line-height: 25px;
+							width: 80%;
+						}
 					}
 				}
 			}
 		}
 
-		#infos-header {
-			font-size: 50px;
+		#getstarted {
+			background-color: black;
+			border-radius: 30px;
+			color: white;
 			font-weight: bold;
-			padding: 20px 0;
+			margin: 0 auto 30px auto;
+			padding: 20px;
 			text-align: center;
-		}
-	}
+			width: 150px;
 
-	#socialmedias {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-around;
-		margin: 0 auto;
-		width: 300px;
-
-		.socialmedia {
-			height: 30px;
-			width: 30px;
-
-			img {
-				height: 100%;
-				width: 100%;
+			&:hover {
+				cursor: pointer;
+				opacity: 0.5;
 			}
 		}
 	}
 
 	#footer {
-		font-size: 20px;
-		padding: 50px 0;
-		text-align: center;
+		background-color: #202020;
+		display: flex;
+		flex-direction: column;
+		height: 150px;
+		justify-content: space-around;
+
+		#socialmedias {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+			margin: 0 auto;
+			width: 300px;
+
+			.socialmedia {
+				height: 30px;
+				width: 30px;
+
+				img {
+					height: 100%;
+					width: 100%;
+				}
+			}
+		}
+
+		#footer-header {
+			color: white;
+			font-size: 20px;
+			font-weight: 400;
+			text-align: center;
+		}
 	}
 }
