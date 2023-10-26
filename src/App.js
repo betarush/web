@@ -18,7 +18,6 @@ import Listproduct from './pages/listproduct'
 //import Payment from './pages/payment'
 
 // mobile
-import MobileLanding from './pages/mobile/landing'
 import MobileRegister from './pages/mobile/register'
 import MobileLogin from './pages/mobile/login'
 import MobileIntro from './pages/mobile/intro'
@@ -57,8 +56,8 @@ function App() {
           </>
           :
           <>
-            <Route path="/" element={userId ? <MobileMain/> : <MobileLanding/>}/>
-            <Route path="/landing" element={<MobileLanding/>}/>
+            <Route path="/" element={userId ? <MobileMain/> : <Landing/>}/>
+            <Route path="/landing" element={<Landing/>}/>
             <Route path="/register" element={<MobileRegister/>}/>
             <Route path="/login" element={<MobileLogin/>}/>
             <Route path="/intro" element={<MobileIntro/>}/>

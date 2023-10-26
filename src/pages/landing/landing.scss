@@ -2,32 +2,37 @@
 	background-image: linear-gradient(white, lightblue, white);
 	height: 100%;
 
-	#landing-header {
+	#landing-header-m {
+		padding: 10px 0;
+		width: 100%;
+	}
+
+	#landing-header-w {
 		display: flex;
 		flex-direction: row;
 		height: 80px;
 		justify-content: space-between;
 		margin: 0 auto;
 		width: 80%;
+	}
 
-		.row {
-			#logo {
-				height: 50px;
-				margin: 0 10px;
-				overflow: hidden;
-				width: 50px;
+	[id^="landing-header-"] {
+		#logo {
+			height: 50px;
+			margin: 0 10px;
+			overflow: hidden;
+			width: 50px;
 
-				img {
-					height: 100%;
-					width: 100%;
-				}
+			img {
+				height: 100%;
+				width: 100%;
 			}
+		}
 
-			#title {
-				font-family: Geologica;
-				font-size: 30px;
-				font-weight: 100;
-			}
+		#title {
+			font-family: Geologica;
+			font-size: 30px;
+			font-weight: 100;
 		}
 
 		#navs {
@@ -39,7 +44,6 @@
 				border-radius: 20px;
 				color: white;
 				font-weight: bold;
-				margin-right: 50px;
 				padding: 10px;
 				text-align: center;
 				width: 80px;
@@ -58,17 +62,26 @@
 			flex-direction: column;
 			justify-content: space-around;
 
-			#masthead-header {
+			#masthead-header-m {
+				padding: 5%;
+				text-align: center;
+			}
+
+			#masthead-header-w {
+				margin: 0 5%;
+				padding: 5px;
+				width: 35%;
+			}
+
+			[id^="masthead-header-"] {
 				border-radius: 5px;
 				color: black;
 				display: flex;
 				flex-direction: column;
 				font-family: Geologica;
 				justify-content: space-around;
-				margin: 0 5%;
 				position: absolute;
 				padding: 5px;
-				width: 35%;
 
 				.header {
 					margin: 5% 0;
@@ -78,25 +91,31 @@
 					margin: 2% 0;
 				}
 
-				#top-header {
+				#top-header-m {
+					font-size: 20px;
+					font-weight: 100;
+				}
+
+				#top-header-w {
 					font-size: 50px;
 					font-weight: 100;
 				}
 
-				#info-header {
-					font-size: 20px;
-					line-height: 25px;
-					margin: 30px 0;
+				#learnmore-m {
+					margin: 10px auto;
 				}
 
-				#learnmore {
+				#learnmore-w {
+					width: 150px;
+				}
+
+				[id^="learnmore-"] {
 					background-color: black;
 					border-radius: 25px;
 					color: white;
 					font-weight: bold;
 					padding: 10px;
 					text-align: center;
-					width: 150px;
 
 					&:hover {
 						cursor: pointer;
@@ -107,8 +126,15 @@
 
 			img {
 				height: 100%;
-				margin-left: calc(50%);
 				width: 100%;
+			}
+
+			#masthead-image-m {
+				opacity: 0.2;
+			}
+
+			#masthead-image-w {
+				margin-left: calc(50%);
 			}
 		}
 
@@ -117,8 +143,16 @@
 			margin: 0 auto;
 			padding: 5% 0;
 
-			#benefit-header {
+			#benefit-header-m {
 				font-size: 50px;
+				font-weight: bold;
+			}
+
+			#benefit-header-w {
+				font-size: 50px;
+			}
+
+			[id^="benefit-header-"] {
 				margin: 40px 0;
 				text-align: center;
 			}
@@ -129,71 +163,68 @@
 				justify-content: space-around;
 				margin: 20px auto;
 				width: 80%;
+			}
 
-				.benefit-item {
-					padding: 0 5%;
-					width: 30%;
+			.benefit-item {
+				padding: 0 5%;
 
-					.image {
-						background-color: black;
-						border-radius: 45px;
-						border-style: solid;
-						border-width: 3px;
-						display: flex;
-						flex-direction: column;
-						height: 80px;
-						justify-content: space-around;
-						margin: 0 auto 20px auto;
-						width: 80px;
+				.image {
+					background-color: black;
+					border-radius: 45px;
+					border-style: solid;
+					border-width: 3px;
+					display: flex;
+					flex-direction: column;
+					height: 80px;
+					justify-content: space-around;
+					margin: 0 auto 20px auto;
+					width: 80px;
 
-						img {
-							height: 100%;
-							width: 100%;
-						}
-					}
-
-					.header {
-						font-size: 25px;
-						font-weight: 500;
-						margin: 30px 0;
-						text-align: center;
-					}
-
-					.header-info {
-						color: black;
-						font-size: 18px;
-						font-weight: 500;
-						height: 100px;
-						line-height: 25px;
-						text-align: center;
-
-						ul {
-							margin: 20px auto;
-							width: 70%;
-
-							li {
-								font-weight: bold;
-								list-style-type: numeric;
-								text-align: left;
-							}
-						}
+					img {
+						height: 100%;
+						width: 100%;
 					}
 				}
 
-				.benefit-arrow {
-					height: 50px;
-					margin: 20px auto;
-					width: 50px;
+				.header {
+					font-size: 25px;
+					font-weight: 800;
+					text-align: center;
 				}
+
+				.header-info {
+					color: black;
+					font-size: 18px;
+					font-weight: 500;
+					line-height: 25px;
+					text-align: center;
+
+					ul {
+						margin: 20px auto;
+						width: 70%;
+
+						li {
+							font-weight: bold;
+							list-style-type: numeric;
+							text-align: left;
+						}
+					}
+				}
+			}
+
+			.benefit-arrow {
+				height: 50px;
+				margin: 20px auto;
+				width: 50px;
 			}
 		}
 
 		#infos {
 			font-family: Geologica;
-			height: 550px;
 
 			#infos-header {
 				font-size: 50px;
+				font-weight: bold;
 				margin: 40px 0;
 				text-align: center;
 			}
@@ -208,7 +239,7 @@
 				[class^="option"] {
 					background-color: transparent;
 					border-color: black;
-					border-radius: 20px;
+					border-radius: 30px;
 					border-style: solid;
 					font-weight: bold;
 					margin: 0 5px;
@@ -231,15 +262,21 @@
 
 			.info {
 				font-weight: bold;
-				margin: 10px auto;
-				width: 50%;
 
-				.info-info {
+				.info-info-m {
+					margin: 0 auto;
+					padding: 1%;
+					width: 98%;
+				}
+
+				.info-info-w {
 					display: flex;
 					flex-direction: row;
 					margin: 30px auto;
 					width: 550px;
+				}
 
+				[class^="info-info-"] {
 					.index {
 						background-color: black;
 						border-radius: 40px;
@@ -255,14 +292,13 @@
 					}
 
 					.header {
-						margin-left: 20px;
-						width: 500px;
+						color: black;
+						font-size: 20px;
 
 						.header-title {
 							color: black;
 							font-size: 25px;
 							font-weight: bold;
-							margin-bottom: 10px;
 						}
 
 						.header-info {
@@ -270,9 +306,14 @@
 							font-size: 20px;
 							font-weight: 400;
 							line-height: 25px;
-							width: 80%;
 						}
 					}
+				}
+
+				.info-arrow {
+					height: 50px;
+					margin: 20px auto;
+					width: 50px;
 				}
 			}
 		}
@@ -282,7 +323,7 @@
 			border-radius: 30px;
 			color: white;
 			font-weight: bold;
-			margin: 0 auto 30px auto;
+			margin: 50px auto;
 			padding: 20px;
 			text-align: center;
 			width: 150px;
