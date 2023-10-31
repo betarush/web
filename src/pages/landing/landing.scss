@@ -138,6 +138,87 @@
 			}
 		}
 
+		#whyus {
+			font-family: Geologica;
+			margin: 0 auto;
+			padding: 5% 0;
+		
+			#whyus-header-m {
+				font-size: 50px;
+				font-weight: bold;
+			}
+		
+			#whyus-header-w {
+				font-size: 50px;
+			}
+		
+			[id^="whyus-header-"] {
+				margin: 40px 0;
+				text-align: center;
+			}
+		
+			#whyus-row {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-around;
+				margin: 20px auto;
+				width: 80%;
+			}
+		
+			.whyus-item {
+				padding: 0 5%;
+		
+				.image {
+					background-color: black;
+					border-radius: 45px;
+					border-style: solid;
+					border-width: 3px;
+					display: flex;
+					flex-direction: column;
+					height: 80px;
+					justify-content: space-around;
+					margin: 0 auto 20px auto;
+					width: 80px;
+		
+					img {
+						height: 100%;
+						width: 100%;
+					}
+				}
+		
+				.header {
+					font-size: 25px;
+					font-weight: 800;
+					text-align: center;
+				}
+		
+				.header-info {
+					color: black;
+					font-size: 18px;
+					font-weight: 500;
+					line-height: 25px;
+					text-align: center;
+		
+					ul {
+						margin: 20px auto;
+						width: 70%;
+		
+						li {
+							font-weight: bold;
+							list-style-type: numeric;
+							text-align: left;
+						}
+					}
+				}
+			}
+		
+			.whyus-arrow {
+				height: 50px;
+				margin: 20px auto;
+				width: 50px;
+			}
+		}
+
 		#benefits {
 			font-family: Geologica;
 			margin: 0 auto;

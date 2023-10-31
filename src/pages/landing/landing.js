@@ -73,9 +73,57 @@ export default function Landing() {
 						<img id="masthead-image-w" alt="masthead image" src="/masthead.png" style={{ ...resizePhoto({ width: 1920, height: 1268 }, window.innerWidth * 0.4, window.innerWidth * 0.4, "width") }}/>
 					</div>
 				}
+				
+				<div id="whyus">
+					<div id={"whyus-header-" + (isMobile ? "m" : "w")}>What choose us</div>
+
+					<div id={!isMobile ? "whyus-row" : ""}>
+						<div className="whyus-item" style={!isMobile ? { width: '30%' } : {}}>
+							<div className="image">
+								<BiNotepad style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
+							</div>
+							<div className="header" style={isMobile ? { } : { margin: '30px 0' }}>GET QUICK BETA TESTERS</div>
+							<div className="header-info" style={isMobile ? {} : { height: 100 }}>
+								Testers will try out your product right away to earn rewards
+							</div>
+						</div>
+						<div className="whyus-arrow">
+							{isMobile ? 
+								<BsArrowDown style={{ color: 'black', height: '100%', width: '100%' }}/>
+								:
+								<AiOutlineArrowRight style={{ color: 'black', height: '100%', width: '100%' }}/>
+							}
+						</div>
+						<div className="whyus-item" style={!isMobile ? { width: '30%' } : {}}>
+							<div className="image">
+								<FaPeopleGroup style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
+							</div>
+							<div className="header" style={isMobile ? { } : { margin: '30px 0' }}>EFFECTIVE SMALL INVESTING</div>
+							<div className="header-info" style={isMobile ? {} : { height: 100 }}>
+								Get 5 QA advices and feedback for every product submission on a fixed deposit
+							</div>
+						</div>
+						<div className="whyus-arrow">
+							{isMobile ? 
+								<BsArrowDown style={{ color: 'black', height: '100%', width: '100%' }}/>
+								:
+								<AiOutlineArrowRight style={{ color: 'black', height: '100%', width: '100%' }}/>
+							}
+						</div>
+						<div className="whyus-item" style={!isMobile ? { width: '30%' } : {}}>
+							<div className="image">
+								<FaMoneyBillAlt style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
+							</div>
+							<div className="header" style={isMobile ? { } : { margin: '30px 0' }}>QUICK QA</div>
+							<div className="header-info" style={isMobile ? {} : { height: 100 }}>
+								The quickest way to get your product quality assuranced before you start launching for the targeted audiences
+							</div>
+						</div>
+					</div>
+				</div>
 
 				<div id="benefits">
-					<div id={"benefit-header-" + (isMobile ? "m" : "w")}>What we are</div>
+					<div id={"benefit-header-" + (isMobile ? "m" : "w")}>How it works</div>
 
 					<div id={!isMobile ? "benefit-row" : ""}>
 						<div className="benefit-item" style={!isMobile ? { width: '30%' } : {}}>
