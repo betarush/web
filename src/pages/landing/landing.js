@@ -123,7 +123,7 @@ export default function Landing() {
 				</div>
 
 				<div id="benefits">
-					<div id={"benefit-header-" + (isMobile ? "m" : "w")}>How it works</div>
+					<div id={"benefit-header-" + (isMobile ? "m" : "w")}>How we benefit you</div>
 
 					<div id={!isMobile ? "benefit-row" : ""}>
 						<div className="benefit-item" style={!isMobile ? { width: '30%' } : {}}>
