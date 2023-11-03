@@ -35,7 +35,7 @@ export default function Main() {
 	const [viewType, setViewtype] = useState('')
 
 	const [intro, setIntro] = useState(false)
-	const [userWrite, setUserwrite] = useState({ show: false, advice: '', feedback: '', id: null, index: -1, amountSpent: 0, loading: false })
+	const [userWrite, setUserwrite] = useState({ show: false, advice: '', id: null, index: -1, amountSpent: 0, loading: false })
 	const [relaunch, setRelaunch] = useState({ show: false, cardInfo: {}, productId: null, loading: false })
 
 	const [bankaccountDone, setBankaccountdone] = useState(false)
@@ -286,10 +286,10 @@ export default function Main() {
 	const submitTheFeedback = () => {
 		setUserwrite({ ...userWrite, loading: true })
 
-		const { advice, feedback, id, index } = userWrite
+		const { advice, id, index } = userWrite
 
-		if (advice || feedback) {
-			const data = { userId, productId: id, advice, feedback }
+		if (advice) {
+			const data = { userId, productId: id, advice }
 			const newProducts = [...products]
 
 			submitFeedback(data)
@@ -302,7 +302,7 @@ export default function Main() {
 				})
 				.then((res) => {
 					if (res) {
-						setUserwrite({ ...userWrite, show: false, advice: '', feedback: '', id: null, index: -1, loading: false })
+						setUserwrite({ ...userWrite, show: false, advice: '', id: null, index: -1, loading: false })
 
 						newProducts[index].gave_feedback = true
 
@@ -317,7 +317,7 @@ export default function Main() {
 					}
 				})
 		} else {
-			setUserwrite({ ...userWrite, errorMsg: 'You need to write an advice or feedback' })
+			setUserwrite({ ...userWrite, errorMsg: 'You need to write an advice' })
 		}
 	}
 
@@ -413,7 +413,7 @@ export default function Main() {
 														<div disabled={product.trying} className="product-action" onClick={() => tryTheProduct(index, product.id, product.link)}>Test first then earn $$</div>
 														:
 														<div className="header">
-															Come back to give a QA advice/feedback when you're done testing
+															Come back to give an advice
 															<br/><br/>
 															redirecting to website....
 														</div>
@@ -428,7 +428,7 @@ export default function Main() {
 
 														{!product.gave_feedback && (
 															<div>
-																<div className="product-action" style={{ marginBottom: 10 }} onClick={() => setUserwrite({ ...userWrite, show: true, input: '', id: product.id, index, amountSpent: product.amountSpent, loading: false })}>Give advice/feedback & Earn ${product.reward.toFixed(2)}</div>
+																<div className="product-action" style={{ marginBottom: 10 }} onClick={() => setUserwrite({ ...userWrite, show: true, input: '', id: product.id, index, amountSpent: product.amountSpent, loading: false })}>Give advice & Earn ${product.reward.toFixed(2)}</div>
 																<div className="product-action" onClick={() => window.open(product.link)}>Go To Product</div>
 															</div>
 														)}
@@ -437,7 +437,7 @@ export default function Main() {
 													<div className="info-container">
 														{product.numLeftover > 0 ? 
 															<>
-																<div className="header">Amount spent: ${product.amountSpent.toFixed(2)}</div>
+																{product.deposited && <div className="header">Amount spent: ${product.amountSpent.toFixed(2)}</div>}
 
 																{product.numTesting > 0 && (
 																	<div className="header">
@@ -453,8 +453,8 @@ export default function Main() {
 
 																{product.numFeedback > 0 && (
 																	<div className="header">
-																		{product.numFeedback} people gave feedback<br/><br/>
-																		<div className="product-action" onClick={() => window.location = '/feedback/' + product.id}>Reward them</div>
+																		{product.numFeedback} people gave feedback<br/>
+																		<div className="product-action" onClick={() => window.location = '/feedback/' + product.id}>See advice(s)</div>
 																	</div>
 																)}
 
@@ -494,18 +494,15 @@ export default function Main() {
 				<div id="hidden-box">
 					{intro && (
 						<div id="intro">
-							<div id="intro-header">Welcome</div>
+							<div id="intro-header">Welcome to BetaRush</div>
 
 							<div className="intro-mini-header">
-								We built this platform that enables you to earn some money
-								by helping creators improve their product.
+								BetaRush enables you to earn money
+								by helping creators ensure QA for their product.
 								<br/><br/>
-								All you have to do is tryout products and write <strong>good QA advices/feedback</strong>.
+								Try products and write good QA advices.
 								<br/><br/>
-								You will get rewarded with money if the creator <strong>likes and approves</strong> your <strong>QA advice/feedback</strong> so
-								try your best to write good words
-								<br/><br/>
-								That's it! Enjoy your time making money here:)
+								You will earn money once the creator <strong>likes and approves</strong> your <strong>advice</strong>
 							</div>
 
 							<div id="intro-actions">
@@ -517,20 +514,18 @@ export default function Main() {
 						<div id="feedback-box">
 							<div id="feedback-header">What's your advice</div>
 							<textarea id="feedback-input" maxlength="500" disabled={userWrite.loading} placeholder="Write a good advice" onChange={e => setUserwrite({ ...userWrite, advice: e.target.value })} value={userWrite.advice}/>
-							<div id="feedback-header">What's your feedback</div>
-							<textarea id="feedback-input" maxlength="500" disabled={userWrite.loading} placeholder="Write a good feedback" onChange={e => setUserwrite({ ...userWrite, feedback: e.target.value })} value={userWrite.feedback}/>
 
 							<div className="errormsg">{userWrite.errorMsg}</div>
 
 							<div id="actions">
-								<div className="action" onClick={() => !userWrite.loading && setUserwrite({ ...userWrite, show: false, advice: '', feedback: '' })}>Cancel</div>
+								<div className="action" onClick={() => !userWrite.loading && setUserwrite({ ...userWrite, show: false, advice: '' })}>Cancel</div>
 								<div className="action" onClick={() => !userWrite.loading && submitTheFeedback()}>Submit</div>
 							</div>
 						</div>
 					)}
 					{relaunch.show && (
 						<div id="relaunch-box">
-							<div id="relaunch-header">Relaunch payment summary</div>
+							<div id="relaunch-header">Resubmit payment summary</div>
 
 							<div className="relaunch-div"/>
 
@@ -559,11 +554,6 @@ export default function Main() {
 			      				<br/>
 			      				*********{relaunch.cardInfo.last4}
 			      			</div>
-			      			{/*<div id="update" onClick={() => {
-			      				localStorage.setItem("relaunchProduct", relaunch.productId.toString())
-
-			      				window.location = "/payment"
-			      			}}>Update payment</div>*/}
 			      		</div>
 			      	)}
 

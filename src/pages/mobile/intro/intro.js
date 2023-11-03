@@ -39,23 +39,11 @@ const VisuallyHiddenInput = styled('input')`
   white-space: nowrap;
   width: 1px;
 `;
-let sessionId = ""
-
-if (window.location.search.includes("session_id")) {
-	const urlParams = new URLSearchParams(window.location.search)
-	
-	sessionId = urlParams.get('session_id')
-}
 
 export default function Intro() {
 	const [accountType, setAccounttype] = useState('')
 
 	const [userId, setUserid] = useState('')
-
-	// const [name, setName] = useState('chatee')
-	// const [desc, setDesc] = useState('match with friends, explore their posts and like their posts to talk with them')
-	// const [link, setLink] = useState('https://www.chatee.app')
-	// const [image, setImage] = useState({ uri: '', width: 0, height: 0 })
 
 	const [name, setName] = useState('')
 	const [desc, setDesc] = useState('')
@@ -76,11 +64,11 @@ export default function Intro() {
 		const name = data.get('name'), desc = data.get('desc'), link = data.get('link')
 
 		if (name && desc && link) {
-			localStorage.setItem("productInfo", JSON.stringify({ userId, name, desc, link, image }))
+			const json = { userId, name, desc, link, image: JSON.stringify(image) }
 
-			const data = { userId, redirect: "intro" }
+			localStorage.setItem("viewMyProducts", "true")
 
-			createCheckout(data)
+			listProduct(json)
 				.then((res) => {
 					if (res.status == 200) {
 						return res.json()
@@ -90,13 +78,15 @@ export default function Intro() {
 				})
 				.then((res) => {
 					if (res) {
-						window.location = res.url
+						localStorage.removeItem("productInfo")
+
+						window.location = "/main"
 					}
 				})
 				.catch((err) => {
 					if (err.status == 400) {
 						err.json().then(() => {
-
+							
 						})
 					}
 				})
@@ -161,56 +151,6 @@ export default function Intro() {
 	}
 
 	useEffect(() => {
-		if (sessionId) {
-			setLoading(true)
-
-			const id = localStorage.getItem("id")
-
-			const data = { userId: id, sessionId }
-
-			sessionId = ""
-
-			createCustomerPayment(data)
-				.then((res) => {
-					if (res.status == 200) {
-						return res.json()
-					}
-
-					throw res
-				})
-				.then((res) => {
-					if (res) {
-						const { userId, name, desc, link, image } = JSON.parse(localStorage.getItem("productInfo"))
-						const json = { userId, name, desc, link, image: JSON.stringify(image) }
-
-						localStorage.setItem("viewMyProducts", "true")
-
-						listProduct(json)
-							.then((res) => {
-								if (res.status == 200) {
-									return res.json()
-								}
-
-								throw res
-							})
-							.then((res) => {
-								if (res) {
-									localStorage.removeItem("productInfo")
-
-									window.location = "/main"
-								}
-							})
-							.catch((err) => {
-								if (err.status == 400) {
-									err.json().then(() => {
-										
-									})
-								}
-							})
-					}
-			})
-		}
-
 		setAccounttype(localStorage.getItem("accountType") ? localStorage.getItem("accountType") : "")
 		setUserid(localStorage.getItem("id"))
 
@@ -224,10 +164,7 @@ export default function Intro() {
 			{accountType ? 
 				<div id="listproduct">
 					<Typography component="h1" variant="h5" style={{ margin: '50px 5% 5% 5%', textAlign: 'center' }}>
-        		A community of people here are desperately looking to tryout products
-        		and give qa advices/feedbacks to earn some money. 
-        		<br/><br/><br/>
-        		Introduce your product and get awesome qa advices/feedbacks from users
+        		Introduce your product
         	</Typography>
 
 					<ThemeProvider theme={theme}>
@@ -270,12 +207,6 @@ export default function Intro() {
 
 									<Typography component="h1" variant="h6" color="red">{errorMsg}</Typography>
 
-									<div id="payment-infos">
-										<div className="payment-info"><strong>Subtotal:</strong> $20.00</div>
-										<div className="payment-info"><strong>Service fee:</strong> $5.00</div>
-										<div className="payment-info"><strong>Total:</strong> $25.00</div>
-									</div>
-
 			            <Button type="submit" fullWidth variant="contained" color="submit" disabled={loading} sx={{ mt: 3, mb: 2 }}>LAUNCH</Button>
 
 			            {loading && (
@@ -285,12 +216,6 @@ export default function Intro() {
 			            )}
 			          </Box>
 			       	</Box>
-				      <div className="row">
-				      	<div style={{ display: 'flex', flexDirection: 'row' }}>
-				        	<div className="column">Powered by </div>
-				        	<img src="/stripe.png" style={{ height: 50, marginLeft: 10, width: 50 }}/>
-				        </div>
-				      </div>
 		        </Container>
 			    </ThemeProvider>
 				</div>

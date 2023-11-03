@@ -1,6 +1,7 @@
 import './seefeedbacks.scss';
 import { useEffect, useState } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
+import { createCheckout, createCustomerPayment } from "../../apis/user"
 import { resizePhoto } from 'geottuse-tools';
 
 // material ui components
@@ -14,6 +15,13 @@ import { rewardCustomer, rejectFeedback } from '../../apis/user'
 import { getFeedbacks } from '../../apis/product'
 
 const LOGO_URL = process.env.REACT_APP_LOGO_URL
+let sessionId = ""
+
+if (window.location.search.includes("session_id")) {
+	const urlParams = new URLSearchParams(window.location.search)
+	
+	sessionId = urlParams.get('session_id')
+}
 
 export default function Seefeedbacks() {
 	const [userId, setUserid] = useState('')
@@ -61,6 +69,28 @@ export default function Seefeedbacks() {
 
 					})
 				}
+			})
+	}
+	const deposit = productId => {
+		const data = { userId, redirect: "seefeedbacks" }
+
+		createCheckout(data)
+			.then((res) => {
+				if (res.status == 200) {
+					return res.json()
+				}
+				
+				throw res
+			})
+			.then((res) => {
+				if (res) {
+					localStorage.setItem("productId", productId)
+
+					window.location = res.url
+				}
+			})
+			.catch((err) => {
+
 			})
 	}
 	const rejectTheFeedback = (id, testerId, productIndex, feedbackIndex) => {
@@ -138,7 +168,31 @@ export default function Seefeedbacks() {
 	}
 
 	useEffect(() => {
-		getTheFeedbacks(true)
+		if (sessionId) {
+			const data = { 
+				userId: localStorage.getItem("id"), 
+				productId: localStorage.getItem("productId"),
+				sessionId 
+			}
+
+			sessionId = ""
+
+			createCustomerPayment(data)
+				.then((res) => {
+					if (res.status == 200) {
+						return res.json()
+					}
+
+					throw res
+				})
+				.then((res) => {
+					if (res) {
+						window.location = "/seefeedbacks"
+					}
+			})
+		} else {
+			getTheFeedbacks(true)
+		}
 	}, [])
 
 	return (
@@ -163,26 +217,40 @@ export default function Seefeedbacks() {
 								</div>
 
 								<div id="feedbacks-header">
-									QA advices/feedbacks for <strong>{product.name}</strong>
+									Advices for <strong>{product.name}</strong>
 									<br/>
-									<div style={{ fontSize: 13 }}>(Please save your feedback somewhere)</div>
+									{product.deposited && <div style={{ fontSize: 13 }}>(Please save your feedback somewhere)</div>}
 								</div>
+								
+								{!product.deposited && (
+									<div id="feedbacks-rules-header">
+										<br/><br/>
+										Yes! Woohoo. You have {product.feedbacks.length} advice(s) from test users
+										<br/>
+										Deposit $20 to see the advices
+										<br/><br/>
+										You will get a refund of the leftover deposit in a week if you don't receive up to 5 advices
 
-								<div id="product-feedbacks">
-									{product.feedbacks.map((feedback, feedbackIndex) => (
-										<div className="feedback" key={feedback.key}>
-											<div className="feedback-header"><strong>Feedback:</strong> {feedback.feedback}</div>
-											<div className="feedback-header"><strong>Advice:</strong> {feedback.advice}</div>
+										<div id="deposit-button" onClick={() => deposit(product.id)}>Deposit</div>
+									</div>
+								)}
 
-											<Stack>
-												<div className="feedback-actions">
-													<div className="feedback-action" disabled={rewarding} onClick={() => rejectTheFeedback(product.id, feedback.testerId, productIndex, feedbackIndex)}>Reject</div>
-													<div className="feedback-action" disabled={rewarding} onClick={() => rewardTheCustomer(product.id, feedback.testerId, productIndex, feedbackIndex)}>I like it. Approve</div>
-												</div>
-											</Stack>
-										</div>
-									))}
-								</div>
+								{product.deposited && (
+									<div id="product-feedbacks">
+										{product.feedbacks.map((feedback, feedbackIndex) => (
+											<div className="feedback" key={feedback.key}>
+												<div className="feedback-header"><strong>Advice:</strong> {feedback.advice}</div>
+
+												<Stack>
+													<div className="feedback-actions">
+														<div className="feedback-action" disabled={rewarding} onClick={() => rejectTheFeedback(product.id, feedback.testerId, productIndex, feedbackIndex)}>Reject</div>
+														<div className="feedback-action" disabled={rewarding} onClick={() => rewardTheCustomer(product.id, feedback.testerId, productIndex, feedbackIndex)}>I like it. Reward tester</div>
+													</div>
+												</Stack>
+											</div>
+										))}
+									</div>
+								)}
 							</div>
 						))}
 					</div>

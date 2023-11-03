@@ -5,6 +5,10 @@ import { BiNotepad } from "react-icons/bi";
 import { FaMoneyBillAlt } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 
+import { SiTestcafe } from "react-icons/si";
+import { LiaMoneyBillAltSolid } from "react-icons/lia";
+import { MdOutlineFreeCancellation } from "react-icons/md";
+
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { BsArrowDown } from "react-icons/bs";
 
@@ -27,7 +31,7 @@ export default function Landing() {
 								</div>
 							</div>
 
-							<div className="column"><div id="title">SHAPER</div></div>
+							<div className="column"><div id="title">BetaRush</div></div>
 						</div>
 					</div>
 					:
@@ -38,7 +42,7 @@ export default function Landing() {
 							</div>
 						</div>
 
-						<div className="column"><div id="title">SHAPER</div></div>
+						<div className="column"><div id="title">BetaRush</div></div>
 					</div>
 				}
 
@@ -54,8 +58,8 @@ export default function Landing() {
 				{isMobile ? 
 					<div id="masthead" style={{ height: 300, overflow: 'hidden', width: '100%' }}>
 						<div id="masthead-header-m">
-							<h1 id="top-header-m">SHAPE YOUR PRODUCT THE WAY YOUR USERS LOVE/NEED IT</h1>
-							<div id="info-header">Reward people cash to tryout your product and provide their QA advices/feedback</div>
+							<h1 id="top-header-m">ITERATE QUICKLY ON YOUR PRODUCT THE WAY USERS WANT IT</h1>
+							<div id="info-header">BetaRush motivate users to try your product and give some QA advices to earn some money</div>
 
 							<div id="learnmore-m" onClick={() => window.location = "/register"}>GET STARTED</div>
 						</div>
@@ -64,9 +68,9 @@ export default function Landing() {
 					:
 					<div id="masthead" style={{ height: window.innerHeight * 0.8, overflow: 'hidden', width: '100%' }}>
 						<div id="masthead-header-w">
-							<h1 id="top-header-w">SHAPE YOUR PRODUCT THE WAY YOUR USERS LOVE/NEED IT</h1>
+							<h1 id="top-header-w">ITERATE QUICKLY ON YOUR PRODUCT THE WAY USERS WANT IT</h1>
 
-							<div id="info-header">Reward people cash to tryout your product and provide their QA advices/feedback</div>
+							<div id="info-header">BetaRush motivate users to try your product and give some QA advices to earn some money</div>
 
 							<div id="learnmore-w" onClick={() => window.location = "/register"}>GET STARTED</div>
 						</div>
@@ -75,16 +79,16 @@ export default function Landing() {
 				}
 				
 				<div id="whyus">
-					<div id={"whyus-header-" + (isMobile ? "m" : "w")}>What choose us</div>
+					<div id={"whyus-header-" + (isMobile ? "m" : "w")}>Why BetaRush</div>
 
 					<div id={!isMobile ? "whyus-row" : ""}>
 						<div className="whyus-item" style={!isMobile ? { width: '30%' } : {}}>
 							<div className="image">
-								<BiNotepad style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
+								<SiTestcafe style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
 							</div>
 							<div className="header" style={isMobile ? { } : { margin: '30px 0' }}>GET QUICK BETA TESTERS</div>
 							<div className="header-info" style={isMobile ? {} : { height: 100 }}>
-								Testers will try out your product right away to earn rewards
+								Testers will want to quickly try your product and give advices to earn money
 							</div>
 						</div>
 						<div className="whyus-arrow">
@@ -96,11 +100,14 @@ export default function Landing() {
 						</div>
 						<div className="whyus-item" style={!isMobile ? { width: '30%' } : {}}>
 							<div className="image">
-								<FaPeopleGroup style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
+								<LiaMoneyBillAltSolid style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
 							</div>
-							<div className="header" style={isMobile ? { } : { margin: '30px 0' }}>EFFECTIVE SMALL INVESTING</div>
+							<div className="header" style={isMobile ? { } : { margin: '30px 0' }}>EFFECTIVE SMALL INVESTMENT</div>
 							<div className="header-info" style={isMobile ? {} : { height: 100 }}>
-								Get 5 QA advices and feedback for every product submission on a fixed deposit
+								Submit your product and quickly get advices<br/><br/>
+								Only deposit $20 if there is at least one advice given to you<br/><br/>
+								Have refund of the leftover deposit within a week unless your product
+								received at least 5 advices
 							</div>
 						</div>
 						<div className="whyus-arrow">
@@ -112,47 +119,29 @@ export default function Landing() {
 						</div>
 						<div className="whyus-item" style={!isMobile ? { width: '30%' } : {}}>
 							<div className="image">
-								<FaMoneyBillAlt style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
+								<MdOutlineFreeCancellation style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
 							</div>
 							<div className="header" style={isMobile ? { } : { margin: '30px 0' }}>QUICK QA</div>
 							<div className="header-info" style={isMobile ? {} : { height: 100 }}>
-								The quickest way to get your product quality assuranced before you start launching for the targeted audiences
+								A quick and effective way to ensure QA for your product before you start running ads
 							</div>
 						</div>
 					</div>
 				</div>
 
 				<div id="benefits">
-					<div id={"benefit-header-" + (isMobile ? "m" : "w")}>How we benefit you</div>
+					<div id={"benefit-header-" + (isMobile ? "m" : "w")}>How we benefit</div>
 
 					<div id={!isMobile ? "benefit-row" : ""}>
-						<div className="benefit-item" style={!isMobile ? { width: '30%' } : {}}>
-							<div className="image">
-								<BiNotepad style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
-							</div>
-							<div className="header" style={isMobile ? { } : { margin: '30px 0' }}>YOU HAVE A PRODUCT</div>
-							<div className="header-info" style={isMobile ? {} : { height: 100 }}>
-								Are you finished with your product and wants some 
-								<strong style={{ color: 'black' }}> QA ADVICES/FEEDBACK</strong> ?
-							</div>
-						</div>
-						<div className="benefit-arrow">
-							{isMobile ? 
-								<BsArrowDown style={{ color: 'black', height: '100%', width: '100%' }}/>
-								:
-								<AiOutlineArrowRight style={{ color: 'black', height: '100%', width: '100%' }}/>
-							}
-						</div>
 						<div className="benefit-item" style={!isMobile ? { width: '30%' } : {}}>
 							<div className="image">
 								<FaPeopleGroup style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
 							</div>
 							<div className="header" style={isMobile ? { } : { margin: '30px 0' }}>PEOPLE</div>
 							<div className="header-info" style={isMobile ? {} : { height: 100 }}>
-								We have recruited alot of people
-								to try products and write 
-								<strong style={{ color: 'black' }}> approvable QA ADVICES/FEEDBACK </strong> 
-								to earn cash as an reward
+								We have recruited many people
+								looking to try products and provide their
+								advices to earn money as rewards
 							</div>
 						</div>
 						<div className="benefit-arrow">
@@ -166,9 +155,9 @@ export default function Landing() {
 							<div className="image">
 								<FaMoneyBillAlt style={{ color: "white", height: '70%', margin: '0 auto', width: '70%' }}/>
 							</div>
-							<div className="header" style={isMobile ? { } : { margin: '30px 0' }}>ITERATE BEFORE ADS</div>
+							<div className="header" style={isMobile ? { } : { margin: '30px 0' }}>VALIDATE BEFORE SPENDING</div>
 							<div className="header-info" style={isMobile ? {} : { height: 100 }}>
-								We help you make sure your product has three things before you start running ads<br/>
+								We want to help you make sure your product has three things before you start running ads<br/>
 
 								<ul>
 									<li>Bug-free</li>
@@ -198,7 +187,7 @@ export default function Landing() {
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>PRODUCT SUBMISSION</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													Start a project submission along with $20 to reward users
+													Submit your product by providing the name, description, logo and link
 												</div>
 											</div>
 										</div>
@@ -210,8 +199,8 @@ export default function Landing() {
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>REJECT/APPROVE</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													Approve the QA advice/feedback you like and 
-													the tester will be notified that they are rewarded
+													Approve the QA advice you like and 
+													the tester will be notified to be rewarded
 												</div>
 											</div>
 										</div>
@@ -223,8 +212,8 @@ export default function Landing() {
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>RECEIVE E-MAILS</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													Receive an email when a user writes a
-													QA advice/feedback about your product
+													Receive an email when a tester writes a
+													QA advice about your product
 												</div>
 											</div>
 										</div>
@@ -236,8 +225,8 @@ export default function Landing() {
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>5 TESTERS FOR A SUBMISSION</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													You can have up to 5 users try out your product and give
-													you good QA advices/feedback for every submission
+													You can have up to 5 users try your product and give
+													you good QA advices for every submission
 												</div>
 											</div>
 										</div>
@@ -251,7 +240,7 @@ export default function Landing() {
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>PRODUCT SUBMISSION</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													Start a project submission along with $20 to reward users
+													Submit your product by providing the name, description, logo and link
 												</div>
 											</div>
 										</div>
@@ -261,7 +250,7 @@ export default function Landing() {
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>REJECT/APPROVE</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													Approve the QA advice/feedback you like and 
+													Approve the QA advice you like and 
 													the tester will be notified that they are rewarded
 												</div>
 											</div>
@@ -275,7 +264,7 @@ export default function Landing() {
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>RECEIVE E-MAILS</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
 													Receive an email when a user writes a
-													QA advice/feedback about your product
+													QA advice about your product
 												</div>
 											</div>
 										</div>
@@ -284,8 +273,8 @@ export default function Landing() {
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>5 TESTERS FOR A SUBMISSION</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													You can have up to 5 users try out your product and give
-													you good QA advices/feedback for every submission
+													For every project submission, you can have up to 5 users try your product and give
+													you good QA advices
 												</div>
 											</div>
 										</div>
@@ -305,9 +294,8 @@ export default function Landing() {
 												<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 													<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>TRY PRODUCTS</div>
 													<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-														Tryout a product you like and
-														write a good QA advice/feedback that
-														the creator would approve
+														Try a product and
+														write a good QA advice the creator would approve
 													</div>
 												</div>
 											</div>
@@ -315,9 +303,8 @@ export default function Landing() {
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>TRY PRODUCTS</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													Tryout a product you like and
-													write a good QA advice/feedback that
-													the creator would approve
+													Try a product you like and
+													write a good QA advice the creator would approve
 												</div>
 											</div>
 										}
@@ -333,8 +320,7 @@ export default function Landing() {
 												<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 													<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>EARN FOR YOUR CONTRIBUTION</div>
 													<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-														The creator can see the good QA advice/feedback, approve it
-														and then reward you a portion of their deposit
+														The creator can see the good QA advice and approve it to reward you $4
 													</div>
 												</div>
 											</div>
@@ -342,8 +328,7 @@ export default function Landing() {
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>EARN FOR YOUR CONTRIBUTION</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													The creator can see the good QA advice/feedback, approve it
-													and then reward you a portion of their deposit
+													The creator can see the good QA advice and approve it to reward you $4
 												</div>
 											</div>
 										}
@@ -359,9 +344,9 @@ export default function Landing() {
 												<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 													<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>TRY PRODUCTS</div>
 													<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-														Tryout a product you like and
-														write a good QA advice/feedback that
-														the creator would approve
+														Try a product and
+														write a good QA advice that
+														the creator would like and approve
 													</div>
 												</div>
 											</div>
@@ -369,9 +354,9 @@ export default function Landing() {
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>TRY PRODUCTS</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													Tryout a product you like and
-													write a good QA advice/feedback that
-													the creator would approve
+													Try a product and
+													write a good QA advice that
+													the creator would like and approve
 												</div>
 											</div>
 										}
@@ -385,8 +370,7 @@ export default function Landing() {
 												<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 													<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>EARN FOR YOUR CONTRIBUTION</div>
 													<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-														The creator can see the good QA advice/feedback, approve it
-														and then reward you a portion of their deposit
+														The creator can see the good QA advice and approve it to reward you $4
 													</div>
 												</div>
 											</div>
@@ -394,8 +378,7 @@ export default function Landing() {
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>EARN FOR YOUR CONTRIBUTION</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													The creator can see the good QA advice/feedback, approve it
-													and then reward you a portion of their deposit
+													The creator can see the good QA advice and approve it to reward you $4
 												</div>
 											</div>
 										}

@@ -38,13 +38,13 @@ const VisuallyHiddenInput = styled('input')`
   white-space: nowrap;
   width: 1px;
 `;
-let sessionId = ""
+// let sessionId = ""
 
-if (window.location.search.includes("session_id")) {
-	const urlParams = new URLSearchParams(window.location.search)
+// if (window.location.search.includes("session_id")) {
+// 	const urlParams = new URLSearchParams(window.location.search)
 	
-	sessionId = urlParams.get('session_id')
-}
+// 	sessionId = urlParams.get('session_id')
+// }
 
 export default function Listproduct() {
 	const [userId, setUserid] = useState('')
@@ -57,7 +57,7 @@ export default function Listproduct() {
 	const [file, setFile] = useState(null)
 	const [errorMsg, setErrormsg] = useState('')
 
-	const [paymentDone, setPaymentdone] = useState(false)
+	//const [paymentDone, setPaymentdone] = useState(false)
 	const [loading, setLoading] = useState(false)
 
 	const getTheUserInfo = () => {
@@ -74,7 +74,7 @@ export default function Listproduct() {
 			})
 			.then((res) => {
 				if (res) {
-					setPaymentdone(res.paymentDone)
+					//setPaymentdone(res.paymentDone)
 					setUserid(id)
 
 					if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('listproduct', { id, web: true });
@@ -97,58 +97,82 @@ export default function Listproduct() {
 		const name = data.get('name'), desc = data.get('desc'), link = data.get('link')
 
 		if (name && desc && link && image.uri) {
-			if (paymentDone) {
-				const id = localStorage.getItem("id")
-				const json = { userId: id, name, desc, link, image: JSON.stringify(image) }
+			// if (paymentDone) {
+			// 	const id = localStorage.getItem("id")
+			// 	const json = { userId: id, name, desc, link, image: JSON.stringify(image) }
 
-				localStorage.setItem("viewMyProducts", "true")
+			// 	localStorage.setItem("viewMyProducts", "true")
 
-				listProduct(json)
-					.then((res) => {
-						if (res.status == 200) {
-							return res.json()
-						}
+			// 	listProduct(json)
+			// 		.then((res) => {
+			// 			if (res.status == 200) {
+			// 				return res.json()
+			// 			}
 
-						throw res
-					})
-					.then((res) => {
-						if (res) {
-							window.location = "/main"
-						}
-					})
-					.catch((err) => {
-						if (err.status == 400) {
-							err.json().then(() => {
+			// 			throw res
+			// 		})
+			// 		.then((res) => {
+			// 			if (res) {
+			// 				window.location = "/main"
+			// 			}
+			// 		})
+			// 		.catch((err) => {
+			// 			if (err.status == 400) {
+			// 				err.json().then(() => {
 								
-							})
-						}
-					})
-			} else {
-				localStorage.setItem("productInfo", JSON.stringify({ userId, name, desc, link, image }))
+			// 				})
+			// 			}
+			// 		})
+			// } else {
+			// 	localStorage.setItem("productInfo", JSON.stringify({ userId, name, desc, link, image }))
 
-				const data = { userId, redirect: "listproduct" }
+			// 	const data = { userId, redirect: "listproduct" }
 
-				createCheckout(data)
-					.then((res) => {
-						if (res.status == 200) {
-							return res.json()
-						}
+			// 	createCheckout(data)
+			// 		.then((res) => {
+			// 			if (res.status == 200) {
+			// 				return res.json()
+			// 			}
 
-						throw res
-					})
-					.then((res) => {
-						if (res) {
-							window.location = res.url
-						}
-					})
-					.catch((err) => {
-						if (err.status == 400) {
-							err.json().then(() => {
+			// 			throw res
+			// 		})
+			// 		.then((res) => {
+			// 			if (res) {
+			// 				window.location = res.url
+			// 			}
+			// 		})
+			// 		.catch((err) => {
+			// 			if (err.status == 400) {
+			// 				err.json().then(() => {
 
-							})
-						}
-					})
-			}
+			// 				})
+			// 			}
+			// 		})
+			// }
+			const data = { userId, name, desc, link, image: JSON.stringify(image) }
+
+			localStorage.setItem("viewMyProducts", "true")
+
+			listProduct(data)
+				.then((res) => {
+					if (res.status == 200) {
+						return res.json()
+					}
+
+					throw res
+				})
+				.then((res) => {
+					if (res) {
+						window.location = "/main"
+					}
+				})
+				.catch((err) => {
+					if (err.status == 400) {
+						err.json().then(() => {
+							
+						})
+					}
+				})
 		} else {
 			setLoading(false)
 			
@@ -186,57 +210,59 @@ export default function Listproduct() {
 	}
 
 	useEffect(() => {
-		if (sessionId) {
-			setLoading(true)
+		// if (sessionId) {
+		// 	setLoading(true)
 
-			const id = localStorage.getItem("id")
+		// 	const id = localStorage.getItem("id")
 
-			const data = { userId: id, sessionId }
+		// 	const data = { userId: id, sessionId }
 
-			sessionId = ""
+		// 	sessionId = ""
 
-			createCustomerPayment(data)
-				.then((res) => {
-					if (res.status == 200) {
-						return res.json()
-					}
+		// 	createCustomerPayment(data)
+		// 		.then((res) => {
+		// 			if (res.status == 200) {
+		// 				return res.json()
+		// 			}
 
-					throw res
-				})
-				.then((res) => {
-					if (res) {
-						const { userId, name, desc, link, image } = JSON.parse(localStorage.getItem("productInfo"))
-						const json = { userId, name, desc, link, image: JSON.stringify(image) }
+		// 			throw res
+		// 		})
+		// 		.then((res) => {
+		// 			if (res) {
+		// 				const { userId, name, desc, link, image } = JSON.parse(localStorage.getItem("productInfo"))
+		// 				const json = { userId, name, desc, link, image: JSON.stringify(image) }
 
-						localStorage.setItem("viewMyProducts", "true")
+		// 				localStorage.setItem("viewMyProducts", "true")
 
-						listProduct(json)
-							.then((res) => {
-								if (res.status == 200) {
-									return res.json()
-								}
+		// 				listProduct(json)
+		// 					.then((res) => {
+		// 						if (res.status == 200) {
+		// 							return res.json()
+		// 						}
 
-								throw res
-							})
-							.then((res) => {
-								if (res) {
-									localStorage.removeItem("productInfo")
+		// 						throw res
+		// 					})
+		// 					.then((res) => {
+		// 						if (res) {
+		// 							localStorage.removeItem("productInfo")
 
-									window.location = "/main"
-								}
-							})
-							.catch((err) => {
-								if (err.status == 400) {
-									err.json().then(() => {
+		// 							window.location = "/main"
+		// 						}
+		// 					})
+		// 					.catch((err) => {
+		// 						if (err.status == 400) {
+		// 							err.json().then(() => {
 										
-									})
-								}
-							})
-					}
-			})
-		} else {
-			getTheUserInfo()
-		}
+		// 							})
+		// 						}
+		// 					})
+		// 			}
+		// 	})
+		// } else {
+		// 	getTheUserInfo()
+		// }
+
+		getTheUserInfo()
 	}, [])
 
 	return (
@@ -289,13 +315,6 @@ export default function Listproduct() {
 								<ClipLoader color="black" size={20}/>
 							</div>
             )}
-
-            <div className="row">
-			      	<div style={{ display: 'flex', flexDirection: 'row' }}>
-			        	<div className="column">Powered by </div>
-			        	<img src="/stripe.png" style={{ height: 50, marginLeft: 10, width: 50 }}/>
-			        </div>
-			      </div>
           </Box>
         </Box>
         <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>

@@ -1,6 +1,7 @@
 import './feedback.scss';
 import { useEffect, useState } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
+import { createCheckout, createCustomerPayment } from "../../apis/user"
 import { useParams } from 'react-router-dom';
 import { resizePhoto } from 'geottuse-tools';
 
@@ -25,6 +26,7 @@ export default function Feedbacks(props) {
 
 	const [name, setName] = useState('')
 	const [image, setImage] = useState({ name: '', width: 0, height: 0 })
+	const [deposited, setDeposited] = useState(false)
 	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {}, errorMsg: "" })
 	const [loaded, setLoaded] = useState(false)
 
@@ -45,6 +47,8 @@ export default function Feedbacks(props) {
 					setFeedbacks(res.feedbacks)
 					setName(res.name)
 					setImage(res.logo)
+					setDeposited(res.deposited)
+					setUserid(userId)
 					setLoaded(true)
 
 					if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('feedback', { id: userId, web: true });
@@ -56,6 +60,28 @@ export default function Feedbacks(props) {
 
 					})
 				}
+			})
+	}
+	const deposit = productId => {
+		const data = { userId, redirect: "seefeedbacks" }
+
+		createCheckout(data)
+			.then((res) => {
+				if (res.status == 200) {
+					return res.json()
+				}
+				
+				throw res
+			})
+			.then((res) => {
+				if (res) {
+					localStorage.setItem("productId", productId)
+
+					window.location = res.url
+				}
+			})
+			.catch((err) => {
+
 			})
 	}
 	const rejectTheFeedback = (testerId, index) => {
@@ -144,26 +170,40 @@ export default function Feedbacks(props) {
 						</div>
 
 						<div id="feedbacks-header">
-							Your feedbacks for <strong>{name}</strong>
+							Advices for <strong>{name}</strong>
 							<br/>
-							<div style={{ fontSize: 20 }}>(Please save your feedback somewhere)</div>
+							{deposited && <div style={{ fontSize: 20 }}>(Please save your feedback somewhere)</div>}
 						</div>
 
-						<div id="product-feedbacks">
-							{feedbacks.map((feedback, index) => (
-								<div className="feedback" key={feedback.key}>
-									<div className="feedback-header"><strong>Feedback:</strong> {feedback.feedback}</div>
-									<div className="feedback-header"><strong>Advice:</strong> {feedback.advice}</div>
+						{!deposited && (
+							<div id="feedbacks-rules-header">
+								<br/><br/>
+								Yes! Woohoo. You have {feedbacks.length} advice(s) from test users
+								<br/>
+								Deposit $20 to see the advices
+								<br/><br/>
+								You will get a refund of the leftover deposit in a week if you don't receive up to 5 advices
 
-									<Stack>
-										<div className="feedback-actions">
-											<div className="feedback-action" style={{ margin: '0 5px' }} onClick={() => rejectTheFeedback(feedback.testerId, index)}>Reject</div>
-											<div className="feedback-action" style={{ margin: '0 5px' }} onClick={() => rewardTheCustomer(feedback.testerId, index)}>I like it. Approve</div>
-										</div>
-									</Stack>
-								</div>
-							))}
-						</div>
+								<div id="deposit-button" onClick={() => deposit(id)}>Deposit</div>
+							</div>
+						)}
+
+						{deposited && (
+							<div id="product-feedbacks">
+								{feedbacks.map((feedback, index) => (
+									<div className="feedback" key={feedback.key}>
+										<div className="feedback-header"><strong>Advice:</strong> {feedback.advice}</div>
+
+										<Stack>
+											<div className="feedback-actions">
+												<div className="feedback-action" style={{ margin: '0 5px' }} onClick={() => rejectTheFeedback(feedback.testerId, index)}>Reject</div>
+												<div className="feedback-action" style={{ margin: '0 5px' }} onClick={() => rewardTheCustomer(feedback.testerId, index)}>I like it. Reward tester</div>
+											</div>
+										</Stack>
+									</div>
+								))}
+							</div>
+						)}
 					</div>
 				</div>
 				:
