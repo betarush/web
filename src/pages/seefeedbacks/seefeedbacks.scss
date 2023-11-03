@@ -158,5 +158,50 @@
 				}
 			}
 		}
+
+		#confirm-deposit-box {
+			background-color: white;
+			display: flex;
+			flex-direction: column;
+			height: 300px;
+			justify-content: space-around;
+			margin: 0 auto;
+			width: 500px;
+
+			#confirm-deposit-header {
+				font-size: 20px;
+				font-weight: bold;
+				text-align: center;
+			}
+
+			#confirm-deposit-details {
+				margin: 0 10%;
+				width: 80%;
+
+				.confirm-deposit-detail {
+					font-size: 20px;
+					text-align: center;
+				}
+			}
+
+			#confirm-deposit-actions {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-around;
+				width: 100%;
+
+				.confirm-deposit-action {
+					background-color: black;
+					border-radius: 20px;
+					color: white;
+					padding: 10px;
+					
+					&:hover {
+						cursor: pointer;
+						opacity: 0.8;
+					}
+				}
+			}
+		}
 	}
 }

@@ -156,5 +156,23 @@
 				}
 			}
 		}
+
+		#confirm-deposit-actions {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+			width: 100%;
+
+			.confirm-deposit-action {
+				background-color: black;
+				border-radius: 20px;
+				padding: 10px;
+				
+				&:hover {
+					cursor: pointer;
+					opacity: 0.8;
+				}
+			}
+		}
 	}
 }

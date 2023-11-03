@@ -27,7 +27,10 @@ export default function Feedbacks(props) {
 	const [name, setName] = useState('')
 	const [image, setImage] = useState({ name: '', width: 0, height: 0 })
 	const [deposited, setDeposited] = useState(false)
+
 	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {}, errorMsg: "" })
+	const [confirmDeposit, setConfirmdeposit] = useState({ show: false, productId: -1 })
+
 	const [loaded, setLoaded] = useState(false)
 
 	const getTheProductFeedbacks = () => {
@@ -184,7 +187,7 @@ export default function Feedbacks(props) {
 								<br/><br/>
 								You will get a refund of the leftover deposit in a week if you don't receive up to 5 advices
 
-								<div id="deposit-button" onClick={() => deposit(id)}>Deposit</div>
+								<div id="deposit-button" onClick={() => setConfirmdeposit({ show: true, productId: id })}>Deposit</div>
 							</div>
 						)}
 
@@ -212,20 +215,39 @@ export default function Feedbacks(props) {
 				</div>
 			}
 
-			{rejectReasonbox.show && (
+			{(rejectReasonbox.show || confirmDeposit.show) && (
 				<div id="hidden-box">
-					<div id="reject-box">
-						<div id="reject-header">Why are you rejecting ?</div>
+					{rejectReasonbox.show && (
+						<div id="reject-box">
+							<div id="reject-header">Why are you rejecting ?</div>
 
-						<textarea id="reject-input" maxlength="200" onChange={e => setRejectreasonbox({ ...rejectReasonbox, reason: e.target.value, errorMsg: "" })} value={rejectReasonbox.reason}/>
+							<textarea id="reject-input" maxlength="200" onChange={e => setRejectreasonbox({ ...rejectReasonbox, reason: e.target.value, errorMsg: "" })} value={rejectReasonbox.reason}/>
 
-						<div className="errormsg">{rejectReasonbox.errorMsg}</div>
+							<div className="errormsg">{rejectReasonbox.errorMsg}</div>
 
-						<div id="actions">
-							<div className="action" onClick={() => setRejectreasonbox({ show: false, reason: '' })}>Cancel</div>
-							<div className="action" onClick={() => rejectTheFeedback()}>Submit</div>
+							<div id="actions">
+								<div className="action" onClick={() => setRejectreasonbox({ show: false, reason: '' })}>Cancel</div>
+								<div className="action" onClick={() => rejectTheFeedback()}>Submit</div>
+							</div>
 						</div>
-					</div>
+					)}
+
+					{confirmDeposit.show && (
+						<div id="confirm-deposit-box">
+							<div id="confirm-deposit-header">Deposit detail</div>
+
+							<div id="confirm-deposit-details">
+								<div className="confirm-deposit-detail"><strong>Subtotal:</strong> $20.00</div>
+								<div className="confirm-deposit-detail"><strong>Service fee:</strong> $5.00</div>
+								<div className="confirm-deposit-detail"><strong>Total:</strong> $25.00</div>
+							</div>
+
+							<div id="confirm-deposit-actions">
+								<div className="confirm-deposit-action" onClick={() => setConfirmdeposit({ show: false, productId: -1 })}>Cancel</div>
+								<div className="confirm-deposit-action" onClick={() => deposit(confirmDeposit.productId)}>Deposit now</div>
+							</div>
+						</div>
+					)}
 				</div>
 			)}
 		</div>
