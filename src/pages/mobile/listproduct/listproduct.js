@@ -212,58 +212,6 @@ export default function Listproduct() {
 	}
 
 	useEffect(() => {
-		// if (sessionId) {
-		// 	setLoading(true)
-
-		// 	const id = localStorage.getItem("id")
-
-		// 	const data = { userId: id, sessionId }
-
-		// 	sessionId = ""
-
-		// 	createCustomerPayment(data)
-		// 		.then((res) => {
-		// 			if (res.status == 200) {
-		// 				return res.json()
-		// 			}
-
-		// 			throw res
-		// 		})
-		// 		.then((res) => {
-		// 			if (res) {
-		// 				const { userId, name, desc, link, image } = JSON.parse(localStorage.getItem("productInfo"))
-		// 				const json = { userId, name, desc, link, image: JSON.stringify(image) }
-
-		// 				localStorage.setItem("viewMyProducts", "true")
-
-		// 				listProduct(json)
-		// 					.then((res) => {
-		// 						if (res.status == 200) {
-		// 							return res.json()
-		// 						}
-
-		// 						throw res
-		// 					})
-		// 					.then((res) => {
-		// 						if (res) {
-		// 							localStorage.removeItem("productInfo")
-
-		// 							window.location = "/main"
-		// 						}
-		// 					})
-		// 					.catch((err) => {
-		// 						if (err.status == 400) {
-		// 							err.json().then(() => {
-										
-		// 							})
-		// 						}
-		// 					})
-		// 			}
-		// 	})
-		// } else {
-		// 	getTheUserInfo()
-		// }
-
 		getTheUserInfo()
 	}, [])
 

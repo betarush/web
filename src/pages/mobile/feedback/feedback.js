@@ -1,7 +1,7 @@
 import './feedback.scss';
 import { useEffect, useState } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
-import { createCheckout, createCustomerPayment } from "../../../apis/user"
+import { getUserInfo, createCheckout, createCustomerPayment } from "../../../apis/user"
 import { useParams } from 'react-router-dom';
 import { resizePhoto } from 'geottuse-tools';
 
@@ -27,14 +27,36 @@ export default function Feedbacks(props) {
 	const [name, setName] = useState('')
 	const [image, setImage] = useState({ name: '', width: 0, height: 0 })
 	const [deposited, setDeposited] = useState({ show: false, productId: -1 })
+	const [paymentDone, setPaymentdone] = useState({ brand: "", last4: "" })
 
-	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {} })
-	const [confirmDeposit, setConfirmdeposit] = useState({ show: false, productId: -1 })
+	// hidden boxes
+	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {}, errorMsg: "" })
+	const [confirmDeposit, setConfirmdeposit] = useState({ show: false, productId: -1, loading: false })
+
+	// popup boxes
+	const [whyFee, setWhyfee] = useState(false)
 
 	const [loaded, setLoaded] = useState(false)
 
-	const getTheProductFeedbacks = () => {
+	const getTheUserInfo = () => {
 		const userId = localStorage.getItem("id")
+
+		getUserInfo({ userId })
+			.then((res) => {
+				if (res.status == 200) {
+					return res.json()
+				}
+
+				throw res
+			})
+			.then((res) => {
+				if (res) {
+					setUserid(userId)
+					setPaymentdone(res.paymentDone)
+				}
+			})
+	}
+	const getTheProductFeedbacks = () => {	
 		const data = { productId: id }
 
 		getProductFeedbacks(data)
@@ -66,26 +88,46 @@ export default function Feedbacks(props) {
 			})
 	}
 	const deposit = productId => {
-		const data = { userId, redirect: "seefeedbacks" }
+		setConfirmdeposit({ ...confirmDeposit, loading: true })
 
-		createCheckout(data)
-			.then((res) => {
-				if (res.status == 200) {
-					return res.json()
-				}
-				
-				throw res
-			})
-			.then((res) => {
-				if (res) {
-					localStorage.setItem("productId", productId)
+		if (paymentDone.brand) {
+			const data = { userId, productId }
 
-					window.location = res.url
-				}
-			})
-			.catch((err) => {
+			createCustomerPayment(data)
+				.then((res) => {
+					if (res.status == 200) {
+						return res.json()
+					}
 
-			})
+					throw res
+				})
+				.then((res) => {
+					if (res) {
+						window.location = "/seefeedbacks"
+					}
+				})
+		} else {
+			const data = { userId, redirect: "seefeedbacks" }
+
+			createCheckout(data)
+				.then((res) => {
+					if (res.status == 200) {
+						return res.json()
+					}
+					
+					throw res
+				})
+				.then((res) => {
+					if (res) {
+						localStorage.setItem("productId", productId)
+
+						window.location = res.url
+					}
+				})
+				.catch((err) => {
+
+				})
+		}
 	}
 	const rejectTheFeedback = (testerId, index) => {
 		if (!rejectReasonbox.show) {
@@ -156,8 +198,12 @@ export default function Feedbacks(props) {
 	}
 
 	useEffect(() => {
-		getTheProductFeedbacks()
+		getTheUserInfo()
 	}, [])
+
+	useEffect(() => {
+		if (userId) getTheProductFeedbacks()
+	}, [userId])
 
 	return (
 		<div id="mobile-feedback">
@@ -185,7 +231,7 @@ export default function Feedbacks(props) {
 								<br/>
 								Deposit $20 to see the advices
 								<br/><br/>
-								You will get a refund of the leftover deposit in a week if you don't receive up to 5 advices
+								You will get a refund of the leftover deposit in a week if you possibly don't receive up to 5 advices
 
 								<div id="deposit-button" onClick={() => setConfirmdeposit({ show: true, productId: id })}>Deposit</div>
 							</div>
@@ -215,42 +261,92 @@ export default function Feedbacks(props) {
 				</div>
 			}
 
-			{(rejectReasonbox.show || confirmDeposit.show) && (
-				<div id="hidden-box">
-					{rejectReasonbox.show && (
-						<div id="reject-box">
-							<div id="reject-header">Why are you rejecting this feedback ?</div>
+			{(
+				rejectReasonbox.show || confirmDeposit.show || 
+				
+				whyFee
+			) && (
+				<>
+					{(rejectReasonbox.show || confirmDeposit.show) && (
+						<div id="hidden-box">
+							{rejectReasonbox.show && (
+								<div id="reject-box">
+									<div id="reject-header">Why are you rejecting this feedback ?</div>
 
-							<textarea id="reject-input" maxlength="200" onChange={e => setRejectreasonbox({ ...rejectReasonbox, reason: e.target.value })} value={rejectReasonbox.reason}/>
+									<textarea id="reject-input" maxlength="200" onChange={e => setRejectreasonbox({ ...rejectReasonbox, reason: e.target.value })} value={rejectReasonbox.reason}/>
 
-							{rejectReasonbox.errorMsg && <div className="errormsg">Please provide a good reason for rejection</div>}
+									{rejectReasonbox.errorMsg && <div className="errormsg">Please provide a good reason for rejection</div>}
 
-							<div id="actions">
-								<div className="action" onClick={() => setRejectreasonbox({ show: false, reason: '' })}>Cancel</div>
-								<div className="action" onClick={() => rejectTheFeedback()}>Submit</div>
-							</div>
+									<div id="actions">
+										<div className="action" onClick={() => setRejectreasonbox({ show: false, reason: '' })}>Cancel</div>
+										<div className="action" onClick={() => rejectTheFeedback()}>Submit</div>
+									</div>
+								</div>
+							)}
+
+							{confirmDeposit.show && (
+								<div id="confirm-deposit-box">
+									<div id="confirm-deposit-header">Deposit detail</div>
+
+									{paymentDone.brand && (
+										<div id="confirm-deposit-card-info">
+											<div id="card-icon"><img src="/visa.png"/></div>
+											<div id="card-header">****{paymentDone.last4}</div>
+										</div>
+									)}
+
+									<div id="confirm-deposit-details">
+										<div className="confirm-deposit-detail"><strong>Total:</strong> $20.00</div>
+										<div className="confirm-deposit-detail"><strong>
+											Service fee:</strong> $5.00
+											<strong className="confirm-deposit-detail-why" onClick={() => setWhyfee(true)}>?</strong>
+										</div>
+										<div className="confirm-deposit-detail"><strong>Total:</strong> $25.00</div>
+									</div>
+
+									<div id="confirm-deposit-actions">
+										<div className="confirm-deposit-action" onClick={() => {
+											if (!confirmDeposit.loading) {
+												setConfirmdeposit({ show: false, productId: -1 })
+											}
+										}}>Cancel</div>
+										<div className="confirm-deposit-action" onClick={() => {
+											if (!confirmDeposit.loading) {
+												deposit(confirmDeposit.productId)
+											}
+										}}>Deposit now</div>
+									</div>
+
+									<div id="poweredby">
+										<div id="poweredby-header">Powered by </div>
+										<div id="stripe-icon"><img src="/stripe.png"/></div>
+									</div>
+
+									{confirmDeposit.loading && (
+										<div style={{ height: 20, margin: '5% auto', width: 20 }}>
+											<ClipLoader color="black" size={20}/>
+										</div>
+									)}
+								</div>
+							)}
 						</div>
 					)}
 
-					{confirmDeposit.show && (
-						<div id="confirm-deposit-box">
-							<div id="confirm-deposit-header">Deposit detail</div>
+					{(whyFee) && (
+						<div id="popup-box">
+							{whyFee && (
+								<div id="whyfee-box">
+									<div id="whyfee-header">
+										The service fee is for us to run the platform
+									</div>
 
-							<div id="confirm-deposit-details">
-								<div className="confirm-deposit-detail"><strong>Subtotal:</strong> $20.00</div>
-								<div className="confirm-deposit-detail"><strong>Service fee:</strong> $5.00</div>
-								<div className="confirm-deposit-detail"><strong>Total:</strong> $25.00</div>
-							</div>
-
-							<div id="confirm-deposit-actions">
-								<div className="confirm-deposit-action" onClick={() => setConfirmdeposit({ show: false, productId: -1 })}>Cancel</div>
-								<div className="confirm-deposit-action" onClick={() => deposit(confirmDeposit.productId)}>Deposit now</div>
-							</div>
+									<div id="whyfee-button" onClick={() => setWhyfee(false)}>Ok</div>
+								</div>
+							)}
 						</div>
 					)}
-				</div>
+				</>
 			)}
-			
 		</div>
 	)
 }

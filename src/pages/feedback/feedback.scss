@@ -148,5 +148,134 @@
 				}
 			}
 		}
+
+		#confirm-deposit-box {
+			background-color: #efefef;
+			display: flex;
+			flex-direction: column;
+			height: 300px;
+			justify-content: space-around;
+			margin: 0 auto;
+			width: 500px;
+
+			#confirm-deposit-header {
+				font-size: 20px;
+				font-weight: bold;
+				text-align: center;
+			}
+
+			#confirm-deposit-card-info {
+				margin: 0 auto;
+				width: 150px;
+
+				img {
+					width: 100%;
+				}
+
+				#card-header {
+					font-weight: bold;
+					text-align: center;
+				}
+			}
+
+			#confirm-deposit-details {
+				.confirm-deposit-detail {
+					font-size: 20px;
+					text-align: center;
+				}
+
+				.confirm-deposit-detail-why {
+					background-color: rgba(0, 0, 0, 0.8);
+					border-radius: 20px;
+					color: white;
+					font-size: 20px;
+					margin-left: 10px;
+					padding: 0px 8px;
+
+					&:hover {
+						cursor: pointer;
+						opacity: 0.5;
+					}
+				}
+			}
+
+			#confirm-deposit-actions {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-around;
+				width: 100%;
+
+				.confirm-deposit-action {
+					background-color: black;
+					border-radius: 20px;
+					color: white;
+					padding: 10px;
+					text-align: center;
+					width: 100px;
+					
+					&:hover {
+						cursor: pointer;
+						opacity: 0.8;
+					}
+				}
+			}
+
+			#poweredby {
+				margin: 0 auto;
+				width: 220px;
+
+				#poweredby-header {
+					font-size: 15px;
+					text-align: center;
+				}
+
+				#stripe-icon {
+					margin: 0 auto;
+					width: 50px;
+
+					img {
+						width: 100%;
+					}
+				}
+			}
+		}
+	}
+
+	#popup-box {
+		background-color: rgba(0, 0, 0, 0.7);
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+		justify-content: space-around;
+		position: absolute;
+		top: 0;
+		width: 100vw;
+
+		#whyfee-box {
+			background-color: #efefef;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+			margin: 0 auto;
+			padding: 10% 0;
+			width: 500px;
+
+			#whyfee-header {
+				font-size: 20px;
+				font-weight: bold;
+				padding: 0 20px;
+				text-align: center;
+			}
+
+			#whyfee-button {
+				background-color: black;
+				border-radius: 20px;
+				color: white;
+				font-size: 20px;
+				margin: 10px auto;
+				text-align: center;
+				width: 100px;
+			}
+		}
 	}
 }

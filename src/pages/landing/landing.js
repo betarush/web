@@ -394,10 +394,10 @@ export default function Landing() {
 
 			<div id="footer">
 				<div id="socialmedias">
-					<div className="socialmedia" onClick={() => window.open("https://www.facebook.com/shaper.app2023")}>
+					<div className="socialmedia" onClick={() => window.open("https://www.facebook.com/betarush23")}>
 						<img alt="link to facebook page" loading="lazy" src="/facebook-icon.png"/>
 					</div>
-					<div className="socialmedia" onClick={() => window.open("https://twitter.com/shaper2023")}>
+					<div className="socialmedia" onClick={() => window.open("https://twitter.com/betarush23")}>
 						<img alt="link to twitter page" loading="lazy" src="/twitter-icon.png"/>
 					</div>
 					<div className="socialmedia" onClick={() => window.open("https://www.linkedin.com/company/97192981")}>

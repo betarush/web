@@ -241,47 +241,29 @@ export default function Main() {
 			})
 	}
 	const relaunchTheProduct = productId => {
-		if (!relaunch.show) {
-			getPaymentInfo({ userId })
-				.then((res) => {
-					if (res.status == 200) {
-						return res.json()
-					}
+		relistProduct({ productId })
+			.then((res) => {
+				if (res.status == 200) {
+					return res.json()
+				}
 
-					throw res
-				})
-				.then((res) => {
-					if (res) {
-						setRelaunch({ show: true, cardInfo: res.card, productId })
-					}
-				})
-		} else {
-			setRelaunch({ ...relaunch, loading: true })
+				throw res
+			})
+			.then((res) => {
+				if (res) {
+					localStorage.setItem("viewMyProducts", "true")
 
-			relistProduct({ productId: relaunch.productId })
-				.then((res) => {
-					if (res.status == 200) {
-						return res.json()
-					}
+					if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('relaunch', { id: userId, productId: relaunch.productId, mobile: true });
+					window.location = "/main"
+				}
+			})
+			.catch((err) => {
+				if (err.status == 400) {
+					err.json().then(() => {
 
-					throw res
-				})
-				.then((res) => {
-					if (res) {
-						localStorage.setItem("viewMyProducts", "true")
-
-						if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('relaunch', { id: userId, productId: relaunch.productId, mobile: true });
-						window.location = "/main"
-					}
-				})
-				.catch((err) => {
-					if (err.status == 400) {
-						err.json().then(() => {
-
-						})
-					}
-				})
-		}
+					})
+				}
+			})
 	}
 	const submitTheFeedback = () => {
 		setUserwrite({ ...userWrite, loading: true })
@@ -448,8 +430,8 @@ export default function Main() {
 
 															{product.numFeedback > 0 && (
 																<div className="header">
-																	{product.numFeedback} people gave feedback<br/><br/>
-																	<div className="product-action" onClick={() => window.location = '/feedback/' + product.id}>Reward them</div>
+																	{product.numFeedback} people gave feedback<br/>
+																	<div className="product-action" onClick={() => window.location = '/feedback/' + product.id}>See advice(s)</div>
 																</div>
 															)}
 

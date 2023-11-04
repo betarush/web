@@ -241,47 +241,71 @@ export default function Main() {
 			})
 	}
 	const relaunchTheProduct = productId => {
-		if (!relaunch.show) {
-			getPaymentInfo({ userId })
-				.then((res) => {
-					if (res.status == 200) {
-						return res.json()
-					}
+		// if (!relaunch.show) {
+		// 	getPaymentInfo({ userId })
+		// 		.then((res) => {
+		// 			if (res.status == 200) {
+		// 				return res.json()
+		// 			}
 
-					throw res
-				})
-				.then((res) => {
-					if (res) {
-						setRelaunch({ show: true, cardInfo: res.card, productId })
-					}
-				})
-		} else {
-			setRelaunch({ ...relaunch, loading: true })
+		// 			throw res
+		// 		})
+		// 		.then((res) => {
+		// 			if (res) {
+		// 				setRelaunch({ show: true, cardInfo: res.card, productId })
+		// 			}
+		// 		})
+		// } else {
+		// 	setRelaunch({ ...relaunch, loading: true })
 
-			relistProduct({ productId: relaunch.productId })
-				.then((res) => {
-					if (res.status == 200) {
-						return res.json()
-					}
+		// 	relistProduct({ productId: relaunch.productId })
+		// 		.then((res) => {
+		// 			if (res.status == 200) {
+		// 				return res.json()
+		// 			}
 
-					throw res
-				})
-				.then((res) => {
-					if (res) {
-						localStorage.setItem("viewMyProducts", "true")
+		// 			throw res
+		// 		})
+		// 		.then((res) => {
+		// 			if (res) {
+		// 				localStorage.setItem("viewMyProducts", "true")
 
-						if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('relaunch', { id: userId, productId: relaunch.productId, web: true });
-						window.location = "/main"
-					}
-				})
-				.catch((err) => {
-					if (err.status == 400) {
-						err.json().then(() => {
+		// 				if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('relaunch', { id: userId, productId: relaunch.productId, web: true });
+		// 				window.location = "/main"
+		// 			}
+		// 		})
+		// 		.catch((err) => {
+		// 			if (err.status == 400) {
+		// 				err.json().then(() => {
 
-						})
-					}
-				})
-		}
+		// 				})
+		// 			}
+		// 		})
+		// }
+
+		relistProduct({ productId })
+			.then((res) => {
+				if (res.status == 200) {
+					return res.json()
+				}
+
+				throw res
+			})
+			.then((res) => {
+				if (res) {
+					localStorage.setItem("viewMyProducts", "true")
+
+					if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('relaunch', { id: userId, productId: relaunch.productId, web: true });
+					window.location = "/main"
+				}
+			})
+			.catch((err) => {
+				if (err.status == 400) {
+					err.json().then(() => {
+
+					})
+				}
+			})
 	}
 	const submitTheFeedback = () => {
 		setUserwrite({ ...userWrite, loading: true })
