@@ -36,7 +36,7 @@ export default function Seefeedbacks() {
 
 	// hidden boxes
 	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {}, errorMsg: '' })
-	const [confirmDeposit, setConfirmdeposit] = useState({ show: false, productId: -1 })
+	const [confirmDeposit, setConfirmdeposit] = useState({ show: false, productId: -1, loading: false })
 
 	// popup boxes
 	const [whyFee, setWhyfee] = useState(false)
@@ -99,26 +99,46 @@ export default function Seefeedbacks() {
 			})
 	}
 	const deposit = productId => {
-		const data = { userId, redirect: "seefeedbacks" }
+		setConfirmdeposit({ ...confirmDeposit, loading: true })
 
-		createCheckout(data)
-			.then((res) => {
-				if (res.status == 200) {
-					return res.json()
-				}
-				
-				throw res
-			})
-			.then((res) => {
-				if (res) {
-					localStorage.setItem("productId", productId)
+		if (paymentDone.brand != "") {
+			const data = { userId, productId }
 
-					window.location = res.url
-				}
-			})
-			.catch((err) => {
+			createCustomerPayment(data)
+				.then((res) => {
+					if (res.status == 200) {
+						return res.json()
+					}
 
-			})
+					throw res
+				})
+				.then((res) => {
+					if (res) {
+						window.location = "/seefeedbacks"
+					}
+				})
+		} else {
+			const data = { userId, redirect: "seefeedbacks" }
+
+			createCheckout(data)
+				.then((res) => {
+					if (res.status == 200) {
+						return res.json()
+					}
+					
+					throw res
+				})
+				.then((res) => {
+					if (res) {
+						localStorage.setItem("productId", productId)
+
+						window.location = res.url
+					}
+				})
+				.catch((err) => {
+
+				})
+		}
 	}
 	const rejectTheFeedback = (id, testerId, productIndex, feedbackIndex) => {
 		if (!rejectReasonbox.show) {

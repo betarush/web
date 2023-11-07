@@ -513,7 +513,7 @@ export default function Main() {
 					</div>
 				}
 			</div>
-
+			
 			{(intro || userWrite.show || relaunch.show) && (
 				<div id="hidden-box">
 					{intro && (

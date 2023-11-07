@@ -472,7 +472,7 @@ export default function Main() {
 
 							<div className="intro-mini-header">
 								BetaRush enables you to earn money
-								by helping creators improve ensure QA for their product.
+								by helping creators ensure QA for their product.
 								<br/><br/>
 								Try products and write good QA advices.
 								<br/><br/>

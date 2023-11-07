@@ -306,8 +306,16 @@ export default function Feedbacks(props) {
 									</div>
 
 									<div id="confirm-deposit-actions">
-										<div className="confirm-deposit-action" onClick={() => setConfirmdeposit({ show: false, productId: -1 })}>Cancel</div>
-										<div className="confirm-deposit-action" onClick={() => deposit(confirmDeposit.productId)}>Deposit now</div>
+										<div className="confirm-deposit-action" onClick={() => {
+											if (!confirmDeposit.loading) {
+												setConfirmdeposit({ show: false, productId: -1 })
+											}
+										}}>Cancel</div>
+										<div className="confirm-deposit-action" onClick={() => {
+											if (!confirmDeposit.loading) {
+												deposit(confirmDeposit.productId)
+											}
+										}}>Deposit now</div>
 									</div>
 
 									<div id="poweredby">
