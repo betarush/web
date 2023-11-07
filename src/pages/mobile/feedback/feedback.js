@@ -241,7 +241,7 @@ export default function Feedbacks(props) {
 							<div id="product-feedbacks">
 								{feedbacks.map((feedback, index) => (
 									<div className="feedback" key={feedback.key}>
-										<div className="feedback-header">{feedback.header}</div>
+										<div className="feedback-header"><strong>Advice: </strong> {feedback.advice}</div>
 
 										<Stack>
 											<div className="feedback-actions">

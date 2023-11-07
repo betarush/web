@@ -1,7 +1,7 @@
 {
   "name": "getquickstartupfeedback",
   "version": "0.1.0",
-  "proxy": "http://10.0.0.60:5002",
+  "proxy": "http://10.0.0.60:5000",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
