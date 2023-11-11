@@ -15,7 +15,6 @@ import Ratings from './pages/ratings'
 import Earnings from './pages/earnings'
 import Seefeedbacks from './pages/seefeedbacks';
 import Listproduct from './pages/listproduct'
-//import Payment from './pages/payment'
 
 // mobile
 import MobileRegister from './pages/mobile/register'
@@ -23,6 +22,7 @@ import MobileLogin from './pages/mobile/login'
 import MobileIntro from './pages/mobile/intro'
 import MobileMain from './pages/mobile/main'
 import MobileFeedback from './pages/mobile/feedback'
+import MobileRatings from './pages/mobile/ratings'
 import MobileEarnings from './pages/mobile/earnings'
 import MobileSeefeedbacks from './pages/mobile/seefeedbacks'
 import MobileListproduct from './pages/mobile/listproduct'
@@ -62,7 +62,7 @@ function App() {
             <Route path="/intro" element={<MobileIntro/>}/>
             <Route path="/main" element={<MobileMain/>}/>
             <Route path="/feedback/:id" element={<MobileFeedback/>}/>
-            {/* <Route path="/ratings" element={<MobileRejections/>}/> */}
+            <Route path="/ratings" element={<MobileRatings/>}/>
             <Route path="/earnings" element={<MobileEarnings/>}/>
             <Route path="/seefeedbacks" element={<MobileSeefeedbacks/>}/>
             <Route path="/listproduct" element={<MobileListproduct/>}/>

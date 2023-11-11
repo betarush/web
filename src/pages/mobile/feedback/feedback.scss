@@ -62,25 +62,38 @@
 						font-size: 18px;
 					}
 
+					.feedback-actions-header {
+						text-align: center;
+					}
+
 					.feedback-actions {
 						display: flex;
 						flex-direction: row;
 
 						.feedback-action {
-							background-color: black;
-							border-radius: 20px;
-							border-style: solid;
-							border-width: 1px;
-							color: white;
+							background-color: white;
+							border-radius: 10px;
+							box-shadow: 0px 0px 2px black;
 							font-size: 15px;
-							margin: 0 10px;
-							padding: 10px;
+							font-weight: bold;
+							margin: 10px;
+							padding: 5px;
 							text-align: center;
-							width: 200px;
+
+							.feedback-action-icon {
+								height: 30px;
+								margin: 0 auto;
+								width: 30px;
+							}
+
+							.feedback-action-header {
+								font-weight: 500;
+								text-align: center;
+							}
 
 							&:hover {
-								background-color: rgba(0, 0, 0, 0.5);
 								cursor: pointer;
+								opacity: 0.5;
 							}
 						}
 					}
@@ -122,28 +135,6 @@
 				padding: 10px;
 				resize: none;
 				width: 90%;
-			}
-
-			#actions {
-				display: flex;
-				flex-direction: row;
-				justify-content: space-around;
-
-				.action {
-					background-color: black;
-					border-radius: 20px;
-					color: white;
-					font-size: 15px;
-					font-weight: bold;
-					padding: 10px;
-					text-align: center;
-					width: 40%;
-
-					&:hover {
-						cursor: pointer;
-						opacity: 0.5;
-					}
-				}
 			}
 		}
 
@@ -197,27 +188,6 @@
 				}
 			}
 
-			#confirm-deposit-actions {
-				display: flex;
-				flex-direction: row;
-				justify-content: space-around;
-				width: 100%;
-
-				.confirm-deposit-action {
-					background-color: black;
-					border-radius: 20px;
-					color: white;
-					padding: 10px;
-					text-align: center;
-					width: 100px;
-					
-					&:hover {
-						cursor: pointer;
-						opacity: 0.8;
-					}
-				}
-			}
-
 			#poweredby {
 				margin: 0 auto;
 				width: 220px;
@@ -234,6 +204,119 @@
 					img {
 						width: 100%;
 					}
+				}
+			}
+		}
+
+		#regain-account-box {
+			background-color: #efefef;
+			height: 60%;
+			margin: 0 auto;
+			width: 90%;
+
+			#regain-account-header {
+				font-size: 30px;
+				font-weight: bold;
+				padding: 0 5px;
+				text-align: center;
+			}
+
+			.regain-account-div {
+				border-color: grey;
+				border-style: solid;
+				border-width: 0.5px;
+				margin: 20px 0;
+				width: 100%;
+			}
+
+			#regain-account-infos {
+				color: rgba(0, 0, 0, 0.8);
+
+				.regain-account-info-header {
+					font-size: 20px;
+					font-weight: 100;
+				}
+
+				.regain-account-info-header:nth-child(3) {
+					font-weight: bold;
+				}
+			}
+
+			#card-info {
+				margin: 0 auto;
+				width: 200px;
+
+				#type {
+					margin: 0 auto;
+					width: 80px;
+
+					img {
+						width: 100%;
+					}
+				}
+
+				#header {
+					text-align: center;
+				}
+
+				#update {
+					border-style: solid;
+					border-width: 1px;
+					padding: 5px;
+					text-align: center;
+					width: 100%;
+
+					&:hover {
+						cursor: pointer;
+						opacity: 0.5;
+					}
+				}
+			}
+
+			#card-info-header {
+				font-size: 20px;
+				font-weight: bold;
+				padding: 20px 0;
+				text-align: center;
+			}
+		}
+
+		#banned-sign-box {
+			background-color: #efefef;
+			display: flex;
+			flex-direction: column;
+			height: 60%;
+			justify-content: space-around;
+			margin: 0 auto;
+			width: 90%;
+
+			#banned-sign-header {
+				font-size: 30px;
+				font-weight: bold;
+				padding: 0 5px;
+				text-align: center;
+			}
+		}
+
+		#actions {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+
+			.action {
+				background-color: black;
+				border-radius: 20px;
+				color: white;
+				font-size: 15px;
+				font-weight: bold;
+				margin: 0 2px;
+				padding: 10px;
+				text-align: center;
+				width: 45%;
+
+				&:hover {
+					cursor: pointer;
+					opacity: 0.5;
 				}
 			}
 		}

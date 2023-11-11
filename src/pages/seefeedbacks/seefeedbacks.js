@@ -35,7 +35,6 @@ export default function Seefeedbacks() {
 
 	const [name, setName] = useState('')
 	const [image, setImage] = useState({ name: '', width: 0, height: 0 })
-
 	const [paymentDone, setPaymentdone] = useState({ brand: "", last4: "" })
 
 	// hidden boxes
@@ -411,13 +410,13 @@ export default function Seefeedbacks() {
 										<div className="confirm-deposit-detail"><strong>Total:</strong> ${(depositAmount + 5).toFixed(2)}</div>
 									</div>
 
-									<div id="confirm-deposit-actions">
-										<div className="confirm-deposit-action" onClick={() => {
+									<div id="actions">
+										<div className="action" onClick={() => {
 											if (!confirmDeposit.loading) {
 												setConfirmdeposit({ ...confirmDeposit, show: false, productId: -1 })
 											}
 										}}>Cancel</div>
-										<div className="confirm-deposit-action" onClick={() => {
+										<div className="action" onClick={() => {
 											if (!confirmDeposit.loading) {
 												deposit(confirmDeposit.productId)
 											}
@@ -436,7 +435,7 @@ export default function Seefeedbacks() {
 									)}
 								</div>
 							)}
-							{regainAccountconfirm && (
+							{regainAccountconfirm.show && (
 								<div id="regain-account-box">
 									<div id="regain-account-header">Regain account payment summary</div>
 

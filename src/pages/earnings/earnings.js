@@ -470,8 +470,7 @@ export default function Earnings() {
 							</div>
 						</div>
 					)}
-
-					{regainAccountconfirm && (
+					{regainAccountconfirm.show && (
 						<div id="regain-account-box">
 							<div id="regain-account-header">Regain account payment summary</div>
 
@@ -516,7 +515,6 @@ export default function Earnings() {
 							)}
 						</div>
 					)}
-					
 					{bannedSign && (
 						<div id="banned-sign-box">
 							<div id="banned-sign-header">You have been banned because of an advice you gave</div>

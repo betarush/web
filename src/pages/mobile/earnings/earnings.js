@@ -1,7 +1,8 @@
 import './earnings.scss';
 import { useEffect, useState } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
-import { getUserInfo, getBankaccountInfo, submitBankaccountInfo, getEarnings } from '../../../apis/user'
+import { depositAmount, regainAmount } from "../../../info"
+import { getUserInfo, getBankaccountInfo, submitBankaccountInfo, getEarnings, createCheckout, createCustomerPayment } from '../../../apis/user'
 
 // material ui components
 import Avatar from '@mui/material/Avatar';
@@ -24,6 +25,13 @@ import StackButton from '@mui/material/Button';
 import Header from '../../../components/mobile/header'
 
 let stripe = require('stripe')(process.env.REACT_APP_STRIPE_KEY);
+let sessionId = ""
+
+if (window.location.search.includes("session_id")) {
+	const urlParams = new URLSearchParams(window.location.search)
+	
+	sessionId = urlParams.get('session_id')
+}
 
 export default function Earnings() {
 	const [userId, setUserid] = useState('')
@@ -41,8 +49,11 @@ export default function Earnings() {
 	const [bankInfo, setBankinfo] = useState('')
 
 	const [bankaccountDone, setBankaccountdone] = useState(false)
+	const [paymentDone, setPaymentdone] = useState({ brand: "", last4: "" })
 	const [earnings, setEarnings] = useState(0.0)
 	const [earnedBox, setEarnedbox] = useState({ show: false, earned: 0, pending: 0 })
+	const [regainAccountconfirm, setRegainaccountconfirm] = useState({ show: false, cardInfo: {}, loading: false })
+	const [bannedSign, setBannedsign] = useState(false)
 
 	const [loaded, setLoaded] = useState(false)
 	const [loading, setLoading] = useState(false)
@@ -226,9 +237,74 @@ export default function Earnings() {
 				}
 			})
 	}
+	const regainTheAccount = () => {
+		if (!regainAccountconfirm.show) {
+			setRegainaccountconfirm({ ...regainAccountconfirm, show: true })
+		} else {
+			if (paymentDone.brand != "") {
+				const data = { userId }
+
+				createCustomerPayment(data)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						}
+
+						throw res
+					})
+					.then((res) => {
+						if (res) {
+							window.location = "/earnings"
+						}
+					})
+			} else {
+				const data = { userId, redirect: "earnings" }
+
+				createCheckout(data)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						}
+						
+						throw res
+					})
+					.then((res) => {
+						if (res) {
+							window.location = res.url
+						}
+					})
+					.catch((err) => {
+
+					})
+			}
+		}
+	}
 
 	useEffect(() => {
-		getTheUserInfo()
+		if (sessionId) {
+			const data = { 
+				userId: localStorage.getItem("id"), 
+				sessionId 
+			}
+			
+			sessionId = ""
+			
+			createCustomerPayment(data)
+				.then((res) => {
+					if (res.status == 200) {
+						return res.json()
+					}
+			
+					throw res
+				})
+				.then((res) => {
+					if (res) {
+						window.location = "/earnings"
+					}
+			})
+		} else {
+			getTheUserInfo()
+		}
 	}, [])
 
 	useEffect(() => {
@@ -237,7 +313,9 @@ export default function Earnings() {
 
 	return (
 		<div id="mobile-earnings">
-			<Header/>
+			<Header
+				regainAccount={() => regainTheAccount()}
+			/>
 
 			{loaded ? 
 				<>
@@ -344,8 +422,6 @@ export default function Earnings() {
 				            <div style={{ marginLeft: 10 }}><LockOutlinedIcon /></div>
 				          </Button>
 				        </CardActions>
-
-			        
 				      </CardContent>
 
 				      {loading && (
@@ -355,9 +431,9 @@ export default function Earnings() {
 	            )}
 
 	            <div className="row">
-				      	<div style={{ display: 'flex', flexDirection: 'row' }}>
+				      	<div style={{ display: 'flex', flexDirection: 'row', marginTop: 20 }}>
 				        	<div className="column">Powered by </div>
-				        	<img src="/stripe.png" style={{ height: 50, marginLeft: 10, width: 50 }}/>
+				        	<img src="/stripe.png" style={{ height: 30, marginLeft: 10 }}/>
 				        </div>
 				      </div>
 				     </Box>
@@ -373,25 +449,85 @@ export default function Earnings() {
 	      {'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}
 	    </Typography>
 
-	    {earnedBox.show && (
+	    {(earnedBox.show || regainAccountconfirm.show || bannedSign) && (
 	      <div id="hidden-box">
-         	<div id="earned-box">
-           	<div id="earned-header">
-           		{earnedBox.earned > 0 && "Yay! You've earned $" + earnedBox.earned.toFixed(2)}
-           		{earnedBox.pending && (
-           			<div style={{ fontSize: 20, padding: '0 5%' }}>
-           				<br/><br/>
-           				We are processing your withdrawal. You will get an e-mail to withdraw your money soon.
-           			</div>
-           		)}
+					{earnedBox.show && (
+						<div id="earned-box">
+							<div id="earned-header">
+								{earnedBox.earned > 0 && "Yay! You've earned $" + earnedBox.earned.toFixed(2)}
+								{earnedBox.pending && (
+									<div style={{ fontSize: 20, padding: '0 5%' }}>
+										<br/><br/>
+										We are processing your withdrawal. You will get an e-mail to withdraw your money soon.
+									</div>
+								)}
 
-           		{earnedBox.leftover && <div style={{ fontSize: 20, padding: '5%' }}>We only do 5 money transfers at a time.<br/>You still have more transfers</div>}
+								{earnedBox.leftover && <div style={{ fontSize: 20, padding: '5%' }}>We only do 5 money transfers at a time.<br/>You still have more transfers</div>}
 
-            	<br/><br/>
+								<br/><br/>
 
-            	Thank you for your contribution
-           	</div>
-         	</div>
+								Thank you for your contribution
+							</div>
+						</div>
+					)}
+					{regainAccountconfirm.show && (
+						<div id="regain-account-box">
+							<div id="regain-account-header">Regain account payment summary</div>
+
+							<div className="regain-account-div"/>
+
+							<div id="regain-account-infos">
+								<div className="regain-account-info-header"><strong>Subtotal:</strong> ${regainAmount.toFixed(2)}</div>
+
+								<div className="regain-account-div"/>
+
+								<div className="regain-account-info-header"><strong>Total:</strong> ${regainAmount.toFixed(2)}</div>
+							</div>
+
+							{regainAccountconfirm.cardInfo.last4 && (
+								<div id="card-info">
+									<div id="type">
+										{regainAccountconfirm.cardInfo.name == "Visa" && <img src="/visa.png"/>}
+										{regainAccountconfirm.cardInfo.name == "MasterCard" && <img src="/mastercard.png"/>}
+										{regainAccountconfirm.cardInfo.name == "American Express" && <img src="/amex.jpg"/>}
+										{regainAccountconfirm.cardInfo.name == "Discover" && <img src="/discover.jpg"/>}
+										{regainAccountconfirm.cardInfo.name == "Diners Club" && <img src="/dinersclub.png"/>}
+										{regainAccountconfirm.cardInfo.name == "JCB" && <img src="/jcb.jpg"/>}
+										{regainAccountconfirm.cardInfo.name == "UnionPay" && <img src="/unionpay.png"/>}
+									</div>
+									<div id="header">
+										{regainAccountconfirm.cardInfo.name}
+										<br/>
+										*********{regainAccountconfirm.cardInfo.last4}
+									</div>
+								</div>
+							)}
+							
+							<div id="actions">
+								<div className="action" style={{ opacity: regainAccountconfirm.loading ? 0.5 : 1 }} onClick={() => !regainAccountconfirm.loading && setRegainaccountconfirm({ show: false, cardInfo: {} })}>Cancel</div>
+								<div className="action" style={{ opacity: regainAccountconfirm.loading ? 0.5 : 1 }} onClick={() => !regainAccountconfirm.loading && regainTheAccount()}>Regain now</div>
+							</div>
+
+							{regainAccountconfirm.loading && (
+								<div style={{ height: 20, margin: '5px auto', width: 20 }}>
+									<ClipLoader color="black" size={20}/>
+								</div>
+							)}
+						</div>
+					)}
+					{bannedSign && (
+						<div id="banned-sign-box">
+							<div id="banned-sign-header">You have been banned because of an advice you gave</div>
+
+							<div id="actions">
+								<div className="action" onClick={() => setBannedsign(false)}>Cancel</div>
+								<div className="action" onClick={() => {
+									setBannedsign(false)
+									regainTheAccount()
+								}}>Unban now</div>
+							</div>
+						</div>
+					)}
 	     	</div>
 	    )}
     </div>

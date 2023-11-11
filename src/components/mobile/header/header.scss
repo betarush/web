@@ -10,6 +10,21 @@
 		font-weight: bold;
 		margin: 10px 0;
 		text-align: center;
+
+		strong {
+			background-color: white;
+			border-radius: 5px;
+			border-style: solid;
+			border-width: 2px;
+			color: black;
+			padding: 5px;
+			text-align: center;
+
+			&:hover {
+				cursor: pointer;
+				opacity: 0.5;
+			}
+		}
 	}
 
 	#logo {

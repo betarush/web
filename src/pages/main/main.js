@@ -231,7 +231,7 @@ export default function Main() {
 			})
 			.then((res) => {
 				if (res) {
-					if (res.msg != undefined) {
+					if (res.msg) {
 						newProducts[index].trying = true
 
 						setProducts(newProducts)
@@ -517,7 +517,6 @@ export default function Main() {
 																)}
 
 																{product.numRewarded > 0 && <div className="header">{product.numRewarded} people rewarded</div>}
-																{product.numRejected > 0 && <div className="header">{product.numRejected} people rejected</div>}
 															</>
 															:
 															<>

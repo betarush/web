@@ -4,6 +4,9 @@ import { AiOutlineCodeSandbox, AiFillDollarCircle } from "react-icons/ai";
 import { FaRegFaceFrownOpen } from "react-icons/fa6";
 import { VscFeedback } from "react-icons/vsc";
 import { HiRocketLaunch } from "react-icons/hi2";
+import { BsDoorOpen } from "react-icons/bs";
+import { FcRating } from "react-icons/fc";
+import { MdPending } from "react-icons/md";
 import { getUserInfo } from '../../../apis/user'
 
 // material ui components
@@ -21,12 +24,14 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
-export default function Header() {
+export default function Header(props) {
 	const [username, setUsername] = useState('')
 	const [earnings, setEarnings] = useState(0.0)
-	const [numRejected, setNumrejected] = useState(0)
+	const [amountPending, setAmountpending] = useState(0.0)
+	const [numAdvices, setNumadvices] = useState(0)
 	const [firstTime, setFirsttime] = useState(false)
 	const [isCreator, setIscreator] = useState(false)
+	const [banned, setBanned] = useState(false)
 
 	const getTheUserInfo = () => {
 		const data = { userId: localStorage.getItem("id") }
@@ -43,9 +48,11 @@ export default function Header() {
 				if (res) {
 					setUsername(res.username)
 					setEarnings(res.earnings)
-					setNumrejected(res.rejectedReasons)
+					setAmountpending(res.amountPending)
+					setNumadvices(res.numAdvices)
 					setFirsttime(res.firstTime)
 					setIscreator(res.isCreator)
+					setBanned(res.banned)
 				}
 			})
 			.catch((err) => {
@@ -81,14 +88,14 @@ export default function Header() {
 		            	<div className="column"><AiOutlineCodeSandbox style={{ fontSize: 20 }}/></div>
 		            	<div className="column" style={{ marginLeft: 10 }}>Products</div>
 		            </div>
-		            <div className="nav" onClick={() => window.location = "/rejections"} sx={{ color: 'black' }}>
-		            	<div className="column"><FaRegFaceFrownOpen style={{ fontSize: 20 }}/></div>
-		            	<div className="column" style={{ marginLeft: 10 }}>Rejections</div>
+		            <div className="nav" onClick={() => window.location = "/ratings"} sx={{ color: 'black' }}>
+		            	<div className="column"><FcRating style={{ fontSize: 20 }}/></div>
+		            	<div className="column" style={{ marginLeft: 10 }}>Ratings</div>
 		            </div>
 		            {isCreator == true && (
 		            	<div className="nav" onClick={() => window.location = "/seefeedbacks"} sx={{ my: 2, color: 'white' }}>
 		            		<div className="column"><VscFeedback style={{ fontSize: 20 }}/></div>
-		            		<div className="column" style={{ marginLeft: 10 }}>See Feedbacks</div>
+		            		<div className="column" style={{ marginLeft: 10 }}>See Feedbacks{numAdvices > 0 && " (" + numAdvices + ")"}</div>
 		            	</div>
 		            )}
 		          </div>
@@ -108,7 +115,18 @@ export default function Header() {
           </>
       	)}
     	</div>
-      <div id="logout" onClick={() => logout()} sx={{ my: 2, color: 'black', display: 'block' }}>Log-Out</div>
+      <div className="row">
+				<div>
+					<div className="row">
+						<div className="column"><MdPending style={{ fontSize: 20 }}/></div>
+						<div id="user">Pending ${amountPending.toFixed(2)}</div>
+					</div>
+					{banned && <div id="user">You are banned<strong onClick={() => props.regainAccount()}>FIX</strong></div>}
+				</div>
+				<div className="column">
+					<div id="logout" onClick={() => logout()} sx={{ my: 2, color: 'black', display: 'block' }}>Log-Out</div>
+				</div>
+			</div>
 		</div>
 	)
 }

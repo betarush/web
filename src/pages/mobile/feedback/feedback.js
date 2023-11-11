@@ -2,8 +2,12 @@ import './feedback.scss';
 import { useEffect, useState } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
 import { getUserInfo, createCheckout, createCustomerPayment } from "../../../apis/user"
+import { depositAmount, regainAmount } from "../../../info"
 import { useParams } from 'react-router-dom';
 import { resizePhoto } from 'geottuse-tools';
+import { FaBan } from "react-icons/fa"
+import { ImHappy } from "react-icons/im"
+import { BsArrowRepeat, BsCheckCircle } from "react-icons/bs"
 
 // material ui components
 import Stack from '@mui/material/Stack';
@@ -12,10 +16,17 @@ import Button from '@mui/material/Button';
 // components
 import Header from '../../../components/mobile/header'
 
-//import { rewardCustomer, rejectFeedback } from '../../../apis/user'
+import { rateCustomer } from '../../../apis/user'
 import { getProductFeedbacks } from '../../../apis/product'
 
 const LOGO_URL = process.env.REACT_APP_LOGO_URL
+let sessionId = ""
+
+if (window.location.search.includes("session_id")) {
+	const urlParams = new URLSearchParams(window.location.search)
+	
+	sessionId = urlParams.get('session_id')
+}
 
 export default function Feedbacks(props) {
 	const { id } = useParams()
@@ -30,8 +41,10 @@ export default function Feedbacks(props) {
 	const [paymentDone, setPaymentdone] = useState({ brand: "", last4: "" })
 
 	// hidden boxes
-	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {}, errorMsg: "" })
+	const [warningReasonbox, setWarningreasonbox] = useState({ show: false, reason: '', info: {}, errorMsg: "" })
 	const [confirmDeposit, setConfirmdeposit] = useState({ show: false, productId: -1, loading: false })
+	const [regainAccountconfirm, setRegainaccountconfirm] = useState({ show: false, cardInfo: {}, loading: false })
+	const [bannedSign, setBannedsign] = useState(false)
 
 	// popup boxes
 	const [whyFee, setWhyfee] = useState(false)
@@ -129,76 +142,134 @@ export default function Feedbacks(props) {
 				})
 		}
 	}
-	const rejectTheFeedback = (testerId, index) => {
-		if (!rejectReasonbox.show) {
-			setRejectreasonbox({ show: true, reason: '', info: { testerId, index } })
-		} else {
-			const { info, reason } = rejectReasonbox
-
-			if (reason) {
-				const data = { productId: id, testerId: info.testerId, reason }
-				const newFeedbacks = [...feedbacks]
-
-				// rejectFeedback(data)
-				// 	.then((res) => {
-				// 		if (res.status == 200) {
-				// 			return res.json()
-				// 		}
-
-				// 		throw res
-				// 	})
-				// 	.then((res) => {
-				// 		if (res) {
-				// 			newFeedbacks.splice(info.index, 1)
-
-				// 			if (newFeedbacks.length > 0) {
-				// 				setFeedbacks(newFeedbacks)
-				// 			} else {
-				// 				window.location = '/main'
-				// 			}
-				// 		}
-				// 	})
+	const rateTheCustomer = (testerId, type, index) => {
+		if (type == "warn" || warningReasonbox.info.type == "warn") {
+			if (!warningReasonbox.show) {
+				setWarningreasonbox({ ...warningReasonbox, show: true, reason: '', info: { testerId, type, index } })
 			} else {
-				setRejectreasonbox({ ...rejectReasonbox, errorMsg: "Please include a reason" })
+				const { info, reason } = warningReasonbox
+
+				if (reason) {
+					const data = { productId: id, testerId: info.testerId, type: info.type, reason }
+					const newFeedbacks = [...feedbacks]
+
+					rateCustomer(data)
+						.then((res) => {
+							if (res.status == 200) {
+								return res.json()
+							}
+
+							throw res
+						})
+						.then((res) => {
+							if (res) {
+								newFeedbacks.splice(info.index, 1)
+
+								if (newFeedbacks.length > 0) {
+									setFeedbacks(newFeedbacks)
+								} else {
+									window.location = '/main'
+								}
+							}
+						})
+				} else {
+					setWarningreasonbox({ ...warningReasonbox, errorMsg: "Please include a reason" })
+				}
+			}
+		} else {
+			const data = { productId: id, testerId, type, reason: "" }
+			const newFeedbacks = [...feedbacks]
+
+			rateCustomer(data)
+				.then((res) => {
+					if (res.status == 200) {
+						return res.json()
+					}
+
+					throw res
+				})
+				.then((res) => {
+					if (res) {
+						newFeedbacks.splice(index, 1)
+
+						if (newFeedbacks.length > 0) {
+							setFeedbacks(newFeedbacks)
+						} else {
+							window.location = '/main'
+						}
+					}
+				})
+		}
+	}
+	const regainTheAccount = () => {
+		if (!regainAccountconfirm.show) {
+			setRegainaccountconfirm({ ...regainAccountconfirm, show: true })
+		} else {
+			if (paymentDone.brand != "") {
+				const data = { userId }
+
+				createCustomerPayment(data)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						}
+
+						throw res
+					})
+					.then((res) => {
+						if (res) {
+							window.location = "/feedback"
+						}
+					})
+			} else {
+				const data = { userId, redirect: "feedback" }
+
+				createCheckout(data)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						}
+						
+						throw res
+					})
+					.then((res) => {
+						if (res) {
+							window.location = res.url
+						}
+					})
+					.catch((err) => {
+
+					})
 			}
 		}
 	}
-	const rewardTheCustomer = (testerId, index) => {
-		const data = { productId: id, testerId }
-		const newFeedbacks = [...feedbacks]
-
-		// rewardCustomer(data)
-		// 	.then((res) => {
-		// 		if (res.status == 200) {
-		// 			return res.json()
-		// 		}
-
-		// 		throw res
-		// 	})
-		// 	.then((res) => {
-		// 		if (res) {
-		// 			newFeedbacks.splice(index, 1)
-
-		// 			if (newFeedbacks.length > 0) {
-		// 				setFeedbacks(newFeedbacks)
-		// 			} else {
-		// 				localStorage.setItem("viewMyProducts", "true")
-						
-		// 				window.location = '/main'
-		// 			}
-		// 		}
-		// 	})
-		// 	.catch((err) => {
-		// 		if (err.status == 400) {
-		// 			err.json().then(() => {
-
-		// 			})
-		// 		}
-		// 	})
-	}
 
 	useEffect(() => {
-		getTheUserInfo()
+		if (sessionId) {
+			const data = { 
+				userId: localStorage.getItem("id"), 
+				productId: localStorage.getItem("productId") ? localStorage.getItem("productId") : null,
+				sessionId 
+			}
+			
+			sessionId = ""
+			
+			createCustomerPayment(data)
+				.then((res) => {
+					if (res.status == 200) {
+						return res.json()
+					}
+			
+					throw res
+				})
+				.then((res) => {
+					if (res) {
+						window.location = "/feedback"
+					}
+			})
+		} else {
+			getTheUserInfo()
+		}
 	}, [])
 
 	useEffect(() => {
@@ -207,7 +278,9 @@ export default function Feedbacks(props) {
 
 	return (
 		<div id="mobile-feedback">
-			<Header/>
+			<Header
+				regainAccount={() => regainTheAccount()}
+			/>
 
 			{loaded ? 
 				<div id="feedbacks">
@@ -221,7 +294,7 @@ export default function Feedbacks(props) {
 						<div id="feedbacks-header">
 							Advices for <strong>{name}</strong>
 							<br/>
-							{deposited && <div style={{ fontSize: 20 }}>(Please save your feedback somewhere)</div>}
+							{(deposited && feedbacks.length > 0) && <div style={{ fontSize: 20 }}>(Please save the good advices somewhere)</div>}
 						</div>
 
 						{!deposited && (
@@ -229,7 +302,7 @@ export default function Feedbacks(props) {
 								<br/><br/>
 								Yes! Woohoo. You have {feedbacks.length} advice(s) from test users
 								<br/>
-								Deposit $20 to see the advices
+								Deposit only ${depositAmount.toFixed(2)} to see the advices
 								<br/><br/>
 								You will get a refund of the leftover deposit in a week if you possibly don't receive up to 5 advices
 
@@ -238,20 +311,34 @@ export default function Feedbacks(props) {
 						)}
 
 						{deposited && (
-							<div id="product-feedbacks">
-								{feedbacks.map((feedback, index) => (
-									<div className="feedback" key={feedback.key}>
-										<div className="feedback-header"><strong>Advice: </strong> {feedback.advice}</div>
+							feedbacks.length > 0 ? 
+									<div id="product-feedbacks">
+									{feedbacks.map((feedback, index) => (
+										<div className="feedback" key={feedback.key}>
+											<div className="feedback-header"><strong>Advice: </strong> {feedback.advice}</div>
 
-										<Stack>
-											<div className="feedback-actions">
-												<div className="feedback-action" onClick={() => rejectTheFeedback(feedback.testerId, index)}>Reject</div>
-												<div className="feedback-action" onClick={() => rewardTheCustomer(feedback.testerId, index)}>I like it. Reward tester</div>
-											</div>
-										</Stack>
-									</div>
-								))}
-							</div>
+											<Stack>
+												<div className="feedback-actions-header">Rate this tester's advice <strong>(anonymously)</strong></div>
+												<div className="feedback-actions">
+													<div className="feedback-action" onClick={() => rateTheCustomer(feedback.testerId, 'warn', index)}>
+														<div className="feedback-action-icon"><FaBan style={{ color: 'red', height: '100%', width: '100%' }}/></div>
+														<div className="feedback-action-header">Warn to be banned</div>
+													</div>
+													<div className="feedback-action" onClick={() => rateTheCustomer(feedback.testerId, 'good', index)}>
+														<div className="feedback-action-icon"><BsCheckCircle style={{ color: 'green', height: '100%', width: '100%' }}/></div>
+														<div className="feedback-action-header">Good advice</div>
+													</div>
+													<div className="feedback-action" onClick={() => rateTheCustomer(feedback.testerId, 'nice', index)}>
+														<div className="feedback-action-icon"><ImHappy style={{ color: 'blue', height: '100%', width: '100%' }}/></div>
+														<div className="feedback-action-header">Very nice advice</div>
+													</div>
+												</div>
+											</Stack>
+										</div>
+									))}
+								</div>
+								:
+								<div id="no-result">No Results</div>
 						)}
 					</div>
 				</div>
@@ -262,30 +349,29 @@ export default function Feedbacks(props) {
 			}
 
 			{(
-				rejectReasonbox.show || confirmDeposit.show || 
+				warningReasonbox.show || confirmDeposit.show || regainAccountconfirm.show || bannedSign ||
 				
 				whyFee
 			) && (
 				<>
-					{(rejectReasonbox.show || confirmDeposit.show) && (
+					{(warningReasonbox.show || confirmDeposit.show || regainAccountconfirm.show || bannedSign) && (
 						<div id="hidden-box">
-							{rejectReasonbox.show && (
+							{warningReasonbox.show && (
 								<div id="reject-box">
-									<div id="reject-header">Why are you rejecting this feedback ?</div>
+									<div id="reject-header">Why are you warning this tester to be banned ?</div>
 
-									<textarea id="reject-input" maxlength="200" onChange={e => setRejectreasonbox({ ...rejectReasonbox, reason: e.target.value })} value={rejectReasonbox.reason}/>
+									<textarea id="reject-input" maxlength="200" onChange={e => setWarningreasonbox({ ...warningReasonbox, reason: e.target.value })} value={warningReasonbox.reason}/>
 
-									{rejectReasonbox.errorMsg && <div className="errormsg">Please provide a good reason for rejection</div>}
+									<div className="errormsg">{warningReasonbox.errorMsg}</div>
 
 									<div id="actions">
-										<div className="action" onClick={() => setRejectreasonbox({ show: false, reason: '' })}>Cancel</div>
-										<div className="action" onClick={() => rejectTheFeedback()}>Submit</div>
+										<div className="action" onClick={() => setWarningreasonbox({ ...warningReasonbox, show: false, reason: '' })}>Cancel</div>
+										<div className="action" onClick={() => rateTheCustomer()}>Submit</div>
 									</div>
 								</div>
 							)}
-
 							{confirmDeposit.show && (
-								<div id="confirm-deposit-box">
+								<div id="confirm-deposit-box" style={confirmDeposit.loading ? { opacity: 0.5 } : { opacity: 1 }}>
 									<div id="confirm-deposit-header">Deposit detail</div>
 
 									{paymentDone.brand && (
@@ -296,21 +382,21 @@ export default function Feedbacks(props) {
 									)}
 
 									<div id="confirm-deposit-details">
-										<div className="confirm-deposit-detail"><strong>Total:</strong> $20.00</div>
-										<div className="confirm-deposit-detail"><strong>
-											Service fee:</strong> $5.00
+										<div className="confirm-deposit-detail"><strong>Total:</strong> ${depositAmount.toFixed(2)}</div>
+										<div className="confirm-deposit-detail">
+											<strong>Service fee:</strong> $5.00
 											<strong className="confirm-deposit-detail-why" onClick={() => setWhyfee(true)}>?</strong>
 										</div>
-										<div className="confirm-deposit-detail"><strong>Total:</strong> $25.00</div>
+										<div className="confirm-deposit-detail"><strong>Total:</strong> ${(depositAmount + 5).toFixed(2)}</div>
 									</div>
 
-									<div id="confirm-deposit-actions">
-										<div className="confirm-deposit-action" onClick={() => {
+									<div id="actions">
+										<div className="action" onClick={() => {
 											if (!confirmDeposit.loading) {
-												setConfirmdeposit({ show: false, productId: -1 })
+												setConfirmdeposit({ ...confirmDeposit, show: false, productId: -1 })
 											}
 										}}>Cancel</div>
-										<div className="confirm-deposit-action" onClick={() => {
+										<div className="action" onClick={() => {
 											if (!confirmDeposit.loading) {
 												deposit(confirmDeposit.productId)
 											}
@@ -327,6 +413,64 @@ export default function Feedbacks(props) {
 											<ClipLoader color="black" size={20}/>
 										</div>
 									)}
+								</div>
+							)}
+							{regainAccountconfirm.show && (
+								<div id="regain-account-box">
+									<div id="regain-account-header">Regain account payment summary</div>
+
+									<div className="regain-account-div"/>
+
+									<div id="regain-account-infos">
+										<div className="regain-account-info-header"><strong>Subtotal:</strong> ${regainAmount.toFixed(2)}</div>
+
+										<div className="regain-account-div"/>
+
+										<div className="regain-account-info-header"><strong>Total:</strong> ${regainAmount.toFixed(2)}</div>
+									</div>
+
+									{regainAccountconfirm.cardInfo.last4 && (
+										<div id="card-info">
+											<div id="type">
+												{regainAccountconfirm.cardInfo.name == "Visa" && <img src="/visa.png"/>}
+												{regainAccountconfirm.cardInfo.name == "MasterCard" && <img src="/mastercard.png"/>}
+												{regainAccountconfirm.cardInfo.name == "American Express" && <img src="/amex.jpg"/>}
+												{regainAccountconfirm.cardInfo.name == "Discover" && <img src="/discover.jpg"/>}
+												{regainAccountconfirm.cardInfo.name == "Diners Club" && <img src="/dinersclub.png"/>}
+												{regainAccountconfirm.cardInfo.name == "JCB" && <img src="/jcb.jpg"/>}
+												{regainAccountconfirm.cardInfo.name == "UnionPay" && <img src="/unionpay.png"/>}
+											</div>
+											<div id="header">
+												{regainAccountconfirm.cardInfo.name}
+												<br/>
+												*********{regainAccountconfirm.cardInfo.last4}
+											</div>
+										</div>
+									)}
+									
+									<div id="actions">
+										<div className="action" style={{ opacity: regainAccountconfirm.loading ? 0.5 : 1 }} onClick={() => !regainAccountconfirm.loading && setRegainaccountconfirm({ show: false, cardInfo: {} })}>Cancel</div>
+										<div className="action" style={{ opacity: regainAccountconfirm.loading ? 0.5 : 1 }} onClick={() => !regainAccountconfirm.loading && regainTheAccount()}>Regain now</div>
+									</div>
+
+									{regainAccountconfirm.loading && (
+										<div style={{ height: 20, margin: '5px auto', width: 20 }}>
+											<ClipLoader color="black" size={20}/>
+										</div>
+									)}
+								</div>
+							)}
+							{bannedSign && (
+								<div id="banned-sign-box">
+									<div id="banned-sign-header">You have been banned because of an advice you gave</div>
+
+									<div id="actions">
+										<div className="action" onClick={() => setBannedsign(false)}>Cancel</div>
+										<div className="action" onClick={() => {
+											setBannedsign(false)
+											regainTheAccount()
+										}}>Unban now</div>
+									</div>
 								</div>
 							)}
 						</div>

@@ -58,10 +58,10 @@ export default function Listproduct() {
 
 	const [file, setFile] = useState(null)
 	const [errorMsg, setErrormsg] = useState('')
+	const [paymentDone, setPaymentdone] = useState({ brand: "", last4: "" })
 	const [regainAccountconfirm, setRegainaccountconfirm] = useState({ show: false, cardInfo: {}, loading: false })
 	const [bannedSign, setBannedsign] = useState(false)
 
-	const [paymentDone, setPaymentdone] = useState({ brand: "", last4: "" })
 	const [loading, setLoading] = useState(false)
 
 	const getTheUserInfo = () => {

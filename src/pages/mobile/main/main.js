@@ -2,6 +2,7 @@ import './main.scss';
 import { useEffect, useState } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
 import { resizePhoto } from 'geottuse-tools';
+import { depositAmount, regainAmount } from "../../../info"
 import { getUserInfo, getPaymentInfo, createCheckout, createCustomerPayment } from '../../../apis/user'
 import { getUntestedProducts, getTestingProducts, getMyProducts, tryProduct, relistProduct } from '../../../apis/product'
 import { submitFeedback } from '../../../apis/producttesting'
@@ -24,6 +25,13 @@ import PersonIcon from '@mui/icons-material/Person';
 import Header from '../../../components/mobile/header'
 
 const LOGO_URL = process.env.REACT_APP_LOGO_URL
+let sessionId = ""
+
+if (window.location.search.includes("session_id")) {
+	const urlParams = new URLSearchParams(window.location.search)
+	
+	sessionId = urlParams.get('session_id')
+}
 
 export default function Main() {
 	const [userId, setUserid] = useState('')
@@ -37,8 +45,11 @@ export default function Main() {
 	const [intro, setIntro] = useState(false)
 	const [userWrite, setUserwrite] = useState({ show: false, advice: '', id: null, index: -1, amountSpent: 0, loading: false })
 	const [relaunch, setRelaunch] = useState({ show: false, cardInfo: {}, productId: null, loading: false })
+	const [regainAccountconfirm, setRegainaccountconfirm] = useState({ show: false, cardInfo: {}, loading: false })
+	const [bannedSign, setBannedsign] = useState(false)
 
 	const [bankaccountDone, setBankaccountdone] = useState(false)
+	const [paymentDone, setPaymentdone] = useState({ brand: "", last4: "" })
 	const [loaded, setLoaded] = useState(false)
 	const [loading, setLoading] = useState(false)
 
@@ -302,14 +313,79 @@ export default function Main() {
 			setUserwrite({ ...userWrite, errorMsg: 'You need to write an advice' })
 		}
 	}
+	const regainTheAccount = () => {
+		if (!regainAccountconfirm.show) {
+			setRegainaccountconfirm({ ...regainAccountconfirm, show: true })
+		} else {
+			if (paymentDone.brand != "") {
+				const data = { userId }
+
+				createCustomerPayment(data)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						}
+
+						throw res
+					})
+					.then((res) => {
+						if (res) {
+							window.location = "/main"
+						}
+					})
+			} else {
+				const data = { userId, redirect: "main" }
+
+				createCheckout(data)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						}
+						
+						throw res
+					})
+					.then((res) => {
+						if (res) {
+							window.location = res.url
+						}
+					})
+					.catch((err) => {
+
+					})
+			}
+		}
+	}
 
 	useEffect(() => {
-		getTheUserInfo()
+		if (sessionId) {
+			const data = { 
+				userId: localStorage.getItem("id"), 
+				sessionId 
+			}
 
-		if (localStorage.getItem("testerIntro")) {
-			localStorage.removeItem("testerIntro")
+			sessionId = ""
 
-			setIntro(true)
+			createCustomerPayment(data)
+				.then((res) => {
+					if (res.status == 200) {
+						return res.json()
+					}
+
+					throw res
+				})
+				.then((res) => {
+					if (res) {
+						window.location = "/main"
+					}
+			})
+		} else {
+			getTheUserInfo()
+
+			if (localStorage.getItem("testerIntro")) {
+				localStorage.removeItem("testerIntro")
+
+				setIntro(true)
+			}
 		}
 	}, [])
 
@@ -327,7 +403,9 @@ export default function Main() {
 
 	return (
 		<div id="mobile-main">
-			<Header/>
+			<Header
+				regainAccount={() => regainTheAccount()}
+			/>
 
 			<div id="mobile-main-body">
 				<div className="page-navs">
@@ -384,9 +462,9 @@ export default function Main() {
 									</div>
 
 									<Stack>
-										<div className="info-container">
+										
 											{viewType == 'untested' ? 
-												<>
+												<div className="info-container">
 													{!product.trying && <div className="header">{product.numLeftover} people left can try</div>}
 
 													{!product.trying ? 
@@ -398,22 +476,18 @@ export default function Main() {
 															redirecting to website....
 														</div>
 													}
-												</>
+												</div>
 												:
 												viewType == "testing" ? 
-													<>
-														<div className="header">{product.earned ? "Earned $" + product.reward + " for trying" : product.gave_feedback && "Waiting for creator to reward you"}</div>
-
-														{!product.gave_feedback && (
-															<>
-																<div className="product-action" style={{ marginBottom: 10 }} onClick={() => setUserwrite({ ...userWrite, show: true, advice: '', id: product.id, index, amountSpent: product.amountSpent, loading: false })}>Give advice & Earn ${product.reward.toFixed(2)}</div>
-																<div className="product-action" onClick={() => window.open(product.link)}>Go To Product</div>
-															</>
-														)}
-													</>
+													!product.gave_feedback && (
+														<div className="info-container">
+															<div className="product-action" style={{ marginBottom: 10 }} onClick={() => setUserwrite({ ...userWrite, show: true, advice: '', id: product.id, index, amountSpent: product.amountSpent, loading: false })}>Give advice & Earn ${product.reward.toFixed(2)}</div>
+															<div className="product-action" onClick={() => window.open(product.link)}>Go To Product</div>
+														</div>
+													)
 													:
 													product.numLeftover > 0 ? 
-														<>
+														<div className="info-container">
 															{product.deposited && <div className="header">Amount spent: ${product.amountSpent.toFixed(2)}</div>}
 
 															{product.numTesting > 0 && (
@@ -436,15 +510,22 @@ export default function Main() {
 															)}
 
 															{product.numRewarded > 0 && <div className="header">{product.numRewarded} people rewarded</div>}
-															{product.numRejected > 0 && <div className="header">{product.numRejected} people rejected</div>}
-														</>
+														</div>
 														:
-														<div className="header">
-															{5 - product.numLeftover} people rewarded
-															<div className="relaunch" onClick={() => relaunchTheProduct(product.id)}>Relaunch for testers</div>
+														<div className="info-container">
+															<div className="header">
+																{5 - product.numLeftover} people rewarded
+																<div className="relaunch" onClick={() => relaunchTheProduct(product.id)}>Relaunch for testers</div>
+															</div>
+
+															{product.numFeedback > 0 && (
+																<div className="header">
+																	{product.numFeedback} people gave feedback<br/>
+																	<div className="product-action" onClick={() => window.location = '/feedback/' + product.id}>See advice(s)</div>
+																</div>
+															)}
 														</div>
 											}
-										</div>
 									</Stack>
 								</div>
 							))}
@@ -464,7 +545,7 @@ export default function Main() {
 				}
 			</div>
 
-			{(intro || userWrite.show || relaunch.show) && (
+			{(intro || userWrite.show || relaunch.show || regainAccountconfirm.show || bannedSign) && (
 				<div id="hidden-box">
 					{intro && (
 						<div id="intro">
@@ -504,12 +585,12 @@ export default function Main() {
 							<div className="relaunch-div"/>
 
 							<div id="relaunch-infos">
-								<div className="relaunch-info-header"><strong>Subtotal:</strong> $20.00</div>
+								<div className="relaunch-info-header"><strong>Subtotal:</strong> ${depositAmount.toFixed(2)}</div>
 								<div className="relaunch-info-header"><strong>Service fee:</strong> $5.00</div>
 
 								<div className="relaunch-div"/>
 
-								<div className="relaunch-info-header"><strong>Total:</strong> $25.00</div>
+								<div className="relaunch-info-header"><strong>Total:</strong> ${(depositAmount + 5).toFixed(2)}</div>
 							</div>
 
 							{relaunch.cardInfo.last4 && (
@@ -541,6 +622,64 @@ export default function Main() {
 									<ClipLoader color="black" size={20}/>
 								</div>
 							)}
+						</div>
+					)}
+					{regainAccountconfirm.show && (
+						<div id="regain-account-box">
+							<div id="regain-account-header">Regain account payment summary</div>
+
+							<div className="regain-account-div"/>
+
+							<div id="regain-account-infos">
+								<div className="regain-account-info-header"><strong>Subtotal:</strong> ${regainAmount.toFixed(2)}</div>
+
+								<div className="regain-account-div"/>
+
+								<div className="regain-account-info-header"><strong>Total:</strong> ${regainAmount.toFixed(2)}</div>
+							</div>
+
+							{regainAccountconfirm.cardInfo.last4 && (
+			      		<div id="card-info">
+			      			<div id="type">
+			      				{regainAccountconfirm.cardInfo.name == "Visa" && <img src="/visa.png"/>}
+			      				{regainAccountconfirm.cardInfo.name == "MasterCard" && <img src="/mastercard.png"/>}
+			      				{regainAccountconfirm.cardInfo.name == "American Express" && <img src="/amex.jpg"/>}
+			      				{regainAccountconfirm.cardInfo.name == "Discover" && <img src="/discover.jpg"/>}
+			      				{regainAccountconfirm.cardInfo.name == "Diners Club" && <img src="/dinersclub.png"/>}
+			      				{regainAccountconfirm.cardInfo.name == "JCB" && <img src="/jcb.jpg"/>}
+			      				{regainAccountconfirm.cardInfo.name == "UnionPay" && <img src="/unionpay.png"/>}
+			      			</div>
+			      			<div id="header">
+			      				{regainAccountconfirm.cardInfo.name}
+			      				<br/>
+			      				*********{regainAccountconfirm.cardInfo.last4}
+			      			</div>
+			      		</div>
+			      	)}
+							
+							<div id="actions">
+								<div className="action" style={{ opacity: regainAccountconfirm.loading ? 0.5 : 1 }} onClick={() => !regainAccountconfirm.loading && setRegainaccountconfirm({ show: false, cardInfo: {} })}>Cancel</div>
+								<div className="action" style={{ opacity: regainAccountconfirm.loading ? 0.5 : 1 }} onClick={() => !regainAccountconfirm.loading && regainTheAccount()}>Regain now</div>
+							</div>
+
+							{regainAccountconfirm.loading && (
+								<div style={{ height: 20, margin: '5px auto', width: 20 }}>
+									<ClipLoader color="black" size={20}/>
+								</div>
+							)}
+						</div>
+					)}
+					{bannedSign && (
+						<div id="banned-sign-box">
+							<div id="banned-sign-header">You have been banned because of an advice you gave</div>
+
+							<div id="actions">
+								<div className="action" onClick={() => setBannedsign(false)}>Cancel</div>
+								<div className="action" onClick={() => {
+									setBannedsign(false)
+									regainTheAccount()
+								}}>Unban now</div>
+							</div>
 						</div>
 					)}
 				</div>

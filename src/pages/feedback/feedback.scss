@@ -144,29 +144,6 @@
 				resize: none;
 				width: 90%;
 			}
-
-			#actions {
-				display: flex;
-				flex-direction: row;
-				justify-content: space-around;
-
-				.action {
-					background-color: black;
-					border-radius: 20px;
-					color: white;
-					font-size: 15px;
-					font-weight: bold;
-					margin: 0 auto;
-					padding: 10px;
-					text-align: center;
-					width: 200px;
-
-					&:hover {
-						cursor: pointer;
-						opacity: 0.5;
-					}
-				}
-			}
 		}
 
 		#confirm-deposit-box {
@@ -215,27 +192,6 @@
 					&:hover {
 						cursor: pointer;
 						opacity: 0.5;
-					}
-				}
-			}
-
-			#confirm-deposit-actions {
-				display: flex;
-				flex-direction: row;
-				justify-content: space-around;
-				width: 100%;
-
-				.confirm-deposit-action {
-					background-color: black;
-					border-radius: 20px;
-					color: white;
-					padding: 10px;
-					text-align: center;
-					width: 100px;
-					
-					&:hover {
-						cursor: pointer;
-						opacity: 0.8;
 					}
 				}
 			}
@@ -333,27 +289,27 @@
 				padding: 20px 0;
 				text-align: center;
 			}
+		}
 
-			#actions {
-				display: flex;
-				flex-direction: row;
-				justify-content: space-around;
-
-				.action {
-					background-color: black;
-					border-radius: 20px;
-					color: white;
-					font-size: 15px;
-					font-weight: bold;
-					margin: 20px auto;
-					padding: 10px;
-					text-align: center;
-					width: 200px;
-
-					&:hover {
-						cursor: pointer;
-						opacity: 0.5;
-					}
+		#actions {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+		
+			.action {
+				background-color: black;
+				border-radius: 20px;
+				color: white;
+				font-size: 15px;
+				font-weight: bold;
+				margin: 20px auto;
+				padding: 10px;
+				text-align: center;
+				width: 200px;
+		
+				&:hover {
+					cursor: pointer;
+					opacity: 0.5;
 				}
 			}
 		}

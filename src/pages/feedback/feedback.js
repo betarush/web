@@ -295,7 +295,7 @@ export default function Feedbacks(props) {
 						<div id="feedbacks-header">
 							Advices for <strong>{name}</strong>
 							<br/>
-							{(deposited && feedbacks.length > 0) && <div style={{ fontSize: 20 }}>(Please save your feedback somewhere)</div>}
+							{(deposited && feedbacks.length > 0) && <div style={{ fontSize: 20 }}>(Please save the good advices somewhere)</div>}
 						</div>
 
 						{!deposited && (
@@ -371,7 +371,6 @@ export default function Feedbacks(props) {
 									</div>
 								</div>
 							)}
-
 							{confirmDeposit.show && (
 								<div id="confirm-deposit-box">
 									<div id="confirm-deposit-header">Deposit detail</div>
@@ -392,13 +391,13 @@ export default function Feedbacks(props) {
 										<div className="confirm-deposit-detail"><strong>Total:</strong> ${(depositAmount + 5).toFixed(2)}</div>
 									</div>
 
-									<div id="confirm-deposit-actions">
-										<div className="confirm-deposit-action" onClick={() => {
+									<div id="actions">
+										<div className="action" onClick={() => {
 											if (!confirmDeposit.loading) {
 												setConfirmdeposit({ show: false, productId: -1 })
 											}
 										}}>Cancel</div>
-										<div className="confirm-deposit-action" onClick={() => {
+										<div className="action" onClick={() => {
 											if (!confirmDeposit.loading) {
 												deposit(confirmDeposit.productId)
 											}
@@ -417,7 +416,6 @@ export default function Feedbacks(props) {
 									)}
 								</div>
 							)}
-							
 							{regainAccountconfirm && (
 								<div id="regain-account-box">
 									<div id="regain-account-header">Regain account payment summary</div>
