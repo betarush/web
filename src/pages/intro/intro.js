@@ -156,7 +156,7 @@ export default function Intro() {
 
 		if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('intro', { id: localStorage.getItem("id"), web: true });
 	}, [])
-
+	
 	return (
 		<div id="intro">
 			<Header/>

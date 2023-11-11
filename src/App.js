@@ -11,7 +11,7 @@ import Login from './pages/login'
 import Intro from './pages/intro'
 import Main from './pages/main'
 import Feedback from './pages/feedback'
-import Rejections from './pages/rejections'
+import Ratings from './pages/ratings'
 import Earnings from './pages/earnings'
 import Seefeedbacks from './pages/seefeedbacks';
 import Listproduct from './pages/listproduct'
@@ -24,7 +24,6 @@ import MobileIntro from './pages/mobile/intro'
 import MobileMain from './pages/mobile/main'
 import MobileFeedback from './pages/mobile/feedback'
 import MobileEarnings from './pages/mobile/earnings'
-import MobileRejections from './pages/mobile/rejections'
 import MobileSeefeedbacks from './pages/mobile/seefeedbacks'
 import MobileListproduct from './pages/mobile/listproduct'
 
@@ -49,7 +48,7 @@ function App() {
             <Route path="/intro" element={<Intro/>}/>
             <Route path="/main" element={<Main/>}/>
             <Route path="/feedback/:id" element={<Feedback/>}/>
-            <Route path="/rejections" element={<Rejections/>}/>
+            <Route path="/ratings" element={<Ratings/>}/>
             <Route path="/earnings" element={<Earnings/>}/>
             <Route path="/seefeedbacks" element={<Seefeedbacks/>}/>
             <Route path="/listproduct" element={<Listproduct/>}/>
@@ -63,7 +62,7 @@ function App() {
             <Route path="/intro" element={<MobileIntro/>}/>
             <Route path="/main" element={<MobileMain/>}/>
             <Route path="/feedback/:id" element={<MobileFeedback/>}/>
-            <Route path="/rejections" element={<MobileRejections/>}/>
+            {/* <Route path="/ratings" element={<MobileRejections/>}/> */}
             <Route path="/earnings" element={<MobileEarnings/>}/>
             <Route path="/seefeedbacks" element={<MobileSeefeedbacks/>}/>
             <Route path="/listproduct" element={<MobileListproduct/>}/>

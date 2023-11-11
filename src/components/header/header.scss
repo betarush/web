@@ -51,5 +51,20 @@
 		font-family: Chalkboard;
 		font-size: 20px;
 		font-weight: bold;
+
+		strong {
+			background-color: white;
+			border-radius: 5px;
+			border-style: solid;
+			border-width: 2px;
+			color: black;
+			padding: 5px;
+			text-align: center;
+
+			&:hover {
+				cursor: pointer;
+				opacity: 0.5;
+			}
+		}
 	}
 }

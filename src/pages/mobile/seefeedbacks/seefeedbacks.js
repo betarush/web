@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 // components
 import Header from '../../../components/mobile/header'
 
-import { rewardCustomer, rejectFeedback } from '../../../apis/user'
+//import { rewardCustomer, rejectFeedback } from '../../../apis/user'
 import { getFeedbacks } from '../../../apis/product'
 
 const LOGO_URL = process.env.REACT_APP_LOGO_URL
@@ -149,28 +149,28 @@ export default function Seefeedbacks() {
 				const data = { productId: info.id, testerId: info.testerId, reason }
 				const newProducts = [...products]
 
-				rejectFeedback(data)
-					.then((res) => {
-						if (res.status == 200) {
-							return res.json()
-						}
+				// rejectFeedback(data)
+				// 	.then((res) => {
+				// 		if (res.status == 200) {
+				// 			return res.json()
+				// 		}
 
-						throw res
-					})
-					.then((res) => {
-						if (res) {
-							if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('rejectfeedback', { id: userId, productId: info.id, testerId: info.testerId, mobile: true });
+				// 		throw res
+				// 	})
+				// 	.then((res) => {
+				// 		if (res) {
+				// 			if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('rejectfeedback', { id: userId, productId: info.id, testerId: info.testerId, mobile: true });
 
-							newProducts[info.productIndex].feedbacks.splice(info.feedbackIndex, 1)
+				// 			newProducts[info.productIndex].feedbacks.splice(info.feedbackIndex, 1)
 
-							if (newProducts[info.productIndex].feedbacks.length == 0) {
-								newProducts.splice(info.productIndex, 1)
-							}
+				// 			if (newProducts[info.productIndex].feedbacks.length == 0) {
+				// 				newProducts.splice(info.productIndex, 1)
+				// 			}
 
-							setProducts(newProducts)
-							setRejectreasonbox({ show: false, reason: '' })
-						}
-					})
+				// 			setProducts(newProducts)
+				// 			setRejectreasonbox({ show: false, reason: '' })
+				// 		}
+				// 	})
 			} else {
 				setRejectreasonbox({ ...rejectReasonbox, errorMsg: "Please include a reason" })
 			}
@@ -182,35 +182,35 @@ export default function Seefeedbacks() {
 
 		setRewarding(true)
 
-		rewardCustomer(data)
-			.then((res) => {
-				if (res.status == 200) {
-					return res.json()
-				}
+		// rewardCustomer(data)
+		// 	.then((res) => {
+		// 		if (res.status == 200) {
+		// 			return res.json()
+		// 		}
 
-				throw res
-			})
-			.then((res) => {
-				if (res) {
-					if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('rewardcustomer', { id: userId, productId: id, testerId, mobile: true });
+		// 		throw res
+		// 	})
+		// 	.then((res) => {
+		// 		if (res) {
+		// 			if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('rewardcustomer', { id: userId, productId: id, testerId, mobile: true });
 
-					newProducts[productIndex].feedbacks.splice(feedbackIndex, 1)
+		// 			newProducts[productIndex].feedbacks.splice(feedbackIndex, 1)
 
-					if (newProducts[productIndex].feedbacks.length == 0) {
-						newProducts.splice(productIndex, 1)
-					}
+		// 			if (newProducts[productIndex].feedbacks.length == 0) {
+		// 				newProducts.splice(productIndex, 1)
+		// 			}
 
-					setProducts(newProducts)
-					setRewarding(false)
-				}
-			})
-			.catch((err) => {
-				if (err.status == 400) {
-					err.json().then(() => {
+		// 			setProducts(newProducts)
+		// 			setRewarding(false)
+		// 		}
+		// 	})
+		// 	.catch((err) => {
+		// 		if (err.status == 400) {
+		// 			err.json().then(() => {
 
-					})
-				}
-			})
+		// 			})
+		// 		}
+		// 	})
 	}
 
 	useEffect(() => {

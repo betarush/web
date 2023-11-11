@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 // components
 import Header from '../../../components/mobile/header'
 
-import { rewardCustomer, rejectFeedback } from '../../../apis/user'
+//import { rewardCustomer, rejectFeedback } from '../../../apis/user'
 import { getProductFeedbacks } from '../../../apis/product'
 
 const LOGO_URL = process.env.REACT_APP_LOGO_URL
@@ -139,25 +139,25 @@ export default function Feedbacks(props) {
 				const data = { productId: id, testerId: info.testerId, reason }
 				const newFeedbacks = [...feedbacks]
 
-				rejectFeedback(data)
-					.then((res) => {
-						if (res.status == 200) {
-							return res.json()
-						}
+				// rejectFeedback(data)
+				// 	.then((res) => {
+				// 		if (res.status == 200) {
+				// 			return res.json()
+				// 		}
 
-						throw res
-					})
-					.then((res) => {
-						if (res) {
-							newFeedbacks.splice(info.index, 1)
+				// 		throw res
+				// 	})
+				// 	.then((res) => {
+				// 		if (res) {
+				// 			newFeedbacks.splice(info.index, 1)
 
-							if (newFeedbacks.length > 0) {
-								setFeedbacks(newFeedbacks)
-							} else {
-								window.location = '/main'
-							}
-						}
-					})
+				// 			if (newFeedbacks.length > 0) {
+				// 				setFeedbacks(newFeedbacks)
+				// 			} else {
+				// 				window.location = '/main'
+				// 			}
+				// 		}
+				// 	})
 			} else {
 				setRejectreasonbox({ ...rejectReasonbox, errorMsg: "Please include a reason" })
 			}
@@ -167,34 +167,34 @@ export default function Feedbacks(props) {
 		const data = { productId: id, testerId }
 		const newFeedbacks = [...feedbacks]
 
-		rewardCustomer(data)
-			.then((res) => {
-				if (res.status == 200) {
-					return res.json()
-				}
+		// rewardCustomer(data)
+		// 	.then((res) => {
+		// 		if (res.status == 200) {
+		// 			return res.json()
+		// 		}
 
-				throw res
-			})
-			.then((res) => {
-				if (res) {
-					newFeedbacks.splice(index, 1)
+		// 		throw res
+		// 	})
+		// 	.then((res) => {
+		// 		if (res) {
+		// 			newFeedbacks.splice(index, 1)
 
-					if (newFeedbacks.length > 0) {
-						setFeedbacks(newFeedbacks)
-					} else {
-						localStorage.setItem("viewMyProducts", "true")
+		// 			if (newFeedbacks.length > 0) {
+		// 				setFeedbacks(newFeedbacks)
+		// 			} else {
+		// 				localStorage.setItem("viewMyProducts", "true")
 						
-						window.location = '/main'
-					}
-				}
-			})
-			.catch((err) => {
-				if (err.status == 400) {
-					err.json().then(() => {
+		// 				window.location = '/main'
+		// 			}
+		// 		}
+		// 	})
+		// 	.catch((err) => {
+		// 		if (err.status == 400) {
+		// 			err.json().then(() => {
 
-					})
-				}
-			})
+		// 			})
+		// 		}
+		// 	})
 	}
 
 	useEffect(() => {

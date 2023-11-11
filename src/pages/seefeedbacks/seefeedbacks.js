@@ -2,7 +2,11 @@ import './seefeedbacks.scss';
 import { useEffect, useState } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
 import { getUserInfo, createCheckout, createCustomerPayment } from "../../apis/user"
+import { depositAmount, regainAmount } from "../../info"
 import { resizePhoto } from 'geottuse-tools';
+import { FaBan } from "react-icons/fa"
+import { ImHappy } from "react-icons/im"
+import { BsArrowRepeat, BsCheckCircle } from "react-icons/bs"
 
 // material ui components
 import Stack from '@mui/material/Stack';
@@ -11,7 +15,7 @@ import Button from '@mui/material/Button';
 // components
 import Header from '../../components/header'
 
-import { rewardCustomer, rejectFeedback } from '../../apis/user'
+import { rateCustomer } from '../../apis/user'
 import { getFeedbacks } from '../../apis/product'
 
 const LOGO_URL = process.env.REACT_APP_LOGO_URL
@@ -35,8 +39,10 @@ export default function Seefeedbacks() {
 	const [paymentDone, setPaymentdone] = useState({ brand: "", last4: "" })
 
 	// hidden boxes
-	const [rejectReasonbox, setRejectreasonbox] = useState({ show: false, reason: '', info: {}, errorMsg: '' })
+	const [warningReasonbox, setWarningreasonbox] = useState({ show: false, reason: '', info: {}, errorMsg: '' })
 	const [confirmDeposit, setConfirmdeposit] = useState({ show: false, productId: -1, loading: false })
+	const [regainAccountconfirm, setRegainaccountconfirm] = useState({ show: false, cardInfo: {}, loading: false })
+	const [bannedSign, setBannedsign] = useState(false)
 
 	// popup boxes
 	const [whyFee, setWhyfee] = useState(false)
@@ -140,17 +146,82 @@ export default function Seefeedbacks() {
 				})
 		}
 	}
-	const rejectTheFeedback = (id, testerId, productIndex, feedbackIndex) => {
-		if (!rejectReasonbox.show) {
-			setRejectreasonbox({ show: true, reason: '', info: { id, testerId, productIndex, feedbackIndex } })
+	const rateTheCustomer = (id, testerId, type, productIndex, feedbackIndex) => {
+		let proceed = false
+
+		if (type == "warn" || warningReasonbox.info.type == "warn") {
+			if (!warningReasonbox.show) {
+				setWarningreasonbox({ show: true, reason: '', info: { id, testerId, type, productIndex, feedbackIndex } })
+			} else {
+				const { info, reason } = warningReasonbox
+
+				if (reason) {
+					const data = { productId: info.id, type: info.type, testerId: info.testerId, reason }
+					const newProducts = [...products]
+		
+					rateCustomer(data)
+						.then((res) => {
+							if (res.status == 200) {
+								return res.json()
+							}
+		
+							throw res
+						})
+						.then((res) => {
+							if (res) {
+								if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('ratecustomer', { id: userId, productId: info.id, type: info.type, testerId: info.testerId, web: true });
+		
+								newProducts[info.productIndex].feedbacks.splice(info.feedbackIndex, 1)
+		
+								if (newProducts[info.productIndex].feedbacks.length == 0) {
+									newProducts.splice(info.productIndex, 1)
+								}
+		
+								setProducts(newProducts)
+								setWarningreasonbox({ ...warningReasonbox, show: false, reason: '' })
+							}
+						})
+
+				} else {
+					setWarningreasonbox({ ...warningReasonbox, errorMsg: "Please include a reason" })
+				}
+			}
 		} else {
-			const { info, reason } = rejectReasonbox
+			const data = { productId: id, type, testerId, reason: "" }
+			const newProducts = [...products]
 
-			if (reason) {
-				const data = { productId: info.id, testerId: info.testerId, reason }
-				const newProducts = [...products]
+			rateCustomer(data)
+				.then((res) => {
+					if (res.status == 200) {
+						return res.json()
+					}
 
-				rejectFeedback(data)
+					throw res
+				})
+				.then((res) => {
+					if (res) {
+						if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('ratecustomer', { id: userId, productId: id, type, testerId, web: true });
+
+						newProducts[productIndex].feedbacks.splice(feedbackIndex, 1)
+
+						if (newProducts[productIndex].feedbacks.length == 0) {
+							newProducts.splice(productIndex, 1)
+						}
+
+						setProducts(newProducts)
+						setWarningreasonbox({ ...warningReasonbox, show: false, reason: '' })
+					}
+				})
+		}		
+	}
+	const regainTheAccount = () => {
+		if (!regainAccountconfirm.show) {
+			setRegainaccountconfirm({ ...regainAccountconfirm, show: true })
+		} else {
+			if (paymentDone.brand != "") {
+				const data = { userId }
+
+				createCustomerPayment(data)
 					.then((res) => {
 						if (res.status == 200) {
 							return res.json()
@@ -160,65 +231,37 @@ export default function Seefeedbacks() {
 					})
 					.then((res) => {
 						if (res) {
-							if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('rejectfeedback', { id: userId, productId: info.id, testerId: info.testerId, web: true });
-
-							newProducts[info.productIndex].feedbacks.splice(info.feedbackIndex, 1)
-
-							if (newProducts[info.productIndex].feedbacks.length == 0) {
-								newProducts.splice(info.productIndex, 1)
-							}
-
-							setProducts(newProducts)
-							setRejectreasonbox({ show: false, reason: '' })
+							window.location = "/seefeedbacks"
 						}
 					})
 			} else {
-				setRejectreasonbox({ ...rejectReasonbox, errorMsg: "Please include a reason" })
-			}
-		}
-	}
-	const rewardTheCustomer = (id, testerId, productIndex, feedbackIndex) => {
-		const data = { productId: id, testerId }
-		const newProducts = [...products]
+				const data = { userId, redirect: "seefeedbacks" }
 
-		setRewarding(true)
-
-		rewardCustomer(data)
-			.then((res) => {
-				if (res.status == 200) {
-					return res.json()
-				}
-
-				throw res
-			})
-			.then((res) => {
-				if (res) {
-					if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('rewardcustomer', { id: userId, productId: id, testerId, web: true });
-
-					newProducts[productIndex].feedbacks.splice(feedbackIndex, 1)
-
-					if (newProducts[productIndex].feedbacks.length == 0) {
-						newProducts.splice(productIndex, 1)
-					}
-
-					setProducts(newProducts)
-					setRewarding(false)
-				}
-			})
-			.catch((err) => {
-				if (err.status == 400) {
-					err.json().then(() => {
+				createCheckout(data)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						}
+						
+						throw res
+					})
+					.then((res) => {
+						if (res) {
+							window.location = res.url
+						}
+					})
+					.catch((err) => {
 
 					})
-				}
-			})
+			}
+		}
 	}
 
 	useEffect(() => {
 		if (sessionId) {
 			const data = { 
 				userId: localStorage.getItem("id"), 
-				productId: localStorage.getItem("productId"),
+				productId: localStorage.getItem("productId") ? localStorage.getItem("productId") : null,
 				sessionId 
 			}
 
@@ -248,7 +291,9 @@ export default function Seefeedbacks() {
 
 	return (
 		<div id="seefeedbacks">
-			<Header/>
+			<Header
+				regainAccount={() => regainTheAccount()}
+			/>
 
 			{loaded ? 
 				products.length > 0 ? 
@@ -270,7 +315,7 @@ export default function Seefeedbacks() {
 								<div id="feedbacks-header">
 									Advices for <strong>{product.name}</strong>
 									<br/>
-									{product.deposited && <div style={{ fontSize: 13 }}>(Please save your feedback somewhere)</div>}
+									{product.deposited && <div style={{ fontSize: 13 }}>(Please save the good advices somewhere)</div>}
 								</div>
 								
 								{!product.deposited && (
@@ -278,7 +323,7 @@ export default function Seefeedbacks() {
 										<br/><br/>
 										Yes! Woohoo. You have {product.feedbacks.length} advice(s) from test users
 										<br/>
-										Deposit $20 to see the advices
+										Deposit only ${depositAmount.toFixed(2)} to see the advices
 										<br/><br/>
 										You will get a refund of the leftover deposit in a week if you don't receive up to 5 advices
 
@@ -293,9 +338,20 @@ export default function Seefeedbacks() {
 												<div className="feedback-header"><strong>Advice:</strong> {feedback.advice}</div>
 
 												<Stack>
+													<div className="feedback-actions-header">Rate this tester's advice <strong>(anonymously)</strong></div>
 													<div className="feedback-actions">
-														<div className="feedback-action" disabled={rewarding} onClick={() => rejectTheFeedback(product.id, feedback.testerId, productIndex, feedbackIndex)}>Reject</div>
-														<div className="feedback-action" disabled={rewarding} onClick={() => rewardTheCustomer(product.id, feedback.testerId, productIndex, feedbackIndex)}>I like it. Reward tester</div>
+														<div className="feedback-action" onClick={() => rateTheCustomer(product.id, feedback.testerId, 'warn', productIndex, feedbackIndex)}>
+															<div className="feedback-action-icon"><FaBan style={{ color: 'red', height: '100%', width: '100%' }}/></div>
+															<div className="feedback-action-header">Warn to be banned</div>
+														</div>
+														<div className="feedback-action" onClick={() => rateTheCustomer(product.id, feedback.testerId, 'good', productIndex, feedbackIndex)}>
+															<div className="feedback-action-icon"><BsCheckCircle style={{ color: 'green', height: '100%', width: '100%' }}/></div>
+															<div className="feedback-action-header">Good advice</div>
+														</div>
+														<div className="feedback-action" onClick={() => rateTheCustomer(product.id, feedback.testerId, 'nice', productIndex, feedbackIndex)}>
+															<div className="feedback-action-icon"><ImHappy style={{ color: 'blue', height: '100%', width: '100%' }}/></div>
+															<div className="feedback-action-header">Very nice advice</div>
+														</div>
 													</div>
 												</Stack>
 											</div>
@@ -314,28 +370,27 @@ export default function Seefeedbacks() {
 			}
 
 			{(
-				rejectReasonbox.show || confirmDeposit.show ||
+				warningReasonbox.show || confirmDeposit.show || regainAccountconfirm.show ||
 
 				whyFee
 			) && (
 				<>
-					{(rejectReasonbox.show || confirmDeposit.show) && (
+					{(warningReasonbox.show || confirmDeposit.show || regainAccountconfirm.show || bannedSign) && (
 						<div id="hidden-box">
-							{rejectReasonbox.show && (
+							{warningReasonbox.show && (
 								<div id="reject-box">
-									<div id="reject-header">Why are you rejecting this feedback ?</div>
+									<div id="reject-header">Why are you warning this tester to be banned ?</div>
 
-									<textarea id="reject-input" maxlength="200" onChange={e => setRejectreasonbox({ ...rejectReasonbox, reason: e.target.value })} value={rejectReasonbox.reason}/>
+									<textarea id="reject-input" maxlength="200" onChange={e => setWarningreasonbox({ ...warningReasonbox, reason: e.target.value })} value={warningReasonbox.reason}/>
 
-									<div className="errormsg">{rejectReasonbox.errorMsg}</div>
+									<div className="errormsg">{warningReasonbox.errorMsg}</div>
 
 									<div id="actions">
-										<div className="action" onClick={() => setRejectreasonbox({ show: false, reason: '' })}>Cancel</div>
-										<div className="action" onClick={() => rejectTheFeedback()}>Submit</div>
+										<div className="action" onClick={() => setWarningreasonbox({ show: false, reason: '' })}>Cancel</div>
+										<div className="action" onClick={() => rateTheCustomer()}>Submit</div>
 									</div>
 								</div>
 							)}
-
 							{confirmDeposit.show && (
 								<div id="confirm-deposit-box">
 									<div id="confirm-deposit-header">Deposit detail</div>
@@ -348,12 +403,12 @@ export default function Seefeedbacks() {
 									)}
 
 									<div id="confirm-deposit-details">
-										<div className="confirm-deposit-detail"><strong>Total:</strong> $20.00</div>
+										<div className="confirm-deposit-detail"><strong>Total:</strong> ${depositAmount.toFixed(2)}</div>
 										<div className="confirm-deposit-detail">
 											<strong>Service fee:</strong> $5.00
 											<strong className="confirm-deposit-detail-why" onClick={() => setWhyfee(true)}>?</strong>
 										</div>
-										<div className="confirm-deposit-detail"><strong>Total:</strong> $25.00</div>
+										<div className="confirm-deposit-detail"><strong>Total:</strong> ${(depositAmount + 5).toFixed(2)}</div>
 									</div>
 
 									<div id="confirm-deposit-actions">
@@ -379,6 +434,64 @@ export default function Seefeedbacks() {
 											<ClipLoader color="black" size={20}/>
 										</div>
 									)}
+								</div>
+							)}
+							{regainAccountconfirm && (
+								<div id="regain-account-box">
+									<div id="regain-account-header">Regain account payment summary</div>
+
+									<div className="regain-account-div"/>
+
+									<div id="regain-account-infos">
+										<div className="regain-account-info-header"><strong>Subtotal:</strong> ${regainAmount.toFixed(2)}</div>
+
+										<div className="regain-account-div"/>
+
+										<div className="regain-account-info-header"><strong>Total:</strong> ${regainAmount.toFixed(2)}</div>
+									</div>
+
+									{regainAccountconfirm.cardInfo.last4 && (
+										<div id="card-info">
+											<div id="type">
+												{regainAccountconfirm.cardInfo.name == "Visa" && <img src="/visa.png"/>}
+												{regainAccountconfirm.cardInfo.name == "MasterCard" && <img src="/mastercard.png"/>}
+												{regainAccountconfirm.cardInfo.name == "American Express" && <img src="/amex.jpg"/>}
+												{regainAccountconfirm.cardInfo.name == "Discover" && <img src="/discover.jpg"/>}
+												{regainAccountconfirm.cardInfo.name == "Diners Club" && <img src="/dinersclub.png"/>}
+												{regainAccountconfirm.cardInfo.name == "JCB" && <img src="/jcb.jpg"/>}
+												{regainAccountconfirm.cardInfo.name == "UnionPay" && <img src="/unionpay.png"/>}
+											</div>
+											<div id="header">
+												{regainAccountconfirm.cardInfo.name}
+												<br/>
+												*********{regainAccountconfirm.cardInfo.last4}
+											</div>
+										</div>
+									)}
+									
+									<div id="actions">
+										<div className="action" style={{ opacity: regainAccountconfirm.loading ? 0.5 : 1 }} onClick={() => !regainAccountconfirm.loading && setRegainaccountconfirm({ show: false, cardInfo: {} })}>Cancel</div>
+										<div className="action" style={{ opacity: regainAccountconfirm.loading ? 0.5 : 1 }} onClick={() => !regainAccountconfirm.loading && regainTheAccount()}>Regain now</div>
+									</div>
+
+									{regainAccountconfirm.loading && (
+										<div style={{ height: 20, margin: '5px auto', width: 20 }}>
+											<ClipLoader color="black" size={20}/>
+										</div>
+									)}
+								</div>
+							)}
+							{bannedSign && (
+								<div id="banned-sign-box">
+									<div id="banned-sign-header">You have been banned because of an advice you gave</div>
+
+									<div id="actions">
+										<div className="action" onClick={() => setBannedsign(false)}>Cancel</div>
+										<div className="action" onClick={() => {
+											setBannedsign(false)
+											regainTheAccount()
+										}}>Unban now</div>
+									</div>
 								</div>
 							)}
 						</div>

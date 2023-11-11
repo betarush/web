@@ -33,6 +33,22 @@ export const getUserInfo = data => {
 	})
 }
 
+export const getRatingsNum = data => {
+	return fetch(`${routeUrl}/get_ratings_num`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(data)
+	})
+}
+
+export const getRatings = data => {
+	return fetch(`${routeUrl}/get_ratings`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(data)
+	})
+}
+
 export const updateFirstTime = data => {
 	return fetch(`${routeUrl}/update_first_time`, {
 		method: "POST",
@@ -73,16 +89,8 @@ export const submitBankaccountInfo = data => {
 	})
 }
 
-export const rewardCustomer = data => {
-	return fetch(`${routeUrl}/reward_customer`, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify(data)
-	})
-}
-
-export const rejectFeedback = data => {
-	return fetch(`${routeUrl}/reject_feedback`, {
+export const rateCustomer = data => {
+	return fetch(`${routeUrl}/rate_customer`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify(data)

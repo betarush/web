@@ -1,7 +1,8 @@
 import './payment.scss';
 import { useEffect, useState } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
-import { submitPaymentInfo, getPaymentInfo } from '../../apis/user'
+import { depositAmount, regainAmount } from "../../info"
+import { submitPaymentInfo, getPaymentInfo, createCheckout, createCustomerPayment } from '../../apis/user'
 import { listProduct, relistProduct } from '../../apis/product'
 
 // material ui components
@@ -24,6 +25,13 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import Header from '../../components/header'
 
 let stripe = require('stripe')(process.env.REACT_APP_STRIPE_KEY);
+let sessionId = ""
+
+if (window.location.search.includes("session_id")) {
+	const urlParams = new URLSearchParams(window.location.search)
+	
+	sessionId = urlParams.get('session_id')
+}
 
 export default function Payment() {
 	const [userId, setUserid] = useState('')
@@ -44,6 +52,10 @@ export default function Payment() {
 	const [errorMsg, setErrormsg] = useState('')
 	const [loaded, setLoaded] = useState(false)
 	const [loading, setLoading] = useState(false)
+	const [paymentDone, setPaymentdone] = useState({ brand: "", last4: "" })
+
+	const [regainAccountconfirm, setRegainaccountconfirm] = useState({ show: false, cardInfo: {}, loading: false })
+	const [bannedSign, setBannedsign] = useState(false)
 
 	const getThePaymentInfo = () => {
 		const id = localStorage.getItem("id")
@@ -168,14 +180,81 @@ export default function Payment() {
 				})
 		}
 	}
+	const regainTheAccount = () => {
+		if (!regainAccountconfirm.show) {
+			setRegainaccountconfirm({ ...regainAccountconfirm, show: true })
+		} else {
+			if (paymentDone.brand != "") {
+				const data = { userId }
+
+				createCustomerPayment(data)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						}
+
+						throw res
+					})
+					.then((res) => {
+						if (res) {
+							window.location = "/payment"
+						}
+					})
+			} else {
+				const data = { userId, redirect: "payment" }
+
+				createCheckout(data)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						}
+						
+						throw res
+					})
+					.then((res) => {
+						if (res) {
+							window.location = res.url
+						}
+					})
+					.catch((err) => {
+
+					})
+			}
+		}
+	}
 
 	useEffect(() => {
-		getThePaymentInfo()
+		if (sessionId) {
+			const data = { 
+				userId: localStorage.getItem("id"), 
+				sessionId 
+			}
+			
+			sessionId = ""
+			
+			createCustomerPayment(data)
+				.then((res) => {
+					if (res.status == 200) {
+						return res.json()
+					}
+			
+					throw res
+				})
+				.then((res) => {
+					if (res) {
+						window.location = "/payment"
+					}
+			})
+		} else {
+			getThePaymentInfo()
+		}
 	}, [])
 
 	return (
 		<div id="payment">
-			<Header/>
+			<Header
+				regainAccount={() => regainTheAccount()}
+			/>
 
 			{loaded ? 
 				<Card
@@ -300,6 +379,69 @@ export default function Payment() {
 	    <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 8, mb: 4 }}>
 	      {'Copyright © ' + new Date().getFullYear() + ' Geottuse, Inc.'}
 	    </Typography>
+
+			{(regainAccountconfirm.show || bannedSign) && (
+				<div id="hidden-box">
+					{regainAccountconfirm && (
+						<div id="regain-account-box">
+							<div id="regain-account-header">Regain account payment summary</div>
+
+							<div className="regain-account-div"/>
+
+							<div id="regain-account-infos">
+								<div className="regain-account-info-header"><strong>Subtotal:</strong> ${regainAmount.toFixed(2)}</div>
+
+								<div className="regain-account-div"/>
+
+								<div className="regain-account-info-header"><strong>Total:</strong> ${regainAmount.toFixed(2)}</div>
+							</div>
+
+							{regainAccountconfirm.cardInfo.last4 && (
+								<div id="card-info">
+									<div id="type">
+										{regainAccountconfirm.cardInfo.name == "Visa" && <img src="/visa.png"/>}
+										{regainAccountconfirm.cardInfo.name == "MasterCard" && <img src="/mastercard.png"/>}
+										{regainAccountconfirm.cardInfo.name == "American Express" && <img src="/amex.jpg"/>}
+										{regainAccountconfirm.cardInfo.name == "Discover" && <img src="/discover.jpg"/>}
+										{regainAccountconfirm.cardInfo.name == "Diners Club" && <img src="/dinersclub.png"/>}
+										{regainAccountconfirm.cardInfo.name == "JCB" && <img src="/jcb.jpg"/>}
+										{regainAccountconfirm.cardInfo.name == "UnionPay" && <img src="/unionpay.png"/>}
+									</div>
+									<div id="header">
+										{regainAccountconfirm.cardInfo.name}
+										<br/>
+										*********{regainAccountconfirm.cardInfo.last4}
+									</div>
+								</div>
+							)}
+							
+							<div id="actions">
+								<div className="action" style={{ opacity: regainAccountconfirm.loading ? 0.5 : 1 }} onClick={() => !regainAccountconfirm.loading && setRegainaccountconfirm({ show: false, cardInfo: {} })}>Cancel</div>
+								<div className="action" style={{ opacity: regainAccountconfirm.loading ? 0.5 : 1 }} onClick={() => !regainAccountconfirm.loading && regainTheAccount()}>Regain now</div>
+							</div>
+
+							{regainAccountconfirm.loading && (
+								<div style={{ height: 20, margin: '5px auto', width: 20 }}>
+									<ClipLoader color="black" size={20}/>
+								</div>
+							)}
+						</div>
+					)}
+					{bannedSign && (
+						<div id="banned-sign-box">
+							<div id="banned-sign-header">You have been banned because of an advice you gave</div>
+
+							<div id="actions">
+								<div className="action" onClick={() => setBannedsign(false)}>Cancel</div>
+								<div className="action" onClick={() => {
+									setBannedsign(false)
+									regainTheAccount()
+								}}>Unban now</div>
+							</div>
+						</div>
+					)}
+				</div>
+			)}
     </div>
 	)
 }
