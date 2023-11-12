@@ -32,7 +32,7 @@ export default function Ratings() {
 	const [loaded, setLoaded] = useState(false)
 	const [loading, setLoading] = useState(false)
 
-	const [regainAccountconfirm, setRegainaccountconfirm] = useState({ show: true, cardInfo: {}, loading: false })
+	const [regainAccountconfirm, setRegainaccountconfirm] = useState({ show: false, cardInfo: {}, loading: false })
   const [paymentDone, setPaymentdone] = useState({ brand: "", last4: "" })
 
 	const getTheRatingsNum = () => {

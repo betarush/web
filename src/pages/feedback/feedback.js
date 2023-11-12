@@ -416,7 +416,7 @@ export default function Feedbacks(props) {
 									)}
 								</div>
 							)}
-							{regainAccountconfirm && (
+							{regainAccountconfirm.show && (
 								<div id="regain-account-box">
 									<div id="regain-account-header">Regain account payment summary</div>
 
