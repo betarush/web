@@ -63,7 +63,7 @@ export default function Intro() {
 		const data = new FormData(event.currentTarget);
 		const name = data.get('name'), desc = data.get('desc'), link = data.get('link')
 
-		if (name && desc && link) {
+		if (name && desc && link && image.uri) {
 			const json = { userId, name, desc, link, image: JSON.stringify(image) }
 
 			localStorage.setItem("viewMyProducts", "true")
@@ -95,8 +95,10 @@ export default function Intro() {
 				setErrormsg("Please enter your product name")
 			} else if (!desc) {
 				setErrormsg("Please enter your product information")
-			} else {
+			} else if (!link) {
 				setErrormsg("Please enter your product website")
+			} else {
+				setErrormsg("Please provide a logo")
 			}
 
 			setLoading(false)
@@ -182,7 +184,7 @@ export default function Intro() {
 			          <Box component="form" onSubmit={listTheProduct} noValidate sx={{ mt: 1 }}>
 			          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product name:" name="name" variant="standard" disabled={loading} defaultValue={name} inputProps={{ maxLength: 50 }}/>
 			          	<TextField margin="normal" required fullWidth multiline id="standard-size-small" label="Enter product information:" name="desc" variant="standard" disabled={loading} defaultValue={desc} inputProps={{ maxLength: 100 }}/>
-			          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product link to lead customers:" name="link" variant="standard" disabled={loading} defaultValue={link} inputProps={{ maxLength: 50 }}/>
+			          	<TextField margin="normal" required fullWidth id="standard-size-small" label="www.example.com" name="link" variant="standard" disabled={loading} defaultValue={link} inputProps={{ maxLength: 50 }}/>
 
 			          	<Button
 									  component="label"

@@ -51,9 +51,9 @@ if (window.location.search.includes("session_id")) {
 export default function Listproduct() {
 	const [userId, setUserid] = useState('')
 
-	const [name, setName] = useState(process.env.REACT_APP_MODE == 'dev' ? 'chatee' : '')
-	const [desc, setDesc] = useState(process.env.REACT_APP_MODE == 'dev' ? 'match with friends, explore their posts and like their posts to talk with them' : '')
-	const [link, setLink] = useState(process.env.REACT_APP_MODE == 'dev' ? 'https://www.chatee.app' : '')
+	const [name, setName] = useState(process.env.REACT_APP_MODE == 'dev' ? '' : '')
+	const [desc, setDesc] = useState(process.env.REACT_APP_MODE == 'dev' ? '' : '')
+	const [link, setLink] = useState(process.env.REACT_APP_MODE == 'dev' ? '' : '')
 	const [image, setImage] = useState({ uri: '', width: 0, height: 0 })
 
 	const [file, setFile] = useState(null)
@@ -100,59 +100,6 @@ export default function Listproduct() {
 		const name = data.get('name'), desc = data.get('desc'), link = data.get('link')
 
 		if (name && desc && link && image.uri) {
-			// if (paymentDone) {
-			// 	const id = localStorage.getItem("id")
-			// 	const json = { userId: id, name, desc, link, image: JSON.stringify(image) }
-
-			// 	localStorage.setItem("viewMyProducts", "true")
-
-			// 	listProduct(json)
-			// 		.then((res) => {
-			// 			if (res.status == 200) {
-			// 				return res.json()
-			// 			}
-
-			// 			throw res
-			// 		})
-			// 		.then((res) => {
-			// 			if (res) {
-			// 				window.location = "/main"
-			// 			}
-			// 		})
-			// 		.catch((err) => {
-			// 			if (err.status == 400) {
-			// 				err.json().then(() => {
-								
-			// 				})
-			// 			}
-			// 		})
-			// } else {
-			// 	localStorage.setItem("productInfo", JSON.stringify({ userId, name, desc, link, image }))
-
-			// 	const data = { userId, redirect: "listproduct" }
-
-			// 	createCheckout(data)
-			// 		.then((res) => {
-			// 			if (res.status == 200) {
-			// 				return res.json()
-			// 			}
-
-			// 			throw res
-			// 		})
-			// 		.then((res) => {
-			// 			if (res) {
-			// 				window.location = res.url
-			// 			}
-			// 		})
-			// 		.catch((err) => {
-			// 			if (err.status == 400) {
-			// 				err.json().then(() => {
-
-			// 				})
-			// 			}
-			// 		})
-			// }
-
 			const data = { userId, name, desc, link, image: JSON.stringify(image) }
 
 			localStorage.setItem("viewMyProducts", "true")
@@ -303,7 +250,7 @@ export default function Listproduct() {
 	          <Box component="form" onSubmit={listTheProduct} noValidate sx={{ mt: 1 }}>
 	          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product name:" name="name" variant="standard" disabled={loading} defaultValue={name} inputProps={{ maxLength: 50 }}/>
 	          	<TextField margin="normal" required fullWidth multiline id="standard-size-small" label="Enter product information:" name="desc" variant="standard" disabled={loading} defaultValue={desc} inputProps={{ maxLength: 100 }}/>
-	          	<TextField margin="normal" required fullWidth id="standard-size-small" label="Enter product link to lead customers:" name="link" variant="standard" disabled={loading} defaultValue={link} inputProps={{ maxLength: 50 }}/>
+	          	<TextField margin="normal" required fullWidth id="standard-size-small" label="www.example.com" name="link" variant="standard" disabled={loading} defaultValue={link} inputProps={{ maxLength: 50 }}/>
 
 	          	<Button
 							  component="label"

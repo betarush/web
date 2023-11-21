@@ -116,13 +116,15 @@ export default function Header(props) {
       	)}
     	</div>
       <div className="row">
-				<div>
-					<div className="row">
-						<div className="column"><MdPending style={{ fontSize: 20 }}/></div>
-						<div id="user">Pending ${amountPending.toFixed(2)}</div>
+				{firstTime == false && (
+					<div>
+						<div className="row">
+							<div className="column"><MdPending style={{ fontSize: 20 }}/></div>
+							<div id="user">Pending ${amountPending.toFixed(2)}</div>
+						</div>
+						{banned && <div id="user">You are banned<strong onClick={() => props.regainAccount()}>FIX</strong></div>}
 					</div>
-					{banned && <div id="user">You are banned<strong onClick={() => props.regainAccount()}>FIX</strong></div>}
-				</div>
+				)}
 				<div className="column">
 					<div id="logout" onClick={() => logout()} sx={{ my: 2, color: 'black', display: 'block' }}>Log-Out</div>
 				</div>

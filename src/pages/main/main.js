@@ -240,7 +240,7 @@ export default function Main() {
 
 						setTimeout(function () {
 							getTheTestingProducts(true)
-							window.open(link)
+							window.open("https://" + link)
 						}, 2000)
 					} else {
 						setBannedsign(true)
@@ -286,7 +286,7 @@ export default function Main() {
 		const { advice, id, index } = userWrite
 
 		if (advice) {
-			const data = { userId, productId: id, advice }
+			const data = { userId, testingId: id, advice }
 			const newProducts = [...products]
 
 			submitFeedback(data)
@@ -487,7 +487,7 @@ export default function Main() {
 														{!product.gave_feedback && (
 															<div>
 																<div className="product-action" style={{ marginBottom: 10 }} onClick={() => setUserwrite({ ...userWrite, show: true, input: '', id: product.id, index, amountSpent: product.amountSpent, loading: false })}>Give advice & Earn ${product.reward.toFixed(2)}</div>
-																<div className="product-action" onClick={() => window.open(product.link)}>Go To Product</div>
+																<div className="product-action" onClick={() => window.open("https://" + product.link)}>Go To Product</div>
 															</div>
 														)}
 													</div>

@@ -143,15 +143,15 @@ export default function Feedbacks(props) {
 				})
 		}
 	}
-	const rateTheCustomer = (testerId, type, index) => {
+	const rateTheCustomer = (testInfo, type, index) => {
 		if (type == "warn" || warningReasonbox.info.type == "warn") {
 			if (!warningReasonbox.show) {
-				setWarningreasonbox({ show: true, reason: '', info: { testerId, type, index } })
+				setWarningreasonbox({ show: true, reason: '', info: { testInfo, type, index } })
 			} else {
 				const { info, reason } = warningReasonbox
 
 				if (reason) {
-					const data = { productId: id, testerId: info.testerId, type: info.type, reason }
+					const data = { productId: id, testingId: info.testInfo.id, testerId: info.testInfo.testerId, type: info.type, reason }
 					const newFeedbacks = [...feedbacks]
 
 					rateCustomer(data)
@@ -178,7 +178,7 @@ export default function Feedbacks(props) {
 				}
 			}
 		} else {
-			const data = { productId: id, testerId, type, reason: "" }
+			const data = { productId: id, testingId: testInfo.id, testerId: testInfo.testerId, type, reason: "" }
 			const newFeedbacks = [...feedbacks]
 
 			rateCustomer(data)
@@ -321,15 +321,15 @@ export default function Feedbacks(props) {
 											<Stack>
 												<div className="feedback-actions-header">Rate this tester's advice <strong>(anonymously)</strong></div>
 												<div className="feedback-actions">
-													<div className="feedback-action" onClick={() => rateTheCustomer(feedback.testerId, 'warn', index)}>
+													<div className="feedback-action" onClick={() => rateTheCustomer(feedback, 'warn', index)}>
 														<div className="feedback-action-icon"><FaBan style={{ color: 'red', height: '100%', width: '100%' }}/></div>
 														<div className="feedback-action-header">Warn to be banned</div>
 													</div>
-													<div className="feedback-action" onClick={() => rateTheCustomer(feedback.testerId, 'good', index)}>
+													<div className="feedback-action" onClick={() => rateTheCustomer(feedback, 'good', index)}>
 														<div className="feedback-action-icon"><BsCheckCircle style={{ color: 'green', height: '100%', width: '100%' }}/></div>
 														<div className="feedback-action-header">Good advice</div>
 													</div>
-													<div className="feedback-action" onClick={() => rateTheCustomer(feedback.testerId, 'nice', index)}>
+													<div className="feedback-action" onClick={() => rateTheCustomer(feedback, 'nice', index)}>
 														<div className="feedback-action-icon"><ImHappy style={{ color: 'blue', height: '100%', width: '100%' }}/></div>
 														<div className="feedback-action-header">Very nice advice</div>
 													</div>

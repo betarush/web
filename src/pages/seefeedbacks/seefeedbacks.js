@@ -145,17 +145,17 @@ export default function Seefeedbacks() {
 				})
 		}
 	}
-	const rateTheCustomer = (id, testerId, type, productIndex, feedbackIndex) => {
+	const rateTheCustomer = (id, testInfo, type, productIndex, feedbackIndex) => {
 		let proceed = false
 
 		if (type == "warn" || warningReasonbox.info.type == "warn") {
 			if (!warningReasonbox.show) {
-				setWarningreasonbox({ show: true, reason: '', info: { id, testerId, type, productIndex, feedbackIndex } })
+				setWarningreasonbox({ show: true, reason: '', info: { id, testInfo, type, productIndex, feedbackIndex } })
 			} else {
 				const { info, reason } = warningReasonbox
 
 				if (reason) {
-					const data = { productId: info.id, type: info.type, testerId: info.testerId, reason }
+					const data = { productId: info.id, type: info.type, testingId: info.testInfo.id, testerId: info.testInfo.testerId, reason }
 					const newProducts = [...products]
 		
 					rateCustomer(data)
@@ -168,7 +168,7 @@ export default function Seefeedbacks() {
 						})
 						.then((res) => {
 							if (res) {
-								if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('ratecustomer', { id: userId, productId: info.id, type: info.type, testerId: info.testerId, web: true });
+								if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('ratecustomer', { id: userId, productId: info.id, type: info.type, testingId: info.testInfo.id, testerId: info.testerId, web: true });
 		
 								newProducts[info.productIndex].feedbacks.splice(info.feedbackIndex, 1)
 		
@@ -180,13 +180,12 @@ export default function Seefeedbacks() {
 								setWarningreasonbox({ ...warningReasonbox, show: false, reason: '' })
 							}
 						})
-
 				} else {
 					setWarningreasonbox({ ...warningReasonbox, errorMsg: "Please include a reason" })
 				}
 			}
 		} else {
-			const data = { productId: id, type, testerId, reason: "" }
+			const data = { productId: id, type, testingId: testInfo.id, testerId: testInfo.testerId, reason: "" }
 			const newProducts = [...products]
 
 			rateCustomer(data)
@@ -199,7 +198,7 @@ export default function Seefeedbacks() {
 				})
 				.then((res) => {
 					if (res) {
-						if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('ratecustomer', { id: userId, productId: id, type, testerId, web: true });
+						if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('ratecustomer', { id: userId, productId: id, type, testingId: testInfo.id, testerId: testInfo.testerId, web: true });
 
 						newProducts[productIndex].feedbacks.splice(feedbackIndex, 1)
 
@@ -339,15 +338,15 @@ export default function Seefeedbacks() {
 												<Stack>
 													<div className="feedback-actions-header">Rate this tester's advice <strong>(anonymously)</strong></div>
 													<div className="feedback-actions">
-														<div className="feedback-action" onClick={() => rateTheCustomer(product.id, feedback.testerId, 'warn', productIndex, feedbackIndex)}>
+														<div className="feedback-action" onClick={() => rateTheCustomer(product.id, feedback, 'warn', productIndex, feedbackIndex)}>
 															<div className="feedback-action-icon"><FaBan style={{ color: 'red', height: '100%', width: '100%' }}/></div>
 															<div className="feedback-action-header">Warn to be banned</div>
 														</div>
-														<div className="feedback-action" onClick={() => rateTheCustomer(product.id, feedback.testerId, 'good', productIndex, feedbackIndex)}>
+														<div className="feedback-action" onClick={() => rateTheCustomer(product.id, feedback, 'good', productIndex, feedbackIndex)}>
 															<div className="feedback-action-icon"><BsCheckCircle style={{ color: 'green', height: '100%', width: '100%' }}/></div>
 															<div className="feedback-action-header">Good advice</div>
 														</div>
-														<div className="feedback-action" onClick={() => rateTheCustomer(product.id, feedback.testerId, 'nice', productIndex, feedbackIndex)}>
+														<div className="feedback-action" onClick={() => rateTheCustomer(product.id, feedback, 'nice', productIndex, feedbackIndex)}>
 															<div className="feedback-action-icon"><ImHappy style={{ color: 'blue', height: '100%', width: '100%' }}/></div>
 															<div className="feedback-action-header">Very nice advice</div>
 														</div>

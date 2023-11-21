@@ -113,15 +113,19 @@ export default function Header(props) {
 		        </div>
 		      </div>
 		    </div>
-
+				
 	      <div className="row">
-					<div className="column" style={{ margin: '0 10px' }}>
-						<div className="row">
-							<MdPending style={{ fontSize: 20 }}/>
-							<div id="user">Pending ${amountPending.toFixed(2)}</div>
-						</div>
-					</div>
-					<div className="column" style={{ margin: '0 10px' }}><div id="user">You are {username}</div></div>
+					{firstTime == false && (
+						<>
+							<div className="column" style={{ margin: '0 10px' }}>
+								<div className="row">
+									<MdPending style={{ fontSize: 20 }}/>
+									<div id="user">Pending ${amountPending.toFixed(2)}</div>
+								</div>
+							</div>
+							<div className="column" style={{ margin: '0 10px' }}><div id="user">You are {username}</div></div>
+						</>
+					)}
 					{banned && <div className="column" style={{ margin: '0 10px' }}><div id="user" style={{ fontSize: 15 }}>You are banned<strong onClick={() => props.regainAccount()}>FIX</strong></div></div>}
 				</div>
 	    </div>

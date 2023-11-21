@@ -238,8 +238,8 @@ export default function Main() {
 					if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('untested', { id: userId, productId, mobile: true });
 
 					setTimeout(function () {
-						window.open(link)
 						getTheTestingProducts(true)
+						window.open(link)
 					}, 2000)
 				}
 			})
@@ -282,7 +282,7 @@ export default function Main() {
 		const { advice, id, index } = userWrite
 		
 		if (advice) {
-			const data = { userId, productId: id, advice }
+			const data = { userId, testingId: id, advice }
 			const newProducts = [...products]
 
 			submitFeedback(data)
@@ -295,11 +295,7 @@ export default function Main() {
 				})
 				.then((res) => {
 					if (res) {
-						setUserwrite({ ...userWrite, show: false, advice: '', id: null, index: -1, loading: false })
-
-						newProducts[index].gave_feedback = true
-
-						setProducts(newProducts)
+						window.location = "/main"
 					}
 				})
 				.catch((err) => {
@@ -557,7 +553,7 @@ export default function Main() {
 								<br/><br/>
 								Try products and write good QA advices.
 								<br/><br/>
-								You will earn money once the creator <strong>likes and approves</strong> your <strong>advice</strong>
+								You will earn $2.00 for every good advice you submit
 							</div>
 
 							<div id="intro-actions">
@@ -567,7 +563,16 @@ export default function Main() {
 					)}
 					{userWrite.show && (
 						<div id="feedback-box">
-							<div id="feedback-header">What's your advice</div>
+							<div id="feedback-header">
+								What's your advice
+								<br/>
+								<div style={{ fontSize: 15 }}>
+									(Please write a proper advice or else you'll be warn first time to be banned)
+								</div>
+								<div style={{ fontSize: 15 }}>
+									(You'll have to pay $10.00 to get unbanned)
+								</div>
+							</div>
 							<textarea id="feedback-input" maxlength="500" disabled={userWrite.loading} placeholder="Write a good advice" onChange={e => setUserwrite({ ...userWrite, advice: e.target.value })} value={userWrite.advice}/>
 
 							<div className="errormsg">{userWrite.errorMsg}</div>

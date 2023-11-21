@@ -222,6 +222,7 @@ export default function Earnings() {
 			.then((res) => {
 				if (res) {
 					if (!res.leftover) setEarnings(0.0)
+
 					setEarnedbox({ show: true, earned: res.earnedAmount, pending: res.pendingEarned, leftover: res.leftover })
 
 					setTimeout(function () {

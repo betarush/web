@@ -4,15 +4,13 @@ import { resizePhoto } from 'geottuse-tools';
 import { BiNotepad } from "react-icons/bi";
 import { FaMoneyBillAlt } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
-
 import { SiTestcafe } from "react-icons/si";
 import { LiaMoneyBillAltSolid } from "react-icons/lia";
 import { MdOutlineFreeCancellation } from "react-icons/md";
-
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { BsArrowDown } from "react-icons/bs";
-
 import { isMobile } from 'react-device-detect';
+import { depositAmount, regainAmount } from '../../info'
 
 if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('landing', { web: true });
 
@@ -105,7 +103,7 @@ export default function Landing() {
 							<div className="header" style={isMobile ? { } : { margin: '30px 0' }}>EFFECTIVE SMALL INVESTMENT</div>
 							<div className="header-info" style={isMobile ? {} : { height: 100 }}>
 								Submit your product and quickly get advices<br/><br/>
-								Only deposit $20 if there is at least one advice given to you<br/><br/>
+								Only deposit ${depositAmount.toFixed(2)} if there is at least one advice given to you<br/><br/>
 								Have refund of the leftover deposit within a week unless your product
 								received at least 5 advices
 							</div>
@@ -197,10 +195,11 @@ export default function Landing() {
 										<div className="index" style={isMobile ? { margin: '0 auto' } : {}}>2</div>
 										<div className="row">
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
-												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>REJECT/APPROVE</div>
+												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>SEE/RATE ADVICES</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													Approve the QA advice you like and 
-													the tester will be notified to be rewarded
+													Deposit just ${depositAmount.toFixed(2)} to see advices only when you received at least one.<br/><br/>
+													Rate the advices you see as GOOD or NICE<br/>
+													<br/>(Warn a tester first time to be banned if they wrote a silly advice)
 												</div>
 											</div>
 										</div>
@@ -248,10 +247,11 @@ export default function Landing() {
 										<div className={"info-info-" + (isMobile ? "m" : "w")}>
 											<div className="index" style={isMobile ? { margin: '0 auto' } : {}}>3</div>
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
-												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>REJECT/APPROVE</div>
+												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>SEE/RATE ADVICES</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													Approve the QA advice you like and 
-													the tester will be notified that they are rewarded
+													Deposit just ${depositAmount.toFixed(2)} to see advices only when you received at least one.<br/><br/>
+													Rate the advices you see as GOOD or NICE<br/>
+													<br/>(Warn a tester first time to be banned if they wrote a silly advice)
 												</div>
 											</div>
 										</div>
@@ -295,7 +295,7 @@ export default function Landing() {
 													<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>TRY PRODUCTS</div>
 													<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
 														Try a product and
-														write a good QA advice the creator would approve
+														write a good QA advice to help the creator
 													</div>
 												</div>
 											</div>
@@ -303,8 +303,8 @@ export default function Landing() {
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>TRY PRODUCTS</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													Try a product you like and
-													write a good QA advice the creator would approve
+													Try a product and
+													write a good QA advice to help the creator
 												</div>
 											</div>
 										}
@@ -320,7 +320,9 @@ export default function Landing() {
 												<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 													<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>EARN FOR YOUR CONTRIBUTION</div>
 													<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-														The creator can see the good QA advice and approve it to reward you $4
+														The creator can see the good QA advice you wrote and rate it as GOOD or NICE<br/><br/>
+														(You will be warned first time to be banned if you write a silly advice)<br/><br/>
+														(Note: You will have to pay $10.00 to get unbanned so please don't write anything silly)
 													</div>
 												</div>
 											</div>
@@ -328,7 +330,9 @@ export default function Landing() {
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>EARN FOR YOUR CONTRIBUTION</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													The creator can see the good QA advice and approve it to reward you $4
+													The creator can see the good QA advice you wrote and rate it as GOOD or NICE<br/><br/>
+													(You will be warned first time to be banned if you write a silly advice)<br/><br/>
+													(Note: You will have to pay $10.00 to get unbanned so please don't write anything silly)
 												</div>
 											</div>
 										}
@@ -345,8 +349,7 @@ export default function Landing() {
 													<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>TRY PRODUCTS</div>
 													<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
 														Try a product and
-														write a good QA advice that
-														the creator would like and approve
+														write a good QA advice to help the creator
 													</div>
 												</div>
 											</div>
@@ -355,8 +358,7 @@ export default function Landing() {
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>TRY PRODUCTS</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
 													Try a product and
-													write a good QA advice that
-													the creator would like and approve
+													write a good QA advice to help the creator
 												</div>
 											</div>
 										}
@@ -370,7 +372,9 @@ export default function Landing() {
 												<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 													<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>EARN FOR YOUR CONTRIBUTION</div>
 													<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-														The creator can see the good QA advice and approve it to reward you $4
+														The creator can see the good QA advice you wrote and rate it as GOOD or NICE<br/><br/>
+														(You will be warned first time to be banned if you write a silly advice)<br/><br/>
+														(Note: You will have to pay $10.00 to get unbanned so please don't write anything silly)
 													</div>
 												</div>
 											</div>
@@ -378,7 +382,9 @@ export default function Landing() {
 											<div className="header" style={isMobile ? { width: 'calc(100% - 60px)' } : { marginLeft: 20, width: 500 }}>
 												<div className="header-title" style={isMobile ? { margin: '20px auto', textAlign: 'center' } : { marginBottom: 10 }}>EARN FOR YOUR CONTRIBUTION</div>
 												<div className="header-info" style={isMobile ? { textAlign: 'center' } : { width: '80%' }}>
-													The creator can see the good QA advice and approve it to reward you $4
+													The creator can see the good QA advice you wrote and rate it as GOOD or NICE<br/><br/>
+													(You will be warned first time to be banned if you write a silly advice)<br/><br/>
+													(Note: You will have to pay $10.00 to get unbanned so please don't write anything silly)
 												</div>
 											</div>
 										}
