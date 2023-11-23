@@ -1,4 +1,4 @@
-const url = process.env.REACT_APP_MODE == 'live' ? 'https://www.getproductfeedback.com' : ''
+const url = process.env.REACT_APP_MODE == 'live' ? process.env.REACT_APP_API_URL : ''
 const routeUrl = `${url}/flask/producttesting`
 
 export const submitFeedback = data => {

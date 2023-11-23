@@ -29,7 +29,7 @@ const theme = createTheme({
 if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('register', { mobile: true });
 
 export default function Register() {
-	const [email, setEmail] = useState(process.env.REACT_APP_MODE == 'dev' ? 'kmrobogram@gmail.com' : '')
+	const [email, setEmail] = useState(process.env.REACT_APP_MODE == 'dev' ? 'tester@gmail.com' : '')
 	const [password, setPassword] = useState(process.env.REACT_APP_MODE == 'dev' ? 'qqqqqqq' : '')
 	const [confirmPassword, setConfirmpassword] = useState(process.env.REACT_APP_MODE == 'dev' ? 'qqqqqqq' : '')
 

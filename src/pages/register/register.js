@@ -27,7 +27,7 @@ const theme = createTheme({
 })
 
 export default function Register() {
-	const [email, setEmail] = useState(process.env.REACT_APP_MODE == 'dev' ? 'kmrobogram@gmail.com' : '')
+	const [email, setEmail] = useState(process.env.REACT_APP_MODE == 'dev' ? 'creator@gmail.com' : '')
 	const [password, setPassword] = useState(process.env.REACT_APP_MODE == 'dev' ? 'qqqqqqq' : '')
 	const [confirmPassword, setConfirmpassword] = useState(process.env.REACT_APP_MODE == 'dev' ? 'qqqqqqq' : '')
 

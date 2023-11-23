@@ -30,7 +30,7 @@ const theme = createTheme({
 if (process.env.REACT_APP_SEGMENT_ON == true) window.analytics.track('login', { web: true });
 
 export default function Login() {
-	const [email, setEmail] = useState(process.env.REACT_APP_MODE == 'dev' ? 'kmrobogram@gmail.com' : '')
+	const [email, setEmail] = useState(process.env.REACT_APP_MODE == 'dev' ? 'creator@gmail.com' : '')
 	const [password, setPassword] = useState(process.env.REACT_APP_MODE == 'dev' ? 'qqqqqqq' : '')
 	const [errorMsg, setErrormsg] = useState('')
 
